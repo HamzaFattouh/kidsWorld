@@ -1,0 +1,47 @@
+name: KidsWorld CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+        
+    - name: Install Dependencies (Root)
+      run: npm ci
+      
+    - name: Static Analysis
+      run: |
+        npm run lint
+        npm run typecheck
+        
+    - name: Build Web
+      run: |
+        cd web
+        npm ci
+        npm run build
+
+    # - name: Run Backend Tests
+    #   run: npm test
+    #   env:
+    #     DATABASE_URL: "mysql://mock:mock@localhost:3306/mock"
+        
+    - name: Build Docker Image (Backend)
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: docker build -t kidsworld/backend:latest .
+      
+    - name: Build Docker Image (Web)
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: docker build -t kidsworld/web:latest ./web
