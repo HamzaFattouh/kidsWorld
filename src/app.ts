@@ -7,12 +7,16 @@ import { errorHandler } from './api/middlewares/errorHandler';
 import { apiLimiter } from './api/middlewares/rateLimiter';
 import { requireAppHeader } from './api/middlewares/csrfDefender';
 import v1Router from './api/v1/routes';
+import { cmsRoutes } from './routes/cms.routes';
 
 const app = express();
 
 // Security Middlewares
 app.use(helmet());
-app.use(cors()); // Configure options based on environment later
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 
 // Body Parsing
 app.use(express.json());
@@ -26,6 +30,7 @@ app.use('/api', apiLimiter);
 app.use('/api', requireAppHeader);
 app.use('/api/v1', v1Router);
 app.use('/api/v1/cameras', cameraRoutes);
+app.use('/api/v1/cms', cmsRoutes);
 
 // Centralized Error Handling
 app.use(errorHandler);

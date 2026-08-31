@@ -75,6 +75,13 @@ model User {
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
+  // Profile Fields
+  name                   String?
+  phone                  String?
+  alternatePhone         String?
+  nationalId             String?
+  address                String?   @db.Text
+
   sessions               Session[]
   tokens                 Token[]
   logs                   AuditLog[]

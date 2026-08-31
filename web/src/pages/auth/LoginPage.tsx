@@ -33,21 +33,21 @@ export function LoginPage() {
       setApiError(null);
       const response = await api.post('/auth/login', data);
       
-      const user = response.data.data;
+      const userData = response.data.data.user;
       setAuth({
-        id: user.userId,
-        email: user.email,
-        role: user.role,
-        requiresPasswordChange: user.requiresPasswordChange
+        id: userData.id,
+        email: userData.email,
+        role: userData.role,
+        requiresPasswordChange: userData.requiresPasswordChange
       });
 
-      if (user.requiresPasswordChange) {
+      if (userData.requiresPasswordChange) {
         navigate('/auth/change-password');
       } else {
         navigate('/dashboard'); // or appropriate home route based on role
       }
     } catch (err: any) {
-      setApiError(err.response?.data?.error || t('error_occurred'));
+      setApiError(err.response?.data?.error?.message || t('error_occurred'));
     }
   };
 

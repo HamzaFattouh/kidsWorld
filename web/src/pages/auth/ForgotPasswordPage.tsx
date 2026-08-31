@@ -32,7 +32,7 @@ export function ForgotPasswordPage() {
       await api.post('/auth/forgot-password', data);
       setSuccess(true);
     } catch (err: any) {
-      setApiError(err.response?.data?.error || t('error_occurred'));
+      setApiError(err.response?.data?.error?.message || t('error_occurred'));
     }
   };
 

@@ -44,7 +44,7 @@ export function ResetPasswordPage() {
       await api.post('/auth/reset-password', { token, newPassword: data.newPassword });
       setSuccess(true);
     } catch (err: any) {
-      setApiError(err.response?.data?.error || t('error_occurred'));
+      setApiError(err.response?.data?.error?.message || t('error_occurred'));
     }
   };
 

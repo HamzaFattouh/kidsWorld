@@ -29,7 +29,7 @@ export function VerifyEmailPage() {
         setStatus('success');
       } catch (err: any) {
         setStatus('error');
-        setErrorMsg(err.response?.data?.error || t('error_occurred'));
+        setErrorMsg(err.response?.data?.error?.message || t('error_occurred'));
       }
     };
 

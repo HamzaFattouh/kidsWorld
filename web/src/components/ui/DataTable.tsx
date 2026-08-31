@@ -28,7 +28,7 @@ export function DataTable<T>({ data, columns, isLoading, emptyMessage, className
             <tr>
               {columns.map((col, index) => (
                 <th key={index} scope="col" className="px-6 py-3 font-medium">
-                  {col.header}
+                  {t(`table.${col.header.toLowerCase().replace(/ /g, '_')}`, col.header)}
                 </th>
               ))}
             </tr>

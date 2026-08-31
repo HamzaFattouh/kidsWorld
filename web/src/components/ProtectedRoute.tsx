@@ -9,13 +9,13 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const { isAuthenticated, user } = useAuthStore();
 
-  if (!isAuthenticated || !user) {
+  if (!isAuthenticated || !user || !user.role) {
     return <Navigate to="/auth/login" replace />;
   }
 
-  // If user requires password change, trap them on that route
-  if (user.requiresPasswordChange && window.location.pathname !== '/auth/change-password') {
-    return <Navigate to="/auth/change-password" replace />;
+  // If user requires password change or hasn't setup profile, trap them on that route
+  if ((user.requiresPasswordChange || !user.name) && window.location.pathname !== '/auth/setup-profile') {
+    return <Navigate to="/auth/setup-profile" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {

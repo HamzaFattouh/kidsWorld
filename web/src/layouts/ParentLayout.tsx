@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../store/themeStore';
 import { useAuthStore } from '../store/authStore';
@@ -84,9 +84,12 @@ export function ParentLayout() {
 
   const SidebarContent = () => (
     <div className="h-full flex flex-col overflow-y-auto bg-surface dark:bg-surface-dark border-e border-gray-200 dark:border-gray-800">
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-primary">KidsWorld Parent</h1>
-      </div>
+      <Link to="/" className="p-6 flex flex-col items-center gap-3 hover:opacity-80 transition-opacity">
+        <div className="w-16 h-16 bg-white rounded-full p-1 shadow-md">
+          <img src="/images/logo.jpg" alt="عالم الأطفال" className="w-full h-full object-contain rounded-full" />
+        </div>
+        <h1 className="text-xl font-bold text-brand-green">عالم الأطفال - ولي الأمر</h1>
+      </Link>
       
       {/* Child Selector */}
       <div className="px-6 mb-6">
@@ -142,7 +145,12 @@ export function ParentLayout() {
   return (
     <div className="min-h-screen bg-background dark:bg-background-dark flex flex-col md:flex-row">
       <div className="md:hidden flex items-center justify-between p-4 bg-surface dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
-        <h1 className="text-xl font-bold text-primary">KidsWorld</h1>
+        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <div className="w-8 h-8 bg-white rounded-full p-1 shadow-sm">
+            <img src="/images/logo.jpg" alt="عالم الأطفال" className="w-full h-full object-contain rounded-full" />
+          </div>
+          <h1 className="text-lg font-bold text-brand-green">عالم الأطفال - ولي الأمر</h1>
+        </Link>
         <button onClick={() => setIsMobileOpen(true)} className="p-2">
           <Menu className="h-6 w-6 text-text dark:text-text-dark" />
         </button>

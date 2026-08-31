@@ -6,6 +6,11 @@ export interface User {
   email: string;
   role: 'ADMIN' | 'TEACHER' | 'PARENT';
   requiresPasswordChange: boolean;
+  name?: string | null;
+  phone?: string | null;
+  alternatePhone?: string | null;
+  nationalId?: string | null;
+  address?: string | null;
 }
 
 interface AuthState {

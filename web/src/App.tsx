@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useThemeStore, applyTheme } from './store/themeStore';
 import { AuthLayout } from './layouts/AuthLayout';
 import { LoginPage } from './pages/auth/LoginPage';
-import { ChangePasswordPage } from './pages/auth/ChangePasswordPage';
+import { SetupProfilePage } from './pages/auth/SetupProfilePage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
@@ -16,6 +18,7 @@ import { UsersPage } from './pages/admin/UsersPage';
 import { ParentsPage } from './pages/admin/ParentsPage';
 import { TeachersPage } from './pages/admin/TeachersPage';
 import { ChildrenPage } from './pages/admin/ChildrenPage';
+import { ChildDetailsPage } from './pages/admin/ChildDetailsPage';
 import { ClassesPage } from './pages/admin/ClassesPage';
 import { PickupPage } from './pages/admin/PickupPage';
 import { AttendancePage } from './pages/admin/AttendancePage';
@@ -72,6 +75,21 @@ import { ParentCamerasPage } from './pages/parent/CamerasPage';
 import { LandingPage } from './pages/public/LandingPage';
 
 export default function App() {
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (theme === 'system') applyTheme('system');
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [theme]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -88,7 +106,7 @@ export default function App() {
           <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
           
           <Route element={<ProtectedRoute />}>
-            <Route path="/auth/change-password" element={<ChangePasswordPage />} />
+            <Route path="/auth/setup-profile" element={<SetupProfilePage />} />
           </Route>
         </Route>
 
@@ -100,6 +118,7 @@ export default function App() {
             <Route path="/admin/parents" element={<ParentsPage />} />
             <Route path="/admin/teachers" element={<TeachersPage />} />
             <Route path="/admin/children" element={<ChildrenPage />} />
+            <Route path="/admin/children/:id" element={<ChildDetailsPage />} />
             <Route path="/admin/classes" element={<ClassesPage />} />
             <Route path="/admin/pickup" element={<PickupPage />} />
             <Route path="/admin/attendance" element={<AttendancePage />} />
