@@ -15,12 +15,10 @@ import {
 'lucide-react';
 
 export function DashboardLayout() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  const toggleLanguage = () => i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
 
   const handleLogout = () => {
     clearAuth();
@@ -164,9 +162,6 @@ export function DashboardLayout() {
         <header className="sticky top-0 z-10 bg-surface/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-4 sm:px-6">
           <div className="flex-1" />
           <div className="flex items-center gap-2 sm:gap-4">
-            <Button variant="ghost" size="sm" onClick={toggleLanguage}>
-              {t('toggle_language')}
-            </Button>
             <ThemeToggle />
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
             <span className="text-sm font-medium text-text dark:text-text-dark hidden sm:inline-block">

@@ -18,9 +18,6 @@ export function AuthLayout() {
           <h1 className="text-3xl font-display font-bold text-brand-green">عالم الأطفال</h1>
         </Link>
         <div className="flex gap-4 items-center">
-          <Button variant="ghost" onClick={toggleLanguage}>
-            {t('toggle_language')}
-          </Button>
           <ThemeToggle variant="outline" />
         </div>
       </header>

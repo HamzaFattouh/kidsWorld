@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { ThemeToggle } from '../components/ui/ThemeToggle';
 import { useAuthStore } from '../store/authStore';
 import { useParentStore } from '../store/parentStore';
+import { api } from '../lib/api';
 import { cn } from '../lib/utils';
 import { Button } from '../components/ui/Button';
 import {
@@ -27,10 +29,20 @@ export function ParentLayout() {
     navigate('/auth/login');
   };
 
-  // Hardcoded for stub purposes. Will be fetched from backend via TanStack Query.
-  const myChildren = [
-  { id: '1', name: 'Ahmad' },
-  { id: '2', name: 'Sara' }];
+  const { data: myChildrenData } = useQuery({
+    queryKey: ['parent-my-children'],
+    queryFn: async () => {
+      const res = await api.get('/core/children');
+      return res.data?.data || res.data || [];
+    }
+  });
+
+  const myChildren = Array.isArray(myChildrenData) ? myChildrenData : [];
+
+  // Auto select first child if none selected
+  if (myChildren.length > 0 && !selectedChildId) {
+    setSelectedChildId(myChildren[0].id);
+  }
 
 
   const navGroups = [
@@ -167,9 +179,6 @@ export function ParentLayout() {
         <header className="sticky top-0 z-10 bg-surface/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-4 sm:px-6">
           <div className="flex-1" />
           <div className="flex items-center gap-2 sm:gap-4">
-            <Button variant="ghost" size="sm" onClick={toggleLanguage}>
-              {t('toggle_language')}
-            </Button>
             <ThemeToggle />
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
             <span className="text-sm font-medium text-text dark:text-text-dark hidden sm:inline-block">

@@ -280,30 +280,18 @@ const resources = {
 };
 
 i18n.
-use(LanguageDetector).
 use(initReactI18next).
 init({
   resources,
+  lng: 'ar',
   fallbackLng: 'ar',
-  detection: {
-    order: ['localStorage', 'sessionStorage', 'navigator'],
-    caches: ['localStorage']
-  },
-  supportedLngs: ['en', 'ar'],
-  nonExplicitSupportedLngs: true,
+  supportedLngs: ['ar'],
   interpolation: {
-    escapeValue: false // react already safes from xss
+    escapeValue: false
   }
 });
 
-// Update the HTML dir attribute whenever the language changes
-i18n.on('languageChanged', (lng) => {
-  document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
-  document.documentElement.lang = lng;
-});
-
-// Set initial dir
-document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
-document.documentElement.lang = i18n.language;
+document.documentElement.dir = 'rtl';
+document.documentElement.lang = 'ar';
 
 export default i18n;
