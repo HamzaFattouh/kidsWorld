@@ -21,8 +21,9 @@ services:
         sync: false
 
   # 2. Frontend Static Site
-  - type: static
+  - type: web
     name: kidsworld-frontend
+    env: static
     region: frankfurt
     rootDir: web
     buildCommand: npm install && npm run build
