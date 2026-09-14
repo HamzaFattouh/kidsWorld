@@ -27,8 +27,13 @@ export const SetupProfilePage = () => {
   React.useEffect(() => {
     if (!user) {
       navigate('/auth/login');
-    } else if (!user.requiresPasswordChange && user.name) {
-      navigate('/dashboard');
+    } else if (!user.requiresPasswordChange) {
+      const roleRoutes = {
+        ADMIN: '/admin',
+        TEACHER: '/teacher',
+        PARENT: '/parent'
+      };
+      navigate(roleRoutes[user.role] || '/auth/login', { replace: true });
     }
   }, [user, navigate]);
 

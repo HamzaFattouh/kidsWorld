@@ -13,14 +13,19 @@ export const ProtectedRoute = ({ allowedRoles }) => {
     return <Navigate to="/auth/login" replace />;
   }
 
-  // If user requires password change or hasn't setup profile, trap them on that route
-  if ((user.requiresPasswordChange || !user.name) && window.location.pathname !== '/auth/setup-profile') {
+  // If user requires password change, trap them on setup-profile route
+  if (user.requiresPasswordChange && window.location.pathname !== '/auth/setup-profile') {
     return <Navigate to="/auth/setup-profile" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // Role not authorized, fallback to dashboard root
-    return <Navigate to="/dashboard" replace />;
+    // Role not authorized, fallback to user's corresponding dashboard
+    const roleRoutes = {
+      ADMIN: '/admin',
+      TEACHER: '/teacher',
+      PARENT: '/parent'
+    };
+    return <Navigate to={roleRoutes[user.role] || '/auth/login'} replace />;
   }
 
   return <Outlet />;
