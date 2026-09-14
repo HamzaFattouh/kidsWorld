@@ -6,7 +6,7 @@ services:
     region: frankfurt
     plan: free
     rootDir: backend
-    buildCommand: npm install && npx prisma generate
+    buildCommand: npm install --include=dev && npx prisma generate
     startCommand: node server.js
     envVars:
       - key: NODE_ENV
@@ -25,7 +25,7 @@ services:
     name: kidsworld-frontend
     env: static
     rootDir: web
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite
