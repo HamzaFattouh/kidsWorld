@@ -29,12 +29,13 @@ export function LoginPage() {
       const response = await api.post('/auth/login', data);
 
       const userData = response.data.data.user;
+      const tokenData = response.data.data.token;
       setAuth({
         id: userData.id,
         email: userData.email,
         role: userData.role,
         requiresPasswordChange: userData.requiresPasswordChange
-      });
+      }, tokenData);
 
       if (userData.requiresPasswordChange) {
         navigate('/auth/change-password');
