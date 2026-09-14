@@ -10,7 +10,8 @@ const apiLimiter = exports.apiLimiter = (0, _expressRateLimit.default)({
 
 const authLimiter = exports.authLimiter = (0, _expressRateLimit.default)({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 requests per window
+  max: 50, // Limit each IP to 50 attempts
+  skipSuccessfulRequests: true,
   message: 'Too many authentication attempts, please try again later',
   standardHeaders: true,
   legacyHeaders: false

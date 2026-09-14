@@ -19,11 +19,11 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use((0, _cors.default)({
-  origin: (origin, callback) => {
-    return callback(null, true);
-  },
+  origin: true,
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-app-client', 'Accept']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-app-client', 'Accept'],
+  optionsSuccessStatus: 204
 }));
 
 // Body Parsing
