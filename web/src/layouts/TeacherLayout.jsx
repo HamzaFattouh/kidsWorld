@@ -13,18 +13,11 @@ import {
 
 export function TeacherLayout() {
   const { t, i18n } = useTranslation();
-  const { theme, setTheme } = useThemeStore();
   const { user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const toggleLanguage = () => i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
-
-  const cycleTheme = () => {
-    if (theme === 'light') setTheme('dark');else
-    if (theme === 'dark') setTheme('system');else
-    setTheme('light');
-  };
 
   const handleLogout = () => {
     clearAuth();
