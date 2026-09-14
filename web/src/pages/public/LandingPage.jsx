@@ -20,9 +20,10 @@ export function LandingPage() {
   const fetchConfigs = async () => {
     try {
       const res = await homepageConfigApi.getMany();
+      const items = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []);
       const configMap = {};
-      res.data.forEach(item => {
-        configMap[item.section] = item;
+      items.forEach(item => {
+        if (item && item.section) configMap[item.section] = item;
       });
       setConfigs(configMap);
     } catch (e) { console.error(e); }
@@ -31,7 +32,8 @@ export function LandingPage() {
   const fetchEvents = async () => {
     try {
       const res = await eventApi.getMany();
-      setEvents(res.data.filter(e => e.isPublished));
+      const items = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []);
+      setEvents(items.filter(e => e && e.isPublished));
     } catch (e) { console.error(e); }
   };
 
