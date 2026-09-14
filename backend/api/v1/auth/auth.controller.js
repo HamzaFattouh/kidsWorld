@@ -6,7 +6,7 @@ const authService = new _AuthService.AuthService();
 
 const loginSchema = exports.loginSchema = _zod.z.object({
   body: _zod.z.object({
-    email: _zod.z.string().email(),
+    email: _zod.z.string().min(1, 'Username or Email is required'),
     password: _zod.z.string().min(1)
   })
 });

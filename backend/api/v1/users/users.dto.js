@@ -3,9 +3,9 @@
 const createUserSchema = exports.createUserSchema = _zod.z.object({
   body: _zod.z.object({
     name: _zod.z.string().min(2, 'Name must be at least 2 characters'),
-    email: _zod.z.string().email('Invalid email address'),
     password: _zod.z.string().min(8, 'Password must be at least 8 characters long'),
     role: _zod.z.enum(['ADMIN', 'TEACHER', 'PARENT'], { required_error: 'Role is required' }),
+    email: _zod.z.string().optional().or(_zod.z.literal('')),
     phone: _zod.z.string().optional(),
     nationalId: _zod.z.string().optional(),
     address: _zod.z.string().optional(),

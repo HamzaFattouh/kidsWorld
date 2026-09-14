@@ -23,12 +23,12 @@ class AuthService {
     return _crypto.default.createHash('sha256').update(token).digest('hex');
   }
 
-  async login(email, passwordPlain, deviceInfo, ipAddress) {
-    const user = await this.userRepo.findByEmail(email);
+  async login(identifier, passwordPlain, deviceInfo, ipAddress) {
+    const user = await this.userRepo.findByEmailOrName(identifier);
 
     if (!user) {
-      await _AuditService.auditService.log({ action: 'LOGIN_FAILED', details: 'Invalid email', ipAddress, userAgent: deviceInfo });
-      throw new _AppError.UnauthorizedError('Invalid email or password');
+      await _AuditService.auditService.log({ action: 'LOGIN_FAILED', details: 'Invalid user', ipAddress, userAgent: deviceInfo });
+      throw new _AppError.UnauthorizedError('Invalid email/name or password');
     }
 
     if (!user.isActive) {

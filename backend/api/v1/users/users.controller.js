@@ -8,9 +8,16 @@ const userRepo = new _UserRepository.UserRepository();
 
 const createUser = async (req, res, next) => {
   try {
-    const { name, email, password, role, phone, nationalId, address, isActive, requiresPasswordChange } = req.body;
+    let { name, email, password, role, phone, nationalId, address, isActive } = req.body;
     const operatorId = req.user?.userId;
     const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
+
+    // Auto-generate email if omitted
+    if (!email || !email.trim()) {
+      const sanitized = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
+      email = `${sanitized || 'user'}_${uniqueSuffix}@kidsworld.local`;
+    }
 
     // Hash the password
     const passwordHash = await _bcrypt.default.hash(password, 10);
@@ -23,9 +30,9 @@ const createUser = async (req, res, next) => {
       phone,
       nationalId,
       address,
-      isActive,
-      requiresPasswordChange: requiresPasswordChange !== undefined ? requiresPasswordChange : true,
-      isVerified: true // Assuming admins creating users auto-verify them
+      isActive: isActive !== undefined ? isActive : true,
+      requiresPasswordChange: true, // Must change password on first login
+      isVerified: true
     });
 
     await _AuditService.auditService.log({

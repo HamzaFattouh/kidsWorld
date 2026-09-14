@@ -9,7 +9,7 @@ import { api } from '../../lib/api';
 import { useAuthStore } from '../../store/authStore';
 
 const loginSchema = z.object({
-  email: z.string().email('البريد الإلكتروني غير صالحة'),
+  email: z.string().min(1, 'يرجى إدخال الاسم أو البريد الإلكتروني'),
   password: z.string().min(1, 'كلمة المرور مطلوبة')
 });
 
@@ -73,11 +73,11 @@ export function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-white/90 block">{t('email_label')}</label>
+              <label className="text-sm font-semibold text-white/90 block">الاسم أو البريد الإلكتروني</label>
               <input
-                type="email"
+                type="text"
                 {...register('email')}
-                placeholder="name@example.com"
+                placeholder="أدخل الاسم أو البريد الإلكتروني"
                 className="w-full px-4 py-3.5 rounded-xl bg-white text-brand-dark font-medium border-0 focus:ring-2 focus:ring-brand-yellow outline-none shadow-sm placeholder:text-gray-400"
               />
               {errors.email && <p className="text-xs text-red-200 mt-1">{errors.email.message}</p>}

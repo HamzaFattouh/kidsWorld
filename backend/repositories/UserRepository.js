@@ -10,6 +10,17 @@ class UserRepository {
     return _prisma.prisma.user.findUnique({ where: { email } });
   }
 
+  async findByEmailOrName(identifier) {
+    return _prisma.prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: identifier },
+          { name: identifier }
+        ]
+      }
+    });
+  }
+
   async findById(id) {
     return _prisma.prisma.user.findUnique({ where: { id } });
   }
