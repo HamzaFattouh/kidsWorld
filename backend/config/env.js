@@ -5,16 +5,18 @@ _dotenv.default.config();
 
 const envSchema = _zod.z.object({
   NODE_ENV: _zod.z.enum(['development', 'production', 'test']).default('development'),
-  PORT: _zod.z.string().transform(Number).default(3000),
-  DATABASE_URL: _zod.z.string()
-  // Add other env vars here as needed (e.g., JWT_SECRET)
+  PORT: _zod.z.union([_zod.z.string().transform(Number), _zod.z.number()]).default(3000),
+  DATABASE_URL: _zod.z.string().optional()
 });
 
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  console.error('Invalid environment variables', _env.error.format());
-  process.exit(1);
+  console.warn('Invalid environment variables warning:', _env.error.format());
 }
 
-const env = exports.env = _env.data;
+const env = exports.env = _env.success ? _env.data : {
+  NODE_ENV: process.env.NODE_ENV || 'production',
+  PORT: process.env.PORT || 10000,
+  DATABASE_URL: process.env.DATABASE_URL
+};

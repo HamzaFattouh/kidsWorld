@@ -11,6 +11,8 @@ var _cms = require("./routes/cms.routes");function _interopRequireDefault(e) {re
 
 const app = (0, _express.default)();
 
+app.set('trust proxy', 1);
+
 const allowedOrigins = [
   'http://localhost:5173',
   process.env.FRONTEND_URL
@@ -28,6 +30,10 @@ app.use((0, _cors.default)({
 app.use(_express.default.json());
 app.use(_express.default.urlencoded({ extended: true }));
 app.use((0, _cookieParser.default)());
+
+// Root & Health check routes
+app.get('/', (req, res) => res.json({ status: 'ok', message: 'KidsWorld Backend API is running' }));
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // Rate Limiting
 app.use('/api', _rateLimiter.apiLimiter);
