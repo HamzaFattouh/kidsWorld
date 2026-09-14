@@ -38,7 +38,7 @@ export function LoginPage() {
       }, tokenData);
 
       if (userData.requiresPasswordChange) {
-        navigate('/auth/change-password');
+        navigate('/auth/setup-profile');
       } else {
         navigate('/dashboard');
       }

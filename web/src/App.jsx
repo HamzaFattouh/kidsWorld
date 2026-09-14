@@ -107,6 +107,7 @@ export default function App() {
           
           <Route element={<ProtectedRoute />}>
             <Route path="/auth/setup-profile" element={<SetupProfilePage />} />
+            <Route path="/auth/change-password" element={<SetupProfilePage />} />
           </Route>
         </Route>
 

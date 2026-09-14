@@ -14,7 +14,7 @@ export const ProtectedRoute = ({ allowedRoles }) => {
   }
 
   // If user requires password change, trap them on setup-profile route
-  if (user.requiresPasswordChange && window.location.pathname !== '/auth/setup-profile') {
+  if (user.requiresPasswordChange && !['/auth/setup-profile', '/auth/change-password'].includes(window.location.pathname)) {
     return <Navigate to="/auth/setup-profile" replace />;
   }
 
