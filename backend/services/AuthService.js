@@ -60,7 +60,7 @@ class AuthService {
     await this.sessionRepo.createSession(user.id, tokenHash, deviceInfo, expiresAt);
     await _AuditService.auditService.log({ action: 'LOGIN_SUCCESS', userId: user.id, ipAddress, userAgent: deviceInfo });
 
-    return { token, user: { id: user.id, email: user.email, role: user.role, requiresPasswordChange: user.requiresPasswordChange } };
+    return { token, user: { id: user.id, name: user.name, email: user.email, role: user.role, requiresPasswordChange: user.requiresPasswordChange } };
   }
 
   async logout(token, userId, ipAddress, userAgent) {

@@ -136,7 +136,7 @@ export function TeacherLayout() {
             <ThemeToggle />
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
             <span className="text-sm font-medium text-text dark:text-text-dark hidden sm:inline-block">
-              {user?.email}
+              {user?.name || user?.email}
             </span>
             <Button variant="outline" size="sm" onClick={handleLogout}>
               <LogOut className="h-4 w-4 sm:me-2" />

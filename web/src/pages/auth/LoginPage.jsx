@@ -32,6 +32,7 @@ export function LoginPage() {
       const tokenData = response.data.data.token;
       setAuth({
         id: userData.id,
+        name: userData.name,
         email: userData.email,
         role: userData.role,
         requiresPasswordChange: userData.requiresPasswordChange
