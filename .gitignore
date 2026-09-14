@@ -1,11 +1,46 @@
-node_modules/
-dist/
-build/
+# Environment variables
 .env
+.env.*
+*.env
+**/.env
+**/.env.*
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build & Output
+dist/
+**/dist/
+build/
+**/build/
+web-build/
+.expo/
+**/.expo/
+coverage/
+
+# Logs
 *.log
-test-results.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System & OS Files
 .DS_Store
-apps/mobile/node_modules/
-apps/mobile/.expo/
-web/node_modules/
-web/dist/
+Thumbs.db
+*.tmp
+*.bak
+
+# IDE & Editor Directories
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.user
+*.swp
+
+# Testing & Temp Artifacts
+test-results.json
+scratch/
+.tempmediaStorage/
