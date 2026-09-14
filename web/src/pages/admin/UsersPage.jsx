@@ -35,37 +35,48 @@ export function UsersPage() {
   });
 
   const columns = [
-  {
-    header: 'Email',
-    accessorKey: 'email'
-  },
-  {
-    header: 'Role',
-    accessorKey: 'role',
-    cell: (user) =>
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+    {
+      header: 'الاسم',
+      accessorKey: 'name',
+      cell: (user) => <span className="font-semibold">{user.name || 'غير محدد'}</span>
+    },
+    {
+      header: 'البريد الإلكتروني',
+      accessorKey: 'email'
+    },
+    {
+      header: 'رقم الهاتف',
+      accessorKey: 'phone',
+      cell: (user) => user.phone || '—'
+    },
+    {
+      header: 'الدور',
+      accessorKey: 'role',
+      cell: (user) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
           ${user.role === 'ADMIN' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' : ''}
           ${user.role === 'TEACHER' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' : ''}
           ${user.role === 'PARENT' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : ''}
         `}>
           {user.role}
         </span>
-
-  },
-  {
-    header: 'Status',
-    accessorKey: 'isActive',
-    cell: (user) =>
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
-          {user.isActive ? 'Active' : 'Inactive'}
+      )
+    },
+    {
+      header: 'الحالة',
+      accessorKey: 'isActive',
+      cell: (user) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+          {user.isActive ? 'نشط' : 'غير نشط'}
         </span>
-
-  },
-  {
-    header: 'Created At',
-    accessorKey: 'createdAt',
-    cell: (user) => new Date(user.createdAt).toLocaleDateString()
-  }];
+      )
+    },
+    {
+      header: 'تاريخ الإضافة',
+      accessorKey: 'createdAt',
+      cell: (user) => new Date(user.createdAt).toLocaleDateString('ar-EG')
+    }
+  ];
 
 
   return (

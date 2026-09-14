@@ -8,7 +8,7 @@ const userRepo = new _UserRepository.UserRepository();
 
 const createUser = async (req, res, next) => {
   try {
-    const { email, password, role, isActive, requiresPasswordChange } = req.body;
+    const { name, email, password, role, phone, nationalId, address, isActive, requiresPasswordChange } = req.body;
     const operatorId = req.user?.userId;
     const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
 
@@ -16,9 +16,13 @@ const createUser = async (req, res, next) => {
     const passwordHash = await _bcrypt.default.hash(password, 10);
 
     const newUser = await userRepo.create({
+      name,
       email,
       passwordHash,
       role,
+      phone,
+      nationalId,
+      address,
       isActive,
       requiresPasswordChange: requiresPasswordChange !== undefined ? requiresPasswordChange : true,
       isVerified: true // Assuming admins creating users auto-verify them
@@ -30,7 +34,7 @@ const createUser = async (req, res, next) => {
       resource: 'User',
       resourceId: newUser.id,
       ipAddress,
-      details: `Created user ${email} with role ${role}`
+      details: `Created user ${name} (${email}) with role ${role}`
     });
 
     const { passwordHash: _, ...safeUser } = newUser;
