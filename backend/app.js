@@ -18,12 +18,10 @@ const allowedOrigins = [
 
 app.use((0, _cors.default)({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
-      return callback(null, true);
-    }
     return callback(null, true);
   },
-  credentials: true
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-app-client', 'Accept']
 }));
 
 // Body Parsing
