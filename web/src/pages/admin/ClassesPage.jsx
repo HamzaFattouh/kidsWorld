@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, UserPlus, UserMinus, Eye, GraduationCap, ShieldCheck, Plus, Sparkles } from 'lucide-react';
+import { Users, UserPlus, UserMinus, Eye, GraduationCap, ShieldCheck, Plus, Trash2 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Modal } from '../../components/ui/Modal';
 
@@ -14,7 +14,7 @@ export function ClassesPage() {
       name: 'روضة العصافير 🐥',
       ageGroup: '3 - 4 سنوات',
       capacity: 20,
-      teacher: 'أ. نورة النابلسي (معلمة الصف المسؤول)',
+      teacher: 'أ. نورة النابلسي',
       teacherPhone: '0599111222',
       students: [
         { id: 'child-omar-shakaa', name: 'عمر أحمد الشكعة', gender: 'ذكر', parent: 'أحمد الشكعة' },
@@ -26,7 +26,7 @@ export function ClassesPage() {
       name: 'روضة الزهور 🌸',
       ageGroup: '4 - 5 سنوات',
       capacity: 22,
-      teacher: 'أ. سارة الخالد (معلمة الصف المسؤول)',
+      teacher: 'أ. سارة الخالد',
       teacherPhone: '0599333444',
       students: [
         { id: 'child-sara-masri', name: 'سارة مريم المصري', gender: 'أنثى', parent: 'مريم المصري' },
@@ -37,7 +37,7 @@ export function ClassesPage() {
       name: 'روضة الأمل 🌟',
       ageGroup: '2 - 3 سنوات',
       capacity: 15,
-      teacher: 'أ. منى التميمي (معلمة الصف المسؤول)',
+      teacher: 'أ. منى التميمي',
       teacherPhone: '0599444555',
       students: [
         { id: 'child-layan-shakaa', name: 'ليان أحمد الشكعة', gender: 'أنثى', parent: 'أحمد الشكعة' },
@@ -64,13 +64,15 @@ export function ClassesPage() {
     setIsStudentsModalOpen(true);
   };
 
-  const handleOpenAddModal = (cls) => {
+  const handleOpenAddModal = (e, cls) => {
+    e.stopPropagation();
     setSelectedClass(cls);
     setNewStudentToAdd('');
     setIsAddStudentModalOpen(true);
   };
 
-  const handleOpenRemoveModal = (cls) => {
+  const handleOpenRemoveModal = (e, cls) => {
+    e.stopPropagation();
     setSelectedClass(cls);
     setStudentToRemove('');
     setIsRemoveStudentModalOpen(true);
@@ -84,7 +86,6 @@ export function ClassesPage() {
     setClassesList((prev) =>
       prev.map((cls) => {
         if (cls.id === selectedClass.id) {
-          // Prevent duplicates
           if (cls.students.some((s) => s.id === studentObj.id)) return cls;
           return { ...cls, students: [...cls.students, studentObj] };
         }
@@ -119,85 +120,93 @@ export function ClassesPage() {
     <div className="space-y-6" dir="rtl">
       <PageHeader
         title="إدارة الصفوف والشعب 🏫"
-        description="عرض الصفوف المعيّنة لكل معلمة ومتابعة قائمة الطلاب المسجلين بالصف"
+        description="كل صف مسئولة عنه معلمة - اضغط على الصف لعرض أسماء الطلاب المسجلين بالصف"
       />
 
-      {/* Grid of Classes */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {classesList.map((cls) => (
-          <div
-            key={cls.id}
-            className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow relative"
-          >
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="text-xl font-bold text-gray-900">{cls.name}</h3>
-                <span className="inline-block mt-1 bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full">
-                  الفئة العمرية: {cls.ageGroup}
-                </span>
+      {/* Classes Table / Cards */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-base font-bold text-gray-900">قائمة الصفوف والمعلمين المسؤولين</h3>
+          <span className="text-xs font-semibold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+            إجمالي الصفوف: {classesList.length}
+          </span>
+        </div>
+
+        <div className="divide-y divide-gray-200">
+          {classesList.map((cls) => (
+            <div
+              key={cls.id}
+              onClick={() => handleOpenStudentsModal(cls)}
+              className="p-5 hover:bg-blue-50/50 transition-colors cursor-pointer flex flex-wrap items-center justify-between gap-4"
+            >
+              {/* Class Info */}
+              <div className="flex items-center space-x-4 space-x-reverse min-w-[220px]">
+                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xl">
+                  🐥
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-gray-900 flex items-center">
+                    {cls.name}
+                    <span className="mr-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-semibold">
+                      {cls.ageGroup}
+                    </span>
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1">
+                    عدد الطلاب المسجلين بالصف: <span className="font-bold text-gray-800">{cls.students.length} / {cls.capacity}</span>
+                  </p>
+                </div>
               </div>
-              <div className="bg-emerald-50 p-2.5 rounded-xl text-emerald-600">
-                <GraduationCap className="w-6 h-6" />
+
+              {/* Responsible Teacher */}
+              <div className="bg-emerald-50 border border-emerald-100 rounded-xl px-4 py-2 flex items-center text-emerald-800">
+                <ShieldCheck className="w-5 h-5 ml-2 text-emerald-600" />
+                <div>
+                  <span className="block text-[11px] text-emerald-600 font-bold">المعلمة المسؤولة عن الصف:</span>
+                  <span className="text-sm font-bold">{cls.teacher}</span>
+                </div>
               </div>
-            </div>
 
-            {/* Teacher Responsible */}
-            <div className="bg-gray-50 border border-gray-100 rounded-xl p-3.5 mb-4">
-              <div className="flex items-center text-xs text-gray-500 font-semibold mb-1">
-                <ShieldCheck className="w-4 h-4 ml-1 text-emerald-600" />
-                المعلمة المسؤولة عن الصف:
-              </div>
-              <p className="text-sm font-bold text-gray-800">{cls.teacher}</p>
-            </div>
-
-            {/* Students Counter */}
-            <div className="flex justify-between items-center text-sm border-t border-b border-gray-100 py-3 mb-4">
-              <span className="text-gray-600">عدد الطلاب المسجلين:</span>
-              <span className="font-bold text-gray-900">
-                {cls.students.length} / {cls.capacity} طفل
-              </span>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-2">
-              <button
-                onClick={() => handleOpenStudentsModal(cls)}
-                className="w-full flex items-center justify-center bg-gray-900 text-white text-sm font-semibold py-2.5 px-4 rounded-xl hover:bg-gray-800 transition-colors"
-              >
-                <Eye className="w-4 h-4 ml-2" />
-                عرض قائمة الطلاب ({cls.students.length})
-              </button>
-
-              <div className="grid grid-cols-2 gap-2">
+              {/* Action Buttons: Add & Delete Students */}
+              <div className="flex items-center space-x-2 space-x-reverse" onClick={(e) => e.stopPropagation()}>
                 <button
-                  onClick={() => handleOpenAddModal(cls)}
-                  className="flex items-center justify-center bg-blue-50 text-blue-700 text-xs font-bold py-2 px-3 rounded-xl hover:bg-blue-100 transition-colors"
+                  onClick={(e) => handleOpenAddModal(e, cls)}
+                  className="flex items-center bg-blue-600 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
                 >
-                  <UserPlus className="w-4 h-4 ml-1" />
-                  إضافة طالب
+                  <UserPlus className="w-4 h-4 ml-1.5" />
+                  إضافة طلاب للصف
                 </button>
+
                 <button
-                  onClick={() => handleOpenRemoveModal(cls)}
-                  className="flex items-center justify-center bg-rose-50 text-rose-700 text-xs font-bold py-2 px-3 rounded-xl hover:bg-rose-100 transition-colors"
+                  onClick={(e) => handleOpenRemoveModal(e, cls)}
+                  className="flex items-center bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold px-3.5 py-2.5 rounded-xl hover:bg-rose-100 transition-colors"
                 >
-                  <UserMinus className="w-4 h-4 ml-1" />
-                  حذف طالب
+                  <UserMinus className="w-4 h-4 ml-1.5" />
+                  حذف طلاب من الصف
+                </button>
+
+                <button
+                  onClick={() => handleOpenStudentsModal(cls)}
+                  className="flex items-center bg-gray-100 text-gray-800 text-xs font-bold px-3.5 py-2.5 rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                  <Eye className="w-4 h-4 ml-1.5" />
+                  عرض الطلاب ({cls.students.length})
                 </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      {/* 1. Modal View Students List */}
+      {/* 1. Modal View Students List when clicking on class */}
       <Modal
         isOpen={isStudentsModalOpen}
         onClose={() => setIsStudentsModalOpen(false)}
-        title={`قائمة الطلاب المسجلين - ${selectedClass?.name || ''}`}
+        title={`قائمة الطلاب المسجلين بالصف - ${selectedClass?.name || ''}`}
       >
         <div className="space-y-4 py-2" dir="rtl">
-          <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 text-xs text-blue-800 font-medium">
-            المعلمة المسؤولة: <span className="font-bold">{selectedClass?.teacher}</span>
+          <div className="bg-blue-50 p-3.5 rounded-xl border border-blue-100 text-xs text-blue-900 font-semibold flex justify-between items-center">
+            <span>المعلمة المسؤولة عن الصف: <strong className="text-blue-700">{selectedClass?.teacher}</strong></span>
+            <span>عدد الطلاب: {selectedClass?.students?.length} طفل</span>
           </div>
 
           {selectedClass?.students?.length === 0 ? (
@@ -205,9 +214,9 @@ export function ClassesPage() {
           ) : (
             <div className="divide-y divide-gray-100 max-h-80 overflow-y-auto pr-1">
               {selectedClass?.students?.map((std, idx) => (
-                <div key={std.id} className="py-3 flex justify-between items-center">
+                <div key={std.id} className="py-3 flex justify-between items-center hover:bg-gray-50 px-2 rounded-lg">
                   <div className="flex items-center">
-                    <span className="w-7 h-7 rounded-full bg-gray-100 text-gray-600 text-xs font-bold flex items-center justify-center ml-3">
+                    <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center ml-3">
                       {idx + 1}
                     </span>
                     <div>
@@ -229,17 +238,17 @@ export function ClassesPage() {
       <Modal
         isOpen={isAddStudentModalOpen}
         onClose={() => setIsAddStudentModalOpen(false)}
-        title={`إضافة طالب جديد - ${selectedClass?.name || ''}`}
+        title={`إضافة طلاب إلى ${selectedClass?.name || ''}`}
       >
         <div className="space-y-4 py-2" dir="rtl">
-          <p className="text-xs text-gray-600">اختر طفلاً من قائمة الطلاب غير الموزعين لإضافته إلى الصف:</p>
-          
+          <p className="text-xs text-gray-600">اختر طفلاً من القائمة لإضافته وتعيينه في هذا الصف:</p>
+
           <select
             value={newStudentToAdd}
             onChange={(e) => setNewStudentToAdd(e.target.value)}
             className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">-- اختر الطفل لتنسيبه --</option>
+            <option value="">-- اختر الطفل لتنسيبه للصف --</option>
             {availableStudents.map((std) => (
               <option key={std.id} value={std.id}>
                 {std.name} (ولي الأمر: {std.parent})
@@ -261,10 +270,10 @@ export function ClassesPage() {
       <Modal
         isOpen={isRemoveStudentModalOpen}
         onClose={() => setIsRemoveStudentModalOpen(false)}
-        title={`حذف طالب من - ${selectedClass?.name || ''}`}
+        title={`حذف طالب من ${selectedClass?.name || ''}`}
       >
         <div className="space-y-4 py-2" dir="rtl">
-          <p className="text-xs text-rose-600 font-medium">حدّد الطالب المراد إزالته من شعبة الصف:</p>
+          <p className="text-xs text-rose-600 font-medium">اختر الطالب المراد إزالته من قائمة الطلاب المسجلين بالصف:</p>
 
           <select
             value={studentToRemove}
@@ -274,7 +283,7 @@ export function ClassesPage() {
             <option value="">-- اختر الطالب للحذف --</option>
             {selectedClass?.students?.map((std) => (
               <option key={std.id} value={std.id}>
-                {std.name}
+                {std.name} (ولي الأمر: {std.parent})
               </option>
             ))}
           </select>
@@ -284,7 +293,7 @@ export function ClassesPage() {
             disabled={!studentToRemove}
             className="w-full bg-rose-600 text-white font-bold py-3 rounded-xl hover:bg-rose-700 disabled:opacity-50 transition-colors text-sm"
           >
-            تأكيد إزالة الطالب
+            تأكيد حذف الطالب من الصف
           </button>
         </div>
       </Modal>
