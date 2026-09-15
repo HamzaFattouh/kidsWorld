@@ -7,6 +7,7 @@ import { Modal } from '../../components/ui/Modal';
 import { DataTable } from '../../components/ui/DataTable';
 import { UserForm } from '../../components/forms/UserForm';
 import { usersApi } from '../../api/users';
+import { api } from '../../lib/api';
 
 export function UsersPage() {
   const { t, i18n } = useTranslation();
@@ -88,15 +89,7 @@ export function UsersPage() {
   const handleSavePermissions = async () => {
     if (!selectedUserId || !selectedUser) return;
     try {
-      // Using generic api client assuming usersApi uses it underneath or just fetch
-      await fetch(`http://localhost:3000/api/v1/auto/user/${selectedUserId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ permissions: userPermissions })
-      });
+      await api.put(`/auto/user/${selectedUserId}`, { permissions: userPermissions });
       queryClient.invalidateQueries({ queryKey: ['users'] });
       alert(`تم حفظ وتطبيق صلاحيات (${selectedUser.name || selectedUser.email}) بنجاح! ✅`);
     } catch (e) {
