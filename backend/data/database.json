@@ -1,0 +1,264 @@
+{
+  "users": [
+    {
+      "id": "user-admin-001",
+      "email": "admin@kidsworld.com",
+      "name": "مدير النظام الرئيسي",
+      "passwordHash": "$2b$10$U6yRUKHu5ERTIlKdzbNnhe4DAIW2f3bMWmQemtloOcfuSUZh1j87.",
+      "role": "ADMIN",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599000000",
+      "address": "نابلس- نابلس الجديدة",
+      "createdAt": "2026-09-15T10:00:00.000Z",
+      "permissions": {
+        "editCms": true,
+        "manageEvents": true,
+        "uploadJournal": true,
+        "recordAttendance": true,
+        "recordMeals": true,
+        "writeEvaluations": true,
+        "sendMessages": true,
+        "viewCameras": true
+      }
+    },
+    {
+      "id": "user-teacher-001",
+      "email": "nora@kidsworld.com",
+      "name": "أ. نورة النابلسي",
+      "passwordHash": "$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu",
+      "role": "TEACHER",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599111222",
+      "assignedClass": "روضة العصافير",
+      "address": "نابلس- نابلس الجديدة",
+      "createdAt": "2026-09-15T10:00:00.000Z"
+    },
+    {
+      "id": "user-teacher-002",
+      "email": "sara@kidsworld.com",
+      "name": "أ. سارة الخالد",
+      "passwordHash": "$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu",
+      "role": "TEACHER",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599333444",
+      "assignedClass": "روضة الزهور",
+      "address": "نابلس- نابلس الجديدة",
+      "createdAt": "2026-09-15T10:00:00.000Z"
+    },
+    {
+      "id": "user-parent-001",
+      "email": "ahmed.parent@gmail.com",
+      "name": "أحمد الشكعة",
+      "passwordHash": "$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu",
+      "role": "PARENT",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599888777",
+      "address": "نابلس- نابلس الجديدة",
+      "createdAt": "2026-09-15T10:00:00.000Z"
+    },
+    {
+      "id": "user-parent-002",
+      "email": "marian.parent@gmail.com",
+      "name": "مريم المصري",
+      "passwordHash": "$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu",
+      "role": "PARENT",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599555666",
+      "address": "نابلس- نابلس الجديدة",
+      "createdAt": "2026-09-15T10:00:00.000Z"
+    }
+  ],
+  "children": [
+    {
+      "id": "child-omar-shakaa",
+      "name": "عمر أحمد الشكعة",
+      "parentId": "user-parent-001",
+      "classId": "class-birds-3-4",
+      "dob": "2022-04-15",
+      "gender": "ذكر",
+      "medicalNotes": "حساسية خفيفة من السمسم - يرجى الانتباه عند تقديم الطعام",
+      "enrollmentDate": "2026-09-05T11:06:06.592Z",
+      "parent": {
+        "id": "user-parent-001",
+        "name": "أحمد الشكعة",
+        "email": "ahmed.parent@gmail.com",
+        "phone": "0599888777"
+      },
+      "class": {
+        "id": "class-birds-3-4",
+        "name": "روضة العصافير",
+        "ageGroup": "3 - 4 سنوات"
+      }
+    },
+    {
+      "id": "child-sara-masri",
+      "name": "سارة مريم المصري",
+      "parentId": "user-parent-002",
+      "classId": "class-flowers-4-5",
+      "dob": "2021-11-20",
+      "gender": "أنثى",
+      "medicalNotes": "تضع نظارات طبية للأنشطة",
+      "enrollmentDate": "2026-08-11T11:06:06.593Z",
+      "parent": {
+        "id": "user-parent-002",
+        "name": "مريم المصري",
+        "email": "marian.parent@gmail.com",
+        "phone": "0599555666"
+      },
+      "class": {
+        "id": "class-flowers-4-5",
+        "name": "روضة الزهور",
+        "ageGroup": "4 - 5 سنوات"
+      }
+    },
+    {
+      "id": "child-layan-shakaa",
+      "name": "ليان أحمد الشكعة",
+      "parentId": "user-parent-001",
+      "classId": "class-hope-2-3",
+      "dob": "2023-08-10",
+      "gender": "أنثى",
+      "medicalNotes": "لا يوجد أية حساسية معروفة",
+      "enrollmentDate": "2026-09-10T11:06:06.593Z",
+      "parent": {
+        "id": "user-parent-001",
+        "name": "أحمد الشكعة",
+        "email": "ahmed.parent@gmail.com",
+        "phone": "0599888777"
+      },
+      "class": {
+        "id": "class-hope-2-3",
+        "name": "روضة الأمل",
+        "ageGroup": "2 - 3 سنوات"
+      }
+    },
+    {
+      "id": "child-yousef-jowdat",
+      "name": "يوسف خالد جودت",
+      "parentId": "user-parent-003",
+      "classId": "class-birds-3-4",
+      "dob": "2022-01-05",
+      "gender": "ذكر",
+      "medicalNotes": "ربو خفيف - بخاخ فنتولين عند الحاجة",
+      "enrollmentDate": "2026-08-06T11:06:06.593Z",
+      "parent": {
+        "id": "user-parent-003",
+        "name": "خالد جودت",
+        "email": "khaled.parent@gmail.com",
+        "phone": "0599222111"
+      },
+      "class": {
+        "id": "class-birds-3-4",
+        "name": "روضة العصافير",
+        "ageGroup": "3 - 4 سنوات"
+      }
+    },
+    {
+      "id": "child-1789470377020",
+      "name": "كرم إبراهيم القاسم",
+      "classId": "class-birds-3-4",
+      "gender": "ذكر",
+      "enrollmentDate": "2026-09-15T11:06:17.020Z"
+    }
+  ],
+  "classes": [
+    {
+      "id": "class-birds-3-4",
+      "name": "روضة العصافير 🐥",
+      "ageGroup": "3 - 4 سنوات",
+      "capacity": 20,
+      "teacher": "أ. نورة النابلسي",
+      "students": [
+        {
+          "id": "child-omar-shakaa",
+          "name": "عمر أحمد الشكعة",
+          "gender": "ذكر",
+          "parent": "أحمد الشكعة"
+        },
+        {
+          "id": "child-yousef-jowdat",
+          "name": "يوسف خالد جودت",
+          "gender": "ذكر",
+          "parent": "خالد جودت"
+        }
+      ]
+    },
+    {
+      "id": "class-flowers-4-5",
+      "name": "روضة الزهور 🌸",
+      "ageGroup": "4 - 5 سنوات",
+      "capacity": 22,
+      "teacher": "أ. سارة الخالد",
+      "students": [
+        {
+          "id": "child-sara-masri",
+          "name": "سارة مريم المصري",
+          "gender": "أنثى",
+          "parent": "مريم المصري"
+        }
+      ]
+    },
+    {
+      "id": "class-hope-2-3",
+      "name": "روضة الأمل 🌟",
+      "ageGroup": "2 - 3 سنوات",
+      "capacity": 15,
+      "teacher": "أ. منى التميمي",
+      "students": [
+        {
+          "id": "child-layan-shakaa",
+          "name": "ليان أحمد الشكعة",
+          "gender": "أنثى",
+          "parent": "أحمد الشكعة"
+        }
+      ]
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att-1",
+      "childId": "child-omar-shakaa",
+      "date": "2026-09-15",
+      "status": "PRESENT",
+      "notes": "حضور مبكر ونشاط ممتاز"
+    },
+    {
+      "id": "att-2",
+      "childId": "child-sara-masri",
+      "date": "2026-09-15",
+      "status": "PRESENT",
+      "notes": "تفاعل ممتاز"
+    }
+  ],
+  "meals": [
+    {
+      "id": "meal-1",
+      "childId": "child-omar-shakaa",
+      "date": "2026-09-15",
+      "type": "BREAKFAST",
+      "notes": "أكل وجبته اليومية بنجاح 🍏",
+      "consumed": "ALL"
+    }
+  ],
+  "complaints": [
+    {
+      "id": "comp-1",
+      "title": "استفسار عن برنامج الوجبات اليومية والمواصلات",
+      "description": "نود الاستفسار عن تفاصيل وجبة الإفطار للأسبوع القادم وهل تشمل الفواكه الطازجة.",
+      "status": "RESOLVED",
+      "parentId": "user-parent-001",
+      "childId": "child-omar-shakaa",
+      "createdAt": "2026-09-15T11:06:06.593Z"
+    }
+  ]
+}

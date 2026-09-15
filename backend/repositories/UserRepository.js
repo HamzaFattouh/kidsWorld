@@ -2,73 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
 var _prisma = require("../core/prisma");
-
-const FALLBACK_USERS = [
-  {
-    id: 'user-admin-001',
-    email: 'admin@kidsworld.com',
-    name: 'مدير النظام الرئيسي',
-    passwordHash: '$2b$10$U6yRUKHu5ERTIlKdzbNnhe4DAIW2f3bMWmQemtloOcfuSUZh1j87.', // admin123
-    role: 'ADMIN',
-    isActive: true,
-    isVerified: true,
-    requiresPasswordChange: false,
-    phone: '0599000000',
-  },
-  {
-    id: 'user-teacher-001',
-    email: 'nora@kidsworld.com',
-    name: 'أ. نورة النابلسي',
-    passwordHash: '$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu', // 123456
-    role: 'TEACHER',
-    isActive: true,
-    isVerified: true,
-    requiresPasswordChange: false,
-    phone: '0599111222',
-  },
-  {
-    id: 'user-teacher-002',
-    email: 'sara@kidsworld.com',
-    name: 'أ. سارة الخالد',
-    passwordHash: '$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu', // 123456
-    role: 'TEACHER',
-    isActive: true,
-    isVerified: true,
-    requiresPasswordChange: false,
-    phone: '0599333444',
-  },
-  {
-    id: 'user-parent-001',
-    email: 'ahmed.parent@gmail.com',
-    name: 'أحمد الشكعة',
-    passwordHash: '$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu', // 123456
-    role: 'PARENT',
-    isActive: true,
-    isVerified: true,
-    requiresPasswordChange: false,
-    phone: '0599888777',
-  },
-  {
-    id: 'user-parent-002',
-    email: 'marian.parent@gmail.com',
-    name: 'مريم المصري',
-    passwordHash: '$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu', // 123456
-    role: 'PARENT',
-    isActive: true,
-    isVerified: true,
-    requiresPasswordChange: false,
-    phone: '0599555666',
-  },
-];
+const { dbStore } = require('../core/db/persistentStore');
 
 class UserRepository {
   async create(data) {
     try {
-      return await _prisma.prisma.user.create({ data });
+      const dbUser = await _prisma.prisma.user.create({ data });
+      if (dbUser) {
+        dbStore.insert('users', dbUser);
+        return dbUser;
+      }
     } catch (e) {
-      console.warn('DB Unavailable, using mock create user fallback');
-      return { id: `user-${Date.now()}`, ...data, createdAt: new Date() };
+      console.warn('[DB] Prisma offline, persisting user to local database.json store');
     }
+    const newUser = {
+      id: `user-${Date.now()}`,
+      ...data,
+      createdAt: new Date().toISOString(),
+      isActive: data.isActive !== undefined ? data.isActive : true,
+    };
+    return dbStore.insert('users', newUser);
   }
 
   async findByEmail(email) {
@@ -76,11 +29,10 @@ class UserRepository {
       const user = await _prisma.prisma.user.findUnique({ where: { email } });
       if (user) return user;
     } catch (e) {
-      console.warn('DB Connection error in findByEmail, checking fallback users...');
+      // offline fallback
     }
-    return FALLBACK_USERS.find(
-      (u) => u.email.toLowerCase() === (email || '').toLowerCase()
-    ) || null;
+    const cleanEmail = (email || '').toLowerCase();
+    return dbStore.find('users', (u) => u.email.toLowerCase() === cleanEmail);
   }
 
   async findByEmailOrName(identifier) {
@@ -92,18 +44,17 @@ class UserRepository {
       });
       if (user) return user;
     } catch (e) {
-      console.warn('DB Connection error in findByEmailOrName, checking fallback users...');
+      // offline fallback
     }
     const cleanId = (identifier || '').toLowerCase();
-    return (
-      FALLBACK_USERS.find(
-        (u) =>
-          u.email.toLowerCase() === cleanId ||
-          u.name.toLowerCase() === cleanId ||
-          (cleanId === 'admin' && u.role === 'ADMIN') ||
-          (cleanId === 'teacher' && u.role === 'TEACHER') ||
-          (cleanId === 'parent' && u.role === 'PARENT')
-      ) || null
+    return dbStore.find(
+      'users',
+      (u) =>
+        u.email.toLowerCase() === cleanId ||
+        (u.name && u.name.toLowerCase() === cleanId) ||
+        (cleanId === 'admin' && u.role === 'ADMIN') ||
+        (cleanId === 'teacher' && u.role === 'TEACHER') ||
+        (cleanId === 'parent' && u.role === 'PARENT')
     );
   }
 
@@ -112,33 +63,41 @@ class UserRepository {
       const user = await _prisma.prisma.user.findUnique({ where: { id } });
       if (user) return user;
     } catch (e) {
-      console.warn('DB Connection error in findById, checking fallback users...');
+      // offline fallback
     }
-    return FALLBACK_USERS.find((u) => u.id === id) || null;
+    return dbStore.find('users', (u) => u.id === id);
   }
 
   async update(id, data) {
     try {
-      return await _prisma.prisma.user.update({ where: { id }, data });
+      const updated = await _prisma.prisma.user.update({ where: { id }, data });
+      if (updated) {
+        dbStore.update('users', 'id', id, updated);
+        return updated;
+      }
     } catch (e) {
-      console.warn('DB Unavailable in update user fallback');
-      const found = FALLBACK_USERS.find((u) => u.id === id);
-      return { ...(found || {}), ...data };
+      console.warn('[DB] Prisma offline, updating user in local database.json store');
     }
+    return dbStore.update('users', 'id', id, data);
   }
 
   async findMany(options) {
     try {
-      return await _prisma.prisma.user.findMany({
+      const list = await _prisma.prisma.user.findMany({
         where: options?.where,
         skip: options?.skip,
         take: options?.take,
         orderBy: options?.orderBy,
       });
+      if (list && list.length > 0) return list;
     } catch (e) {
-      console.warn('DB Connection error in findMany, returning fallback list');
-      return FALLBACK_USERS;
+      console.warn('[DB] Prisma offline, fetching users from local database.json store');
     }
+    let users = dbStore.get('users');
+    if (options?.where?.role) {
+      users = users.filter((u) => u.role === options.where.role);
+    }
+    return users;
   }
 }
 exports.UserRepository = UserRepository;
