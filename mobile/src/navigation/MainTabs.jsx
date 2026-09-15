@@ -19,6 +19,8 @@ import { IncidentsScreen } from '../screens/parent/IncidentsScreen';
 import { ComplaintsScreen } from '../screens/parent/ComplaintsScreen';
 import { RequestsScreen } from '../screens/parent/RequestsScreen';
 import { CamerasScreen } from '../screens/parent/CamerasScreen';
+import { UsersScreen } from '../screens/admin/UsersScreen';
+import { ClassesScreen } from '../screens/admin/ClassesScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,6 +29,8 @@ function DashboardStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="DashboardMain" component={DashboardScreen} />
+      <Stack.Screen name="Users" component={UsersScreen} />
+      <Stack.Screen name="Classes" component={ClassesScreen} />
       <Stack.Screen name="Children" component={ChildrenScreen} />
       <Stack.Screen name="Attendance" component={AttendanceScreen} />
       <Stack.Screen name="Meals" component={MealsScreen} />

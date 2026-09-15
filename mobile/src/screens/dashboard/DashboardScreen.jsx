@@ -28,10 +28,12 @@ export function DashboardScreen({ navigation }) {
   const selectedChildId = useParentStore((s) => s.selectedChildId);
 
   const dashboardItems = [
-    { id: 'Children', label: 'الأطفال والمستندات', icon: Users, color: '#3b82f6', bg: '#eff6ff', screen: 'Children' },
-    { id: 'Attendance', label: 'سجل الحضور والغياب', icon: CalendarCheck, color: '#10b981', bg: '#ecfdf5', screen: 'Attendance' },
-    { id: 'Meals', label: 'الوجبات اليومية', icon: Utensils, color: '#f59e0b', bg: '#fefce8', screen: 'Meals' },
-    { id: 'WeeklyNotes', label: 'الملاحظات الأسبوعية', icon: FileText, color: '#8b5cf6', bg: '#f5f3ff', screen: 'WeeklyNotes' },
+    { id: 'Users', label: 'إدارة المستخدمين والصلاحيات', icon: Users, color: '#8b5cf6', bg: '#f5f3ff', screen: 'Users' },
+    { id: 'Classes', label: 'إدارة الصفوف والشعب والمعلمين', icon: FileCheck, color: '#2563eb', bg: '#eff6ff', screen: 'Classes' },
+    { id: 'Children', label: 'الأطفال والمستندات والتسجيل', icon: Users, color: '#3b82f6', bg: '#eff6ff', screen: 'Children' },
+    { id: 'Attendance', label: 'سجل الحضور والغياب للطلاب والمعلمين', icon: CalendarCheck, color: '#10b981', bg: '#ecfdf5', screen: 'Attendance' },
+    { id: 'Meals', label: 'الوجبات والجدول الأسبوعي', icon: Utensils, color: '#f59e0b', bg: '#fefce8', screen: 'Meals' },
+    { id: 'WeeklyNotes', label: 'الملاحظات والتقارير الأسبوعية', icon: FileText, color: '#8b5cf6', bg: '#f5f3ff', screen: 'WeeklyNotes' },
     { id: 'Evaluations', label: 'التقييمات والتطور', icon: Award, color: '#ec4899', bg: '#fdf2f8', screen: 'Evaluations' },
     { id: 'Incidents', label: 'سجل الحوادث والسلامة', icon: AlertTriangle, color: '#ef4444', bg: '#fef2f2', screen: 'Incidents' },
     { id: 'Cameras', label: 'البث المباشر (الكاميرات)', icon: Camera, color: '#06b6d4', bg: '#cffaff', screen: 'Cameras' },
