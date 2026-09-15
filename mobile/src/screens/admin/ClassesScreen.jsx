@@ -46,7 +46,7 @@ export function ClassesScreen() {
     },
   ]);
 
-  const [availableStudents] = useState([
+  const [availableStudents, setAvailableStudents] = useState([
     { id: 'child-5', name: 'خليل سمير النابلسي', parent: 'سمير النابلسي' },
     { id: 'child-6', name: 'سلمى إبراهيم حامد', parent: 'إبراهيم حامد' },
     { id: 'child-7', name: 'حمزة محمود القاسم', parent: 'محمود القاسم' },
@@ -58,32 +58,41 @@ export function ClassesScreen() {
   const [isRemoveStudentModalOpen, setIsRemoveStudentModalOpen] = useState(false);
 
   const openStudentsModal = (cls) => {
-    setSelectedClass(cls);
+    const latestCls = classesList.find((c) => c.id === cls.id) || cls;
+    setSelectedClass(latestCls);
     setIsStudentsModalOpen(true);
   };
 
   const openAddStudentModal = (cls) => {
-    setSelectedClass(cls);
+    const latestCls = classesList.find((c) => c.id === cls.id) || cls;
+    setSelectedClass(latestCls);
     setIsAddStudentModalOpen(true);
   };
 
   const openRemoveStudentModal = (cls) => {
-    setSelectedClass(cls);
+    const latestCls = classesList.find((c) => c.id === cls.id) || cls;
+    setSelectedClass(latestCls);
     setIsRemoveStudentModalOpen(true);
   };
 
   const handleAddStudentToClass = (stdObj) => {
     if (!selectedClass || !stdObj) return;
 
-    setClassesList((prev) =>
-      prev.map((c) => {
-        if (c.id === selectedClass.id) {
-          if (c.students.some((s) => s.id === stdObj.id)) return c;
-          return { ...c, students: [...c.students, stdObj] };
-        }
-        return c;
-      })
-    );
+    const updatedClasses = classesList.map((c) => {
+      if (c.id === selectedClass.id) {
+        if (c.students.some((s) => s.id === stdObj.id)) return c;
+        return { ...c, students: [...c.students, stdObj] };
+      }
+      return c;
+    });
+
+    setClassesList(updatedClasses);
+    setAvailableStudents((prev) => prev.filter((s) => s.id !== stdObj.id));
+
+    const updatedSelectedClass = updatedClasses.find((c) => c.id === selectedClass.id);
+    if (updatedSelectedClass) {
+      setSelectedClass(updatedSelectedClass);
+    }
 
     setIsAddStudentModalOpen(false);
     Alert.alert('تمت الإضافة 🎉', `تمت إضافة الطالب (${stdObj.name}) إلى صف (${selectedClass.name}) بنجاح!`);
@@ -92,14 +101,23 @@ export function ClassesScreen() {
   const handleRemoveStudentFromClass = (stdObj) => {
     if (!selectedClass || !stdObj) return;
 
-    setClassesList((prev) =>
-      prev.map((c) => {
-        if (c.id === selectedClass.id) {
-          return { ...c, students: c.students.filter((s) => s.id !== stdObj.id) };
-        }
-        return c;
-      })
-    );
+    const updatedClasses = classesList.map((c) => {
+      if (c.id === selectedClass.id) {
+        return { ...c, students: c.students.filter((s) => s.id !== stdObj.id) };
+      }
+      return c;
+    });
+
+    setClassesList(updatedClasses);
+    setAvailableStudents((prev) => {
+      if (prev.some((s) => s.id === stdObj.id)) return prev;
+      return [...prev, stdObj];
+    });
+
+    const updatedSelectedClass = updatedClasses.find((c) => c.id === selectedClass.id);
+    if (updatedSelectedClass) {
+      setSelectedClass(updatedSelectedClass);
+    }
 
     setIsRemoveStudentModalOpen(false);
     Alert.alert('تم الحذف 🗑️', `تم حذف الطالب (${stdObj.name}) من صف (${selectedClass.name}).`);

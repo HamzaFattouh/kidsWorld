@@ -42,12 +42,20 @@ export function TeachersPage() {
     return data.data.find((u) => u.id === selectedTeacherId) || null;
   }, [selectedTeacherId, data?.data]);
 
-  // Generate Monthly Attendance Days Report with Friday Exclusion
+  // Generate Monthly Attendance Days Report with Friday Exclusion & Sync with AttendancePage DB
   const attendanceReport = useMemo(() => {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let teacherDb = null;
+    try {
+      const raw = localStorage.getItem('kidsworld_teacher_attendance_db');
+      if (raw) teacherDb = JSON.parse(raw);
+    } catch (e) {
+      console.warn(e);
+    }
 
     let fridayCount = 0;
     const daysList = [];
@@ -61,22 +69,33 @@ export function TeachersPage() {
         fridayCount++;
       }
 
-      // Simulate realistic attendance (Fridays off, occasional leave)
       const isPast = day <= today.getDate();
-      const isPresent = isPast && !isFriday && (day % 7 !== 0);
+      let isPresent = isPast && !isFriday;
+
+      if (teacherDb && teacherDb[day] && selectedTeacher) {
+        const teacherNameKey = selectedTeacher.name || '';
+        const teacherRec = teacherDb[day].find(
+          (t) =>
+            t.name === teacherNameKey ||
+            (teacherNameKey && t.name && (t.name.includes(teacherNameKey.replace('أ. ', '')) || teacherNameKey.includes(t.name.replace('أ. ', ''))))
+        );
+        if (teacherRec !== undefined) {
+          isPresent = isPast && !isFriday && Boolean(teacherRec.present);
+        }
+      }
 
       daysList.push({
         day,
         dateStr: d.toISOString().split('T')[0],
         isFriday,
         isPresent,
-        isPast
+        isPast,
       });
     }
 
     const netWorkingDays = daysInMonth - fridayCount;
-    const attendedDays = daysList.filter(d => d.isPresent).length;
-    const percentage = Math.round((attendedDays / netWorkingDays) * 100);
+    const attendedDays = daysList.filter((d) => d.isPresent && !d.isFriday).length;
+    const percentage = netWorkingDays > 0 ? Math.round((attendedDays / netWorkingDays) * 100) : 100;
 
     return {
       daysInMonth,
@@ -84,9 +103,9 @@ export function TeachersPage() {
       netWorkingDays,
       attendedDays,
       percentage,
-      daysList
+      daysList,
     };
-  }, [selectedTeacherId]);
+  }, [selectedTeacherId, selectedTeacher, isAttendanceModalOpen]);
 
   const columns = [
     {

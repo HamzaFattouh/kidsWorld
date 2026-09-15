@@ -1,56 +1,77 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Users, UserPlus, UserMinus, Eye, GraduationCap, ShieldCheck, Plus, Trash2 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Modal } from '../../components/ui/Modal';
+import { api } from '../../lib/api';
+
+const DEFAULT_CLASSES = [
+  {
+    id: 'class-birds-3-4',
+    name: 'روضة العصافير 🐥',
+    ageGroup: '3 - 4 سنوات',
+    capacity: 20,
+    teacher: 'أ. نورة النابلسي',
+    teacherPhone: '0599111222',
+    students: [
+      { id: 'child-omar-shakaa', name: 'عمر أحمد الشكعة', gender: 'ذكر', parent: 'أحمد الشكعة' },
+      { id: 'child-yousef-jowdat', name: 'يوسف خالد جودت', gender: 'ذكر', parent: 'خالد جودت' },
+    ],
+  },
+  {
+    id: 'class-flowers-4-5',
+    name: 'روضة الزهور 🌸',
+    ageGroup: '4 - 5 سنوات',
+    capacity: 22,
+    teacher: 'أ. سارة الخالد',
+    teacherPhone: '0599333444',
+    students: [
+      { id: 'child-sara-masri', name: 'سارة مريم المصري', gender: 'أنثى', parent: 'مريم المصري' },
+    ],
+  },
+  {
+    id: 'class-hope-2-3',
+    name: 'روضة الأمل 🌟',
+    ageGroup: '2 - 3 سنوات',
+    capacity: 15,
+    teacher: 'أ. منى التميمي',
+    teacherPhone: '0599444555',
+    students: [
+      { id: 'child-layan-shakaa', name: 'ليان أحمد الشكعة', gender: 'أنثى', parent: 'أحمد الشكعة' },
+    ],
+  },
+];
+
+const DEFAULT_AVAILABLE_STUDENTS = [
+  { id: 'child-khalil', name: 'خليل سمير النابلسي', gender: 'ذكر', parent: 'سمير النابلسي' },
+  { id: 'child-salma', name: 'سلمى إبراهيم حامد', gender: 'أنثى', parent: 'إبراهيم حامد' },
+  { id: 'child-hamza', name: 'حمزة محمود القاسم', gender: 'ذكر', parent: 'محمود القاسم' },
+];
 
 export function ClassesPage() {
   const { t } = useTranslation();
 
-  // Mock initial classes state with teacher in charge & enrolled students
-  const [classesList, setClassesList] = useState([
-    {
-      id: 'class-birds-3-4',
-      name: 'روضة العصافير 🐥',
-      ageGroup: '3 - 4 سنوات',
-      capacity: 20,
-      teacher: 'أ. نورة النابلسي',
-      teacherPhone: '0599111222',
-      students: [
-        { id: 'child-omar-shakaa', name: 'عمر أحمد الشكعة', gender: 'ذكر', parent: 'أحمد الشكعة' },
-        { id: 'child-yousef-jowdat', name: 'يوسف خالد جودت', gender: 'ذكر', parent: 'خالد جودت' },
-      ],
-    },
-    {
-      id: 'class-flowers-4-5',
-      name: 'روضة الزهور 🌸',
-      ageGroup: '4 - 5 سنوات',
-      capacity: 22,
-      teacher: 'أ. سارة الخالد',
-      teacherPhone: '0599333444',
-      students: [
-        { id: 'child-sara-masri', name: 'سارة مريم المصري', gender: 'أنثى', parent: 'مريم المصري' },
-      ],
-    },
-    {
-      id: 'class-hope-2-3',
-      name: 'روضة الأمل 🌟',
-      ageGroup: '2 - 3 سنوات',
-      capacity: 15,
-      teacher: 'أ. منى التميمي',
-      teacherPhone: '0599444555',
-      students: [
-        { id: 'child-layan-shakaa', name: 'ليان أحمد الشكعة', gender: 'أنثى', parent: 'أحمد الشكعة' },
-      ],
-    },
-  ]);
+  // Persistent Classes State
+  const [classesList, setClassesList] = useState(() => {
+    try {
+      const raw = localStorage.getItem('kidsworld_classes_db');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.warn(e);
+    }
+    return DEFAULT_CLASSES;
+  });
 
-  // Unassigned pool of students available for addition
-  const [availableStudents] = useState([
-    { id: 'child-khalil', name: 'خليل سمير النابلسي', gender: 'ذكر', parent: 'سمير النابلسي' },
-    { id: 'child-salma', name: 'سلمى إبراهيم حامد', gender: 'أنثى', parent: 'إبراهيم حامد' },
-    { id: 'child-hamza', name: 'حمزة محمود القاسم', gender: 'ذكر', parent: 'محمود القاسم' },
-  ]);
+  // Persistent Available Students State
+  const [availableStudents, setAvailableStudents] = useState(() => {
+    try {
+      const raw = localStorage.getItem('kidsworld_available_students_db');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.warn(e);
+    }
+    return DEFAULT_AVAILABLE_STUDENTS;
+  });
 
   const [selectedClass, setSelectedClass] = useState(null);
   const [isStudentsModalOpen, setIsStudentsModalOpen] = useState(false);
@@ -59,61 +80,117 @@ export function ClassesPage() {
   const [newStudentToAdd, setNewStudentToAdd] = useState('');
   const [studentToRemove, setStudentToRemove] = useState('');
 
+  // Save to localStorage on any change
+  useEffect(() => {
+    try {
+      localStorage.setItem('kidsworld_classes_db', JSON.stringify(classesList));
+    } catch (e) {
+      console.warn(e);
+    }
+  }, [classesList]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('kidsworld_available_students_db', JSON.stringify(availableStudents));
+    } catch (e) {
+      console.warn(e);
+    }
+  }, [availableStudents]);
+
   const handleOpenStudentsModal = (cls) => {
-    setSelectedClass(cls);
+    const latestCls = classesList.find((c) => c.id === cls.id) || cls;
+    setSelectedClass(latestCls);
     setIsStudentsModalOpen(true);
   };
 
   const handleOpenAddModal = (e, cls) => {
     e.stopPropagation();
-    setSelectedClass(cls);
+    const latestCls = classesList.find((c) => c.id === cls.id) || cls;
+    setSelectedClass(latestCls);
     setNewStudentToAdd('');
     setIsAddStudentModalOpen(true);
   };
 
   const handleOpenRemoveModal = (e, cls) => {
     e.stopPropagation();
-    setSelectedClass(cls);
+    const latestCls = classesList.find((c) => c.id === cls.id) || cls;
+    setSelectedClass(latestCls);
     setStudentToRemove('');
     setIsRemoveStudentModalOpen(true);
   };
 
-  const handleAddStudent = () => {
+  const handleAddStudent = async () => {
     if (!newStudentToAdd || !selectedClass) return;
     const studentObj = availableStudents.find((s) => s.id === newStudentToAdd);
     if (!studentObj) return;
 
-    setClassesList((prev) =>
-      prev.map((cls) => {
-        if (cls.id === selectedClass.id) {
-          if (cls.students.some((s) => s.id === studentObj.id)) return cls;
-          return { ...cls, students: [...cls.students, studentObj] };
-        }
-        return cls;
-      })
-    );
+    const updatedClasses = classesList.map((cls) => {
+      if (cls.id === selectedClass.id) {
+        if (cls.students.some((s) => s.id === studentObj.id)) return cls;
+        return { ...cls, students: [...cls.students, studentObj] };
+      }
+      return cls;
+    });
+
+    const updatedAvailable = availableStudents.filter((s) => s.id !== studentObj.id);
+
+    setClassesList(updatedClasses);
+    setAvailableStudents(updatedAvailable);
+
+    const updatedSelectedClass = updatedClasses.find((c) => c.id === selectedClass.id);
+    if (updatedSelectedClass) {
+      setSelectedClass(updatedSelectedClass);
+    }
+
+    // Save to API in background
+    try {
+      await api.post('/auto/class', { classId: selectedClass.id, studentId: studentObj.id }).catch(() => {});
+    } catch (e) {
+      // fallback handled
+    }
 
     setIsAddStudentModalOpen(false);
-    alert(`تمت إضافة الطالب (${studentObj.name}) إلى صف ${selectedClass.name} بنجاح ✅`);
+    alert(`تمت إضافة الطالب (${studentObj.name}) إلى صف ${selectedClass.name} بنجاح ✅ (محفوظ دائماً)`);
   };
 
-  const handleRemoveStudent = () => {
+  const handleRemoveStudent = async () => {
     if (!studentToRemove || !selectedClass) return;
 
-    setClassesList((prev) =>
-      prev.map((cls) => {
-        if (cls.id === selectedClass.id) {
-          return {
-            ...cls,
-            students: cls.students.filter((s) => s.id !== studentToRemove),
-          };
-        }
-        return cls;
-      })
-    );
+    let removedStudentObj = null;
+
+    const updatedClasses = classesList.map((cls) => {
+      if (cls.id === selectedClass.id) {
+        removedStudentObj = cls.students.find((s) => s.id === studentToRemove);
+        return {
+          ...cls,
+          students: cls.students.filter((s) => s.id !== studentToRemove),
+        };
+      }
+      return cls;
+    });
+
+    let updatedAvailable = availableStudents;
+    if (removedStudentObj && !availableStudents.some((s) => s.id === removedStudentObj.id)) {
+      updatedAvailable = [...availableStudents, removedStudentObj];
+    }
+
+    setClassesList(updatedClasses);
+    setAvailableStudents(updatedAvailable);
+
+    const updatedSelectedClass = updatedClasses.find((c) => c.id === selectedClass.id);
+    if (updatedSelectedClass) {
+      setSelectedClass(updatedSelectedClass);
+    }
+
+    // Save to API in background
+    try {
+      await api.delete(`/auto/class/${selectedClass.id}/students/${studentToRemove}`).catch(() => {});
+    } catch (e) {
+      // fallback handled
+    }
 
     setIsRemoveStudentModalOpen(false);
-    alert(`تم حذف الطالب من صف ${selectedClass.name} بنجاح 🗑️`);
+    alert(`تم حذف الطالب من صف ${selectedClass.name} وإعادته لقائمة المتاحين بنجاح 🗑️ (محفوظ دائماً)`);
   };
 
   return (

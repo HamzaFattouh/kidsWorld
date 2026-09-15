@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Users, ShieldCheck, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
@@ -38,9 +38,14 @@ export function AttendancePage() {
   const teacherClass = allClasses[0]; // Assigned class for teacher
   const visibleClasses = isTeacher ? [teacherClass] : allClasses;
 
-  // Student attendance data BY DAY (selectedDay -> classId -> students)
-  // CRITICAL RULE: Future days (day > TODAY_DAY) are NOT pre-filled! (present: false)
+  // Persistent Student Attendance State BY DAY
   const [studentAttendanceByDay, setStudentAttendanceByDay] = useState(() => {
+    try {
+      const raw = localStorage.getItem('kidsworld_student_attendance_db');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.warn(e);
+    }
     const initial = {};
     for (let day = 1; day <= 30; day++) {
       const isFuture = day > TODAY_DAY;
@@ -63,26 +68,48 @@ export function AttendancePage() {
     return initial;
   });
 
-  // Teacher attendance data BY DAY (selectedDay -> teachers)
-  // CRITICAL RULE: Future days (day > TODAY_DAY) are NOT pre-filled!
+  // Persistent Teacher Attendance State BY DAY
+  // ALL teachers default to present: true for current/past days (days <= 15)
   const [teacherAttendanceByDay, setTeacherAttendanceByDay] = useState(() => {
+    try {
+      const raw = localStorage.getItem('kidsworld_teacher_attendance_db');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.warn(e);
+    }
     const initial = {};
     for (let day = 1; day <= 30; day++) {
       const isFuture = day > TODAY_DAY;
       initial[day] = [
         { id: 't1', name: 'أ. نورة النابلسي', class: 'روضة العصافير', time: isFuture ? '—' : '07:30 ص', present: isFuture ? false : true },
-        { id: 't2', name: 'أ. سارة الخالد', class: 'روضة الزهور', time: isFuture ? '—' : '07:45 ص', present: isFuture ? false : day % 5 !== 0 },
-        { id: 't3', name: 'أ. منى التميمي', class: 'روضة الأمل', time: isFuture ? '—' : '08:00 ص', present: isFuture ? false : day % 3 !== 0 },
+        { id: 't2', name: 'أ. سارة الخالد', class: 'روضة الزهور', time: isFuture ? '—' : '07:45 ص', present: isFuture ? false : true },
+        { id: 't3', name: 'أ. منى التميمي', class: 'روضة الأمل', time: isFuture ? '—' : '08:00 ص', present: isFuture ? false : true },
       ];
     }
     return initial;
   });
 
+  // Save to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('kidsworld_student_attendance_db', JSON.stringify(studentAttendanceByDay));
+    } catch (e) {
+      console.warn(e);
+    }
+  }, [studentAttendanceByDay]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('kidsworld_teacher_attendance_db', JSON.stringify(teacherAttendanceByDay));
+    } catch (e) {
+      console.warn(e);
+    }
+  }, [teacherAttendanceByDay]);
+
   const handleDateSquareClick = (dayNum) => {
     setSelectedDay(dayNum);
     if (calendarMode === 'students') {
       if (isTeacher) {
-        // If teacher, skip class selection and open their assigned class directly!
         setSelectedClass(teacherClass);
         setStudentStep('students_checklist');
       } else {
