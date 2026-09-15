@@ -1,141 +1,117 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
-import { Utensils, CheckCircle, AlertTriangle, XCircle, Calendar } from 'lucide-react-native';
+import { Utensils, CheckCircle, Calendar, ShieldCheck } from 'lucide-react-native';
 import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
-import { useParentStore } from '../../store/parentStore';
-import api from '../../services/api';
 
 export function MealsScreen() {
-  const selectedChildId = useParentStore((s) => s.selectedChildId) || 'CHILD-101';
-  const [meals, setMeals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('daily'); // 'daily' | 'weekly_menu'
 
-  useEffect(() => {
-    fetchMeals();
-  }, [selectedChildId]);
-
-  const fetchMeals = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get(`/operations/meals/${selectedChildId}`);
-      const items = Array.isArray(res?.data?.data) ? res.data.data : Array.isArray(res?.data) ? res.data : [];
-      setMeals(items.length ? items : getFallbackMeals());
-    } catch (e) {
-      setMeals(getFallbackMeals());
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getFallbackMeals = () => [
+  const dailyMeals = [
     {
       id: '1',
-      date: '2026-09-15',
+      date: 'اليوم (2026-09-15)',
       type: 'BREAKFAST',
-      title: 'الإفطار الصحي',
-      consumed: 'ALL',
-      notes: 'تناول طفلك طبق البيض مع شرائح الخيار وتفاحة بالكامل مع العصير الطبيعي.',
+      title: 'وجبة الإفطار',
+      statusText: 'أكل وجبته اليومية بنجاح 🍏',
+      notes: 'تناول الطفل طعامه بحيوية ونشاط كبير.',
     },
     {
       id: '2',
-      date: '2026-09-15',
-      type: 'LUNCH',
-      title: 'وجبة الغداء المتوازنة',
-      consumed: 'SOME',
-      notes: 'أكل نصف وجبة الأرز بالدجاج والشوربة وطلب المزيد من الفواكه.',
-    },
-    {
-      id: '3',
-      date: '2026-09-14',
+      date: 'اليوم (2026-09-15)',
       type: 'SNACK',
-      title: 'الوجبة الخفيفة (Snack)',
-      consumed: 'ALL',
-      notes: 'تناول البسكويت الصحي والحليب كاملاً في وقت الفسحة.',
+      title: 'سناك الفواكه',
+      statusText: 'أكل الوجبة بالكامل ✅',
+      notes: 'تفاح وموز وطبق سلطة فواكه.',
     },
   ];
 
-  const getMealTypeLabel = (type) => {
-    switch (type) {
-      case 'BREAKFAST':
-        return 'الإفطار 🍳';
-      case 'LUNCH':
-        return 'الغداء 🍲';
-      case 'SNACK':
-        return 'وجبة خفيفة 🍎';
-      default:
-        return 'وجبة إضافية 🍪';
-    }
-  };
-
-  const renderConsumedBadge = (consumed) => {
-    switch (consumed) {
-      case 'ALL':
-        return (
-          <View style={[styles.badge, { backgroundColor: '#ecfdf5' }]}>
-            <CheckCircle size={14} color="#10b981" style={{ marginLeft: 4 }} />
-            <Text style={[styles.badgeText, { color: '#10b981' }]}>أكل الوجبة بالكامل ✅</Text>
-          </View>
-        );
-      case 'SOME':
-        return (
-          <View style={[styles.badge, { backgroundColor: '#fefce8' }]}>
-            <AlertTriangle size={14} color="#eab308" style={{ marginLeft: 4 }} />
-            <Text style={[styles.badgeText, { color: '#ca8a04' }]}>أكل جزءاً منها ⚠️</Text>
-          </View>
-        );
-      default:
-        return (
-          <View style={[styles.badge, { backgroundColor: '#fef2f2' }]}>
-            <XCircle size={14} color="#ef4444" style={{ marginLeft: 4 }} />
-            <Text style={[styles.badgeText, { color: '#dc2626' }]}>لم يأكل ❌</Text>
-          </View>
-        );
-    }
-  };
+  const weeklyMenu = [
+    { day: 'الأحد', breakfast: 'جبنة بيضاء ومناقيش زعتر بلدي + خيار', lunch: 'أرز بدجاج ومكسرات وخضار مشكلة', snack: 'فواكه طازجة (تفاح وموز)' },
+    { day: 'الإثنين', breakfast: 'بيض مسلوق وزيت وزعتر + حليب دافئ', lunch: 'صينية خضار بالفرن ومعكرونة', snack: 'بسكويت شوفان وعصير طازج' },
+    { day: 'الثلاثاء', breakfast: 'لبنة بلدية وزيتون أسود وخُبز أسمر', lunch: 'شوربة عدس مغذية + كبسة دجاج', snack: 'برتقال وشرائح جزر' },
+    { day: 'الأربعاء', breakfast: 'فول مدمس خفيف وجبنة شيدر', lunch: 'مقلوبة زهرة ودجاج مع لبن رائب', snack: 'سلطة فواكه مشكلة' },
+    { day: 'الخميس', breakfast: 'فطائر سبانخ وجبنة + عصير برتقال', lunch: 'كفتة بالطحينية وأرز أبيض', snack: 'كيك بيتي بالفواكه' },
+  ];
 
   return (
     <ScreenWrapper>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>سجل الوجبات والتغذية 🍱</Text>
-          <Text style={styles.subTitle}>متابعة الوجبات اليومية للطفل #{selectedChildId}</Text>
+          <Text style={styles.title}>سجل الوجبات وجدول التغذية 🍱</Text>
+          <Text style={styles.subTitle}>متابعة الوجبات اليومية للطفل وتصفح برنامج الأسبوع</Text>
         </View>
 
-        {loading ? (
-          <ActivityIndicator size="medium" color="#10b981" style={{ marginVertical: 20 }} />
-        ) : (
-          meals.map((item) => (
+        {/* Tab Selector */}
+        <View style={styles.tabRow}>
+          <TouchableOpacity
+            style={[styles.tabBtn, activeTab === 'daily' && styles.activeTabBtn]}
+            onPress={() => setActiveTab('daily')}
+          >
+            <Text style={[styles.tabText, activeTab === 'daily' && styles.activeTabText]}>
+              الوجبات اليومية 🍏
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tabBtn, activeTab === 'weekly_menu' && styles.activeTabBtn]}
+            onPress={() => setActiveTab('weekly_menu')}
+          >
+            <Text style={[styles.tabText, activeTab === 'weekly_menu' && styles.activeTabText]}>
+              جدول الوجبات الأسبوعي 📋
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {activeTab === 'daily' ? (
+          dailyMeals.map((item) => (
             <View key={item.id} style={styles.mealCard}>
               <View style={styles.cardHeader}>
                 <View style={styles.typeBadge}>
-                  <Utensils size={14} color="#f97316" style={{ marginLeft: 4 }} />
-                  <Text style={styles.typeText}>{getMealTypeLabel(item.type)}</Text>
+                  <Utensils size={14} color="#ea580c" style={{ marginLeft: 4 }} />
+                  <Text style={styles.typeText}>{item.title}</Text>
                 </View>
-
-                <View style={styles.dateRow}>
-                  <Calendar size={14} color="#9ca3af" style={{ marginLeft: 4 }} />
-                  <Text style={styles.dateText}>{item.date}</Text>
-                </View>
+                <Text style={styles.dateText}>{item.date}</Text>
               </View>
 
-              <Text style={styles.mealTitle}>{item.title || getMealTypeLabel(item.type)}</Text>
-
-              <View style={styles.consumedRow}>
-                {renderConsumedBadge(item.consumed)}
+              <View style={styles.statusBox}>
+                <CheckCircle size={16} color="#10b981" style={{ marginLeft: 6 }} />
+                <Text style={styles.statusText}>{item.statusText}</Text>
               </View>
 
               <View style={styles.notesBox}>
-                <Text style={styles.notesTitle}>ملاحظات المعلمة والمشرفة:</Text>
-                <Text style={styles.notesContent}>{item.notes || 'تم تسجيل الوجبة بنجاح'}</Text>
+                <Text style={styles.notesTitle}>ملاحظات المربية:</Text>
+                <Text style={styles.notesContent}>{item.notes}</Text>
               </View>
             </View>
           ))
+        ) : (
+          <View style={styles.menuContainer}>
+            <Text style={styles.menuHeader}>جدول الوجبات المعتمد للأسبوع الحالي 🥗</Text>
+            {weeklyMenu.map((item, idx) => (
+              <View key={idx} style={styles.menuCard}>
+                <View style={styles.dayBadge}>
+                  <Text style={styles.dayText}>{item.day}</Text>
+                </View>
+                <View style={styles.mealDetailRow}>
+                  <Text style={styles.mealLabel}>🍳 الإفطار:</Text>
+                  <Text style={styles.mealVal}>{item.breakfast}</Text>
+                </View>
+                <View style={styles.mealDetailRow}>
+                  <Text style={styles.mealLabel}>🍲 الغداء:</Text>
+                  <Text style={styles.mealVal}>{item.lunch}</Text>
+                </View>
+                <View style={styles.mealDetailRow}>
+                  <Text style={styles.mealLabel}>🍎 سناك / فواكه:</Text>
+                  <Text style={styles.mealVal}>{item.snack}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
         )}
 
         <View style={{ height: 32 }} />
@@ -150,6 +126,12 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: 'bold', color: '#111827', textAlign: 'right' },
   subTitle: { fontSize: 13, color: '#6b7280', textAlign: 'right', marginTop: 2 },
 
+  tabRow: { flexDirection: 'row-reverse', backgroundColor: '#e2e8f0', borderRadius: 12, padding: 4, marginBottom: 20 },
+  tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
+  activeTabBtn: { backgroundColor: '#ffffff' },
+  tabText: { fontSize: 12, fontWeight: 'bold', color: '#64748b' },
+  activeTabText: { color: '#1e293b' },
+
   mealCard: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
@@ -157,25 +139,25 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#e5e7eb',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.03,
-    shadowRadius: 6,
-    elevation: 2,
   },
   cardHeader: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   typeBadge: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: '#fff7ed', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
   typeText: { fontSize: 12, fontWeight: 'bold', color: '#ea580c' },
-  dateRow: { flexDirection: 'row-reverse', alignItems: 'center' },
   dateText: { fontSize: 12, color: '#6b7280', fontWeight: '500' },
 
-  mealTitle: { fontSize: 16, fontWeight: 'bold', color: '#111827', textAlign: 'right', marginBottom: 10 },
+  statusBox: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: '#ecfdf5', padding: 10, borderRadius: 12, marginBottom: 10 },
+  statusText: { fontSize: 13, fontWeight: 'bold', color: '#15803d' },
 
-  consumedRow: { flexDirection: 'row-reverse', marginBottom: 12 },
-  badge: { flexDirection: 'row-reverse', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
-  badgeText: { fontSize: 12, fontWeight: 'bold' },
+  notesBox: { backgroundColor: '#f9fafb', borderRadius: 12, padding: 10, borderWidth: 1, borderColor: '#f3f4f6' },
+  notesTitle: { fontSize: 11, fontWeight: 'bold', color: '#374151', textAlign: 'right', marginBottom: 2 },
+  notesContent: { fontSize: 13, color: '#4b5563', textAlign: 'right' },
 
-  notesBox: { backgroundColor: '#f9fafb', borderRadius: 12, padding: 12, borderWidth: 1, borderColor: '#f3f4f6' },
-  notesTitle: { fontSize: 12, fontWeight: 'bold', color: '#374151', textAlign: 'right', marginBottom: 4 },
-  notesContent: { fontSize: 13, color: '#4b5563', textAlign: 'right', lineHeight: 18 },
+  menuContainer: { spaceBetween: 12 },
+  menuHeader: { fontSize: 15, fontWeight: 'bold', color: '#1f2937', textAlign: 'right', marginBottom: 12 },
+  menuCard: { backgroundColor: '#ffffff', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#e5e7eb' },
+  dayBadge: { backgroundColor: '#eff6ff', alignSelf: 'flex-end', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 10, marginBottom: 10 },
+  dayText: { fontSize: 13, fontWeight: 'bold', color: '#1d4ed8' },
+  mealDetailRow: { flexDirection: 'row-reverse', borderBottomWidth: 1, borderBottomColor: '#f3f4f6', paddingVertical: 6 },
+  mealLabel: { fontSize: 13, fontWeight: 'bold', color: '#374151', width: 110, textAlign: 'right' },
+  mealVal: { flex: 1, fontSize: 13, color: '#4b5563', textAlign: 'right' },
 });
