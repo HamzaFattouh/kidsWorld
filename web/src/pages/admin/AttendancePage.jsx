@@ -39,10 +39,6 @@ export function AttendancePage() {
   const teacherClass = allClasses[0]; // Assigned class for teacher
   const visibleClasses = isTeacher ? [teacherClass] : allClasses;
 
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [teacherAttendanceByDay]);
 
   const handleDateSquareClick = (dayNum) => {
     setSelectedDay(dayNum);
