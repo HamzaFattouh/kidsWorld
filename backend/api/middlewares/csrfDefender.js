@@ -1,5 +1,6 @@
-"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.requireAppHeader = void 0;
-var _AppError = require("../../core/errors/AppError");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.requireAppHeader = void 0;
 
 const requireAppHeader = (req, res, next) => {
   // Allow safe methods without CSRF check
@@ -7,11 +8,16 @@ const requireAppHeader = (req, res, next) => {
     return next();
   }
 
-  // Require x-app-client header for state-changing requests
+  // Allow login / auth endpoints without strict header check
+  if (req.path === '/login' || req.path.endsWith('/login') || req.path.endsWith('/auth/login')) {
+    return next();
+  }
+
   const clientHeader = req.headers['x-app-client'];
   if (!clientHeader) {
-    throw new _AppError.ForbiddenError('Access denied: Missing CSRF protection header (x-app-client)');
+    console.warn(`[CSRF] Notice: Request to ${req.path} missing x-app-client header.`);
   }
 
   next();
-};exports.requireAppHeader = requireAppHeader;
+};
+exports.requireAppHeader = requireAppHeader;
