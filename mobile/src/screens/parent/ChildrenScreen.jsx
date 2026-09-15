@@ -5,23 +5,27 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import { Users, FileText, CheckCircle, Heart, Shield, Calendar, Award } from 'lucide-react-native';
+import { Users, FileText, Calendar, RefreshCw, AlertTriangle, ShieldCheck, Heart } from 'lucide-react-native';
 import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
 import { useParentStore } from '../../store/parentStore';
 
 export function ChildrenScreen() {
   const { selectedChildId, setSelectedChildId } = useParentStore();
 
-  const childrenList = [
+  const [childrenList, setChildrenList] = useState([
     {
-      id: 'CHILD-101',
-      name: 'عبدالله محمد علي',
-      age: '3 سنوات',
-      class: 'قاعة الرواد (أ)',
-      birthDate: '2023-04-12',
+      id: 'child-omar-shakaa',
+      name: 'عمر أحمد الشكعة',
+      age: '4 سنوات',
+      class: 'روضة العصافير (أ)',
+      birthDate: '2022-04-15',
       bloodType: 'O+',
-      allergies: 'لا يوجد',
+      allergies: 'حساسية خفيفة من السمسم',
+      enrollmentDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
+      parentName: 'أحمد الشكعة (0599888777)',
+      teacherName: 'أ. نورة النابلسي',
       documents: [
         { name: 'شهادة الميلاد الرسمية', status: 'موثق ✅' },
         { name: 'الكشف الطبي والتحصينات', status: 'مكتمل ✅' },
@@ -29,29 +33,66 @@ export function ChildrenScreen() {
       ],
     },
     {
-      id: 'CHILD-102',
-      name: 'سارة محمد علي',
-      age: 'سنة ونصف',
-      class: 'قاعة الصغار (ب)',
-      birthDate: '2025-01-20',
+      id: 'child-sara-masri',
+      name: 'سارة مريم المصري',
+      age: '5 سنوات',
+      class: 'روضة الزهور (ب)',
+      birthDate: '2021-11-20',
       bloodType: 'A+',
-      allergies: 'حساسية بسيطة من الفول السوداني',
+      allergies: 'تضع نظارات طبية للأنشطة',
+      enrollmentDate: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString(), // 35 days ago (Expired!)
+      parentName: 'مريم المصري (0599555666)',
+      teacherName: 'أ. سارة الخالد',
       documents: [
         { name: 'شهادة الميلاد الرسمية', status: 'موثق ✅' },
         { name: 'التقرير الطبي الأول', status: 'مكتمل ✅' },
       ],
     },
-  ];
+  ]);
 
   const currentChildId = selectedChildId || childrenList[0].id;
   const activeChild = childrenList.find((c) => c.id === currentChildId) || childrenList[0];
+
+  // Expiration logic calculation (30 days threshold)
+  const getEnrollmentStatus = (enrollDateStr) => {
+    if (!enrollDateStr) return { expired: false, days: 0, text: 'غير محدد' };
+    const days = Math.floor((new Date() - new Date(enrollDateStr)) / (1000 * 60 * 60 * 24));
+    if (days >= 30) {
+      return {
+        expired: true,
+        days,
+        text: 'انتهى تسجيله (يتطلب تجديد) ⚠️',
+        color: '#ef4444',
+        bg: '#fef2f2',
+      };
+    }
+    const remaining = 30 - days;
+    return {
+      expired: false,
+      days,
+      text: `نشط (باقي ${remaining} يوماً على التجديد) 🟢`,
+      color: '#10b981',
+      bg: '#ecfdf5',
+    };
+  };
+
+  const handleRenewRegistration = (childId) => {
+    setChildrenList((prev) =>
+      prev.map((c) =>
+        c.id === childId ? { ...c, enrollmentDate: new Date().toISOString() } : c
+      )
+    );
+    Alert.alert('تم تجديد الاشتراك 🎉', 'تم تمديد تسجيل الطفل لمدة 30 يوماً بنجاح!');
+  };
+
+  const currentStatus = getEnrollmentStatus(activeChild.enrollmentDate);
 
   return (
     <ScreenWrapper>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>الأطفال والمستندات 👶</Text>
-          <Text style={styles.subTitle}>إدارة وتحديد الطفل المتابع وعرض الملف الطبي والمستندات</Text>
+          <Text style={styles.title}>الأطفال وتجديد التسجيل 👶</Text>
+          <Text style={styles.subTitle}>متابعة حالة التسجيل والملف الطبي والمستندات الرسمية</Text>
         </View>
 
         {/* Child Selector Tabs */}
@@ -60,6 +101,7 @@ export function ChildrenScreen() {
         <View style={styles.childrenSelectorRow}>
           {childrenList.map((ch) => {
             const isSelected = ch.id === currentChildId;
+            const st = getEnrollmentStatus(ch.enrollmentDate);
             return (
               <TouchableOpacity
                 key={ch.id}
@@ -68,10 +110,38 @@ export function ChildrenScreen() {
                 activeOpacity={0.7}
               >
                 <Users size={16} color={isSelected ? '#ffffff' : '#3b82f6'} style={{ marginLeft: 6 }} />
-                <Text style={[styles.childChipText, isSelected && styles.activeChildChipText]}>{ch.name}</Text>
+                <Text style={[styles.childChipText, isSelected && styles.activeChildChipText]}>
+                  {ch.name} {st.expired ? '⚠️' : ''}
+                </Text>
               </TouchableOpacity>
             );
           })}
+        </View>
+
+        {/* Expiration Banner */}
+        <View style={[styles.expirationBanner, { backgroundColor: currentStatus.bg, borderColor: currentStatus.color }]}>
+          <View style={styles.expirationContent}>
+            {currentStatus.expired ? (
+              <AlertTriangle size={22} color={currentStatus.color} style={{ marginLeft: 10 }} />
+            ) : (
+              <ShieldCheck size={22} color={currentStatus.color} style={{ marginLeft: 10 }} />
+            )}
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.expirationTitle, { color: currentStatus.color }]}>حالة الاشتراك الشهري</Text>
+              <Text style={styles.expirationSub}>{currentStatus.text}</Text>
+            </View>
+          </View>
+
+          {currentStatus.expired && (
+            <TouchableOpacity
+              style={styles.renewBtn}
+              activeOpacity={0.8}
+              onPress={() => handleRenewRegistration(activeChild.id)}
+            >
+              <RefreshCw size={16} color="#ffffff" style={{ marginLeft: 6 }} />
+              <Text style={styles.renewBtnText}>تجديد الاشتراك الان</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Selected Child Info Card */}
@@ -97,7 +167,11 @@ export function ChildrenScreen() {
               <Text style={styles.detailVal}>{activeChild.bloodType}</Text>
             </View>
             <View style={styles.detailItem}>
-              <Text style={styles.detailLabel}>الحساسية والطوارئ</Text>
+              <Text style={styles.detailLabel}>المعلم المسؤول</Text>
+              <Text style={styles.detailVal}>{activeChild.teacherName}</Text>
+            </View>
+            <View style={[styles.detailItem, { width: '100%' }]}>
+              <Text style={styles.detailLabel}>الحساسية والملاحظات الطبية</Text>
               <Text style={[styles.detailVal, { color: '#ef4444' }]}>{activeChild.allergies}</Text>
             </View>
           </View>
@@ -132,7 +206,7 @@ const styles = StyleSheet.create({
 
   sectionHeader: { fontSize: 16, fontWeight: 'bold', color: '#111827', textAlign: 'right', marginBottom: 12 },
 
-  childrenSelectorRow: { flexDirection: 'row-reverse', marginBottom: 20 },
+  childrenSelectorRow: { flexDirection: 'row-reverse', marginBottom: 16 },
   childChip: {
     flexDirection: 'row-reverse',
     alignItems: 'center',
@@ -147,6 +221,43 @@ const styles = StyleSheet.create({
   activeChildChip: { backgroundColor: '#3b82f6', borderColor: '#3b82f6' },
   childChipText: { fontSize: 13, fontWeight: 'bold', color: '#1e40af' },
   activeChildChipText: { color: '#ffffff' },
+
+  expirationBanner: {
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1.5,
+  },
+  expirationContent: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+  },
+  expirationTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'right',
+  },
+  expirationSub: {
+    fontSize: 13,
+    color: '#374151',
+    textAlign: 'right',
+    marginTop: 2,
+    fontWeight: '600',
+  },
+  renewBtn: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    justify: 'center',
+    backgroundColor: '#ef4444',
+    paddingVertical: 10,
+    borderRadius: 12,
+    marginTop: 12,
+  },
+  renewBtnText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
 
   infoCard: {
     backgroundColor: '#ffffff',
