@@ -186,11 +186,10 @@ export function PublicLayout() {
           </div>
           <div>
             <h4 className="font-display font-bold text-xl mb-6">معلومات الاتصال</h4>
-            <ul className="space-y-3 text-gray-400" dir="ltr">
-              <li className="text-end">123 Education Lane</li>
-              <li className="text-end">New York, NY 10001</li>
-              <li className="text-end">hello@kidtime.com</li>
-              <li className="text-end">+1 (555) 123-4567</li>
+            <ul className="space-y-3 text-gray-400">
+              <li className="text-start font-medium">📍 نابلس- نابلس الجديدة</li>
+              <li className="text-start">✉️ info@kidsworld.ps</li>
+              <li className="text-start">📞 +970 9 234 5678</li>
             </ul>
           </div>
           <div>

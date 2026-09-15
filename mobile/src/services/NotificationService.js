@@ -84,12 +84,17 @@ async function registerForPushNotificationsAsync() {
     // expo-notifications natively supports FCM and APNs mapping via EAS
     try {
       const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
-      token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+      if (projectId) {
+        token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+      } else {
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+      }
 
-      // Store locally
-      await AsyncStorage.setItem('expoPushToken', token);
+      if (token) {
+        await AsyncStorage.setItem('expoPushToken', token);
+      }
     } catch (e) {
-      console.error(e);
+      console.warn('Push notification token unavailable (EAS projectId required for remote push):', e.message);
     }
   } else {
     console.log('Must use physical device for Push Notifications');

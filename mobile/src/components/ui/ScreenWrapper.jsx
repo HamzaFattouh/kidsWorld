@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, SafeAreaView, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeStore, getActiveTheme } from '../../store/themeStore';
 
 export function ScreenWrapper({ children }) {
@@ -11,8 +12,8 @@ export function ScreenWrapper({ children }) {
       <View style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f9fafb' }]}>
         {children}
       </View>
-    </SafeAreaView>);
-
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
