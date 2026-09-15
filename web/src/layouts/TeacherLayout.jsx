@@ -8,7 +8,7 @@ import { Button } from '../components/ui/Button';
 import {
   LayoutDashboard, Baby, CalendarCheck, Utensils,
   Gamepad2, FileText, Star, AlertTriangle,
-  MessageSquare, Bell, Calendar, LogOut, Menu, X } from
+  MessageSquare, Bell, Calendar, LogOut, Menu, X, ClipboardCheck } from
 'lucide-react';
 
 export function TeacherLayout() {
@@ -45,7 +45,7 @@ export function TeacherLayout() {
     items: [
     { href: '/teacher/notes', label: t('nav.notes', 'Weekly Notes'), icon: FileText },
     { href: '/teacher/evaluations', label: t('nav.evaluations', 'Evaluations'), icon: Star },
-    { href: '/teacher/incidents', label: t('nav.incidents', 'Incidents'), icon: AlertTriangle }]
+    { href: '/teacher/tasks', label: t('nav.tasks', 'Tasks'), icon: ClipboardCheck }]
 
   },
   {

@@ -58,8 +58,7 @@ export function ParentLayout() {
     { href: '/parent/attendance', label: t('nav.attendance', 'Attendance'), icon: CalendarCheck },
     { href: '/parent/meals', label: t('nav.meals', 'Meals'), icon: Utensils },
     { href: '/parent/notes', label: t('nav.notes', 'Weekly Notes'), icon: FileText },
-    { href: '/parent/evaluations', label: t('nav.evaluations', 'Evaluations'), icon: Star },
-    { href: '/parent/incidents', label: t('nav.incidents', 'Incidents'), icon: AlertTriangle }]
+    { href: '/parent/evaluations', label: t('nav.evaluations', 'Evaluations'), icon: Star }]
 
   },
   {

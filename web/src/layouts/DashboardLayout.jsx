@@ -11,7 +11,7 @@ import {
   CalendarCheck, Utensils, FileText, Star, AlertTriangle, UserMinus,
   MessageSquare, HelpCircle, Bell, Megaphone, Calendar, Rss, Image,
   Layout, FormInput, FileBox, Video, Key, Clock, FileBarChart, Shield, Settings,
-  LogOut, Menu, X } from
+  LogOut, Menu, X, ClipboardList } from
 'lucide-react';
 
 export function DashboardLayout() {
@@ -50,7 +50,7 @@ export function DashboardLayout() {
     { href: '/admin/meals', label: t('nav.meals', 'Meals'), icon: Utensils },
     { href: '/admin/notes', label: t('nav.notes', 'Weekly Notes'), icon: FileText },
     { href: '/admin/evaluations', label: t('nav.evaluations', 'Evaluations'), icon: Star },
-    { href: '/admin/incidents', label: t('nav.incidents', 'Incidents'), icon: AlertTriangle }]
+    { href: '/admin/tasks', label: t('nav.tasks', 'Tasks'), icon: ClipboardList }]
 
   },
   {

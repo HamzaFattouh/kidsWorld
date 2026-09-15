@@ -10,7 +10,6 @@ import { AttendanceScreen } from '../screens/parent/AttendanceScreen';
 import { MealsScreen } from '../screens/parent/MealsScreen';
 import { WeeklyNotesScreen } from '../screens/parent/WeeklyNotesScreen';
 import { EvaluationsScreen } from '../screens/parent/EvaluationsScreen';
-import { IncidentsScreen } from '../screens/parent/IncidentsScreen';
 
 import { MessagesScreen } from '../screens/parent/MessagesScreen';
 import { NotificationsScreen } from '../screens/parent/NotificationsScreen';
@@ -34,9 +33,7 @@ function ChildrenStack() {
       <Stack.Screen name="Meals" component={MealsScreen} />
       <Stack.Screen name="WeeklyNotes" component={WeeklyNotesScreen} />
       <Stack.Screen name="Evaluations" component={EvaluationsScreen} />
-      <Stack.Screen name="Incidents" component={IncidentsScreen} />
     </Stack.Navigator>);
-
 }
 
 function MessagesStack() {

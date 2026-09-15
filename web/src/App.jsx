@@ -25,7 +25,7 @@ import { AttendancePage } from './pages/admin/AttendancePage';
 import { MealsPage } from './pages/admin/MealsPage';
 import { WeeklyNotesPage } from './pages/admin/WeeklyNotesPage';
 import { EvaluationsPage } from './pages/admin/EvaluationsPage';
-import { IncidentsPage } from './pages/admin/IncidentsPage';
+import { TasksPage } from './pages/admin/TasksPage';
 import { ComplaintsPage } from './pages/admin/ComplaintsPage';
 import { RequestsPage } from './pages/admin/RequestsPage';
 import { MessagesPage } from './pages/admin/MessagesPage';
@@ -51,7 +51,7 @@ import { TeacherMealsPage } from './pages/teacher/MealsPage';
 import { TeacherDailyActivitiesPage } from './pages/teacher/DailyActivitiesPage';
 import { TeacherWeeklyNotesPage } from './pages/teacher/WeeklyNotesPage';
 import { TeacherEvaluationsPage } from './pages/teacher/EvaluationsPage';
-import { TeacherIncidentsPage } from './pages/teacher/IncidentsPage';
+import { TeacherTasksPage } from './pages/teacher/TasksPage';
 import { TeacherComplaintsPage } from './pages/teacher/ComplaintsPage';
 import { TeacherMessagesPage } from './pages/teacher/MessagesPage';
 import { TeacherNotificationsPage } from './pages/teacher/NotificationsPage';
@@ -62,7 +62,6 @@ import { ParentAttendancePage } from './pages/parent/AttendancePage';
 import { ParentMealsPage } from './pages/parent/MealsPage';
 import { ParentWeeklyNotesPage } from './pages/parent/WeeklyNotesPage';
 import { ParentEvaluationsPage } from './pages/parent/EvaluationsPage';
-import { ParentIncidentsPage } from './pages/parent/IncidentsPage';
 import { ParentAnnouncementsPage } from './pages/parent/AnnouncementsPage';
 import { ParentEventsPage } from './pages/parent/EventsPage';
 import { ParentComplaintsPage } from './pages/parent/ComplaintsPage';
@@ -126,7 +125,7 @@ export default function App() {
             <Route path="/admin/meals" element={<MealsPage />} />
             <Route path="/admin/notes" element={<WeeklyNotesPage />} />
             <Route path="/admin/evaluations" element={<EvaluationsPage />} />
-            <Route path="/admin/incidents" element={<IncidentsPage />} />
+            <Route path="/admin/tasks" element={<TasksPage />} />
             <Route path="/admin/complaints" element={<ComplaintsPage />} />
             <Route path="/admin/requests" element={<RequestsPage />} />
             <Route path="/admin/messages" element={<MessagesPage />} />
@@ -157,7 +156,7 @@ export default function App() {
             <Route path="/teacher/activities" element={<TeacherDailyActivitiesPage />} />
             <Route path="/teacher/notes" element={<TeacherWeeklyNotesPage />} />
             <Route path="/teacher/evaluations" element={<TeacherEvaluationsPage />} />
-            <Route path="/teacher/incidents" element={<TeacherIncidentsPage />} />
+            <Route path="/teacher/tasks" element={<TeacherTasksPage />} />
             <Route path="/teacher/complaints" element={<TeacherComplaintsPage />} />
             <Route path="/teacher/messages" element={<TeacherMessagesPage />} />
             <Route path="/teacher/notifications" element={<TeacherNotificationsPage />} />
@@ -173,7 +172,6 @@ export default function App() {
             <Route path="/parent/meals" element={<ParentMealsPage />} />
             <Route path="/parent/notes" element={<ParentWeeklyNotesPage />} />
             <Route path="/parent/evaluations" element={<ParentEvaluationsPage />} />
-            <Route path="/parent/incidents" element={<ParentIncidentsPage />} />
             <Route path="/parent/announcements" element={<ParentAnnouncementsPage />} />
             <Route path="/parent/events" element={<ParentEventsPage />} />
             <Route path="/parent/complaints" element={<ParentComplaintsPage />} />

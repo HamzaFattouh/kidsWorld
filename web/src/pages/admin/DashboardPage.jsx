@@ -231,56 +231,52 @@ export function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* 4. Incidents & Safety Notifications */}
+        {/* 4. Tasks & Teacher Completion Feed */}
         <Card className="lg:col-span-1 shadow-md">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-rose-500" />
+                <CheckCircle2 className="w-5 h-5 text-blue-600" />
                 <h3 className="font-display font-bold text-gray-900 dark:text-white text-base">
-                  إشعارات الحوادث والطوارئ ⚠️
+                  مهام المعلمين ومتابعة الإنجاز 📋
                 </h3>
               </div>
-              <span className="text-xs bg-rose-50 dark:bg-rose-950/40 text-rose-600 px-2 py-0.5 rounded-md font-bold">
-                {stats.incidentsFeed?.length || 0}
+              <span className="text-xs bg-blue-50 dark:bg-blue-950/40 text-blue-600 px-2 py-0.5 rounded-md font-bold">
+                مباشر
               </span>
             </div>
 
             <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1">
-              {stats.incidentsFeed?.length > 0 ? (
-                stats.incidentsFeed.map((inc) => (
-                  <div key={inc.id} className="p-3.5 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-gray-900 dark:text-white">
-                        الطفل: {inc.childName}
-                      </span>
-                      <span className="text-[11px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded-full">
-                        {inc.severity === 'LOW' ? 'بسيط 🟢' : inc.severity === 'MEDIUM' ? 'متوسط 🟡' : 'عالي 🔴'}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {inc.description}
-                    </p>
-
-                    {inc.actionAction || inc.actionTaken ? (
-                      <div className="bg-emerald-50/60 dark:bg-emerald-950/20 p-2 rounded-lg text-[11px] text-emerald-700 dark:text-emerald-300">
-                        <span className="font-bold">الإجراء: </span>{inc.actionTaken}
-                      </div>
-                    ) : null}
-
-                    <div className="flex justify-between items-center text-[10px] text-gray-400 pt-1">
-                      <span>توقيت الحادثة: {inc.time || '—'}</span>
-                      <span>{new Date(inc.date).toLocaleDateString('ar-EG')}</span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-emerald-600 dark:text-emerald-400 space-y-2">
-                  <CheckCircle2 className="w-8 h-8 mx-auto" />
-                  <p className="text-xs font-bold">الحمد لله، لم يتم تسجيل أي حوادث طارئة اليوم.</p>
+              <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                    أ. نورة النابلسي
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-full">
+                    مكتملة ✅
+                  </span>
                 </div>
-              )}
+                <p className="text-xs text-emerald-800 dark:text-emerald-300 font-medium">
+                  إعداد تقارير التقييم الشهري للطلاب
+                </p>
+                <div className="text-[11px] text-emerald-700 dark:text-emerald-400 bg-white/70 dark:bg-slate-900/40 p-2 rounded-lg">
+                  💬 ملاحظة المعلمة: تم إنجاز كافة تقييمات روضة العصافير بنجاح.
+                </div>
+              </div>
+
+              <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-800 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                    أ. سارة الخالد، أ. منى التميمي
+                  </span>
+                  <span className="text-[10px] font-bold text-amber-700 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-full">
+                    قيد التنفيذ ⏳
+                  </span>
+                </div>
+                <p className="text-xs text-amber-800 dark:text-amber-300 font-medium">
+                  تجهيز ركن المعرض الفني وتلوين الرسومات
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>

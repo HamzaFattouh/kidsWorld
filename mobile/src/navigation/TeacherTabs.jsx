@@ -11,7 +11,7 @@ import { MealsScreen } from '../screens/teacher/MealsScreen';
 import { ActivitiesScreen } from '../screens/teacher/ActivitiesScreen';
 import { WeeklyNotesScreen } from '../screens/teacher/WeeklyNotesScreen';
 import { EvaluationsScreen } from '../screens/teacher/EvaluationsScreen';
-import { IncidentsScreen } from '../screens/teacher/IncidentsScreen';
+import { TasksScreen } from '../screens/teacher/TasksScreen';
 
 import { MessagesScreen } from '../screens/teacher/MessagesScreen';
 import { NotificationsScreen } from '../screens/teacher/NotificationsScreen';
@@ -28,14 +28,13 @@ function ClassroomStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ChildrenHome" component={ChildrenScreen} />
+      <Stack.Screen name="Tasks" component={TasksScreen} />
       <Stack.Screen name="Attendance" component={AttendanceScreen} />
       <Stack.Screen name="Meals" component={MealsScreen} />
       <Stack.Screen name="Activities" component={ActivitiesScreen} />
       <Stack.Screen name="WeeklyNotes" component={WeeklyNotesScreen} />
       <Stack.Screen name="Evaluations" component={EvaluationsScreen} />
-      <Stack.Screen name="Incidents" component={IncidentsScreen} />
     </Stack.Navigator>);
-
 }
 
 function MessagesStack() {
