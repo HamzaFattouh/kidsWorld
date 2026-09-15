@@ -14,6 +14,8 @@ reportingRouter.post('/notes', _sessionValidator.requireAuth, (0, _authorize.req
 reportingRouter.get('/notes/:childId', _sessionValidator.requireAuth, (0, _authorize.requireOwnership)('child', 'childId'), _reporting.getWeeklyNotes);
 
 reportingRouter.post('/evaluations', _sessionValidator.requireAuth, (0, _authorize.requireOwnership)('child', 'childId'), (0, _validateRequest.validateRequest)(_reporting2.createEvaluationSchema), _reporting.createEvaluation);
-reportingRouter.get('/evaluations/:childId', _sessionValidator.requireAuth, (0, _authorize.requireOwnership)('child', 'childId'), _reporting.getEvaluations);var _default = exports.default =
+reportingRouter.get('/evaluations/:childId', _sessionValidator.requireAuth, (0, _authorize.requireOwnership)('child', 'childId'), _reporting.getEvaluations);
 
-reportingRouter;
+reportingRouter.get('/admin/dashboard-stats', _sessionValidator.requireAuth, _reporting.getAdminDashboardStats);
+
+var _default = exports.default = reportingRouter;

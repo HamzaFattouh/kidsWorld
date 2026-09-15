@@ -29,4 +29,8 @@ class ReportingService {
   async getEvaluations(childId) {
     return this.reportingRepo.getEvaluations(childId);
   }
+
+  async getAdminDashboardStats() {
+    return this.reportingRepo.getAdminDashboardStats();
+  }
 }exports.ReportingService = ReportingService;

@@ -73,3 +73,10 @@ const getEvaluations = async (req, res, next) => {
     res.json({ data: records });
   } catch (error) {next(error);}
 };exports.getEvaluations = getEvaluations;
+
+const getAdminDashboardStats = async (req, res, next) => {
+  try {
+    const stats = await reportingService.getAdminDashboardStats();
+    res.json({ data: stats });
+  } catch (error) {next(error);}
+};exports.getAdminDashboardStats = getAdminDashboardStats;
