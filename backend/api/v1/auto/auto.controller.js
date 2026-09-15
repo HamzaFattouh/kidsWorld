@@ -132,7 +132,7 @@ const updateResource = async (req, res, next) => {
     if (index !== -1) {
       const updated = { ...items[index], ...req.body };
       items[index] = updated;
-      dbStore.save();
+      dbStore.saveData();
       return res.json({ data: updated });
     }
     return res.status(404).json({ error: { message: 'Not found' } });
@@ -171,7 +171,7 @@ const deleteResource = async (req, res, next) => {
     const index = items.findIndex(item => item.id === id);
     if (index !== -1) {
       items.splice(index, 1);
-      dbStore.save();
+      dbStore.saveData();
       return res.json({ success: true });
     }
     return res.status(404).json({ error: { message: 'Not found' } });
