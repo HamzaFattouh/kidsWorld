@@ -51,20 +51,44 @@ export function UsersPage() {
     return data.data.find((u) => u.id === selectedUserId) || null;
   }, [selectedUserId, data?.data]);
 
+  // Helper to load saved permissions per user ID from localStorage
+  const loadPermissionsFromDb = () => {
+    try {
+      const raw = localStorage.getItem('kidsworld_user_permissions_db');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.warn(e);
+    }
+    return {};
+  };
+
   const handleOpenPermissions = (user) => {
     setSelectedUserId(user.id);
-    // Initialize default role-specific permissions
+    const db = loadPermissionsFromDb();
     const isTeacher = user.role === 'TEACHER';
-    setUserPermissions({
-      editCms: isTeacher,
-      manageEvents: isTeacher,
-      uploadJournal: true,
-      recordAttendance: isTeacher,
-      recordMeals: isTeacher,
-      writeEvaluations: isTeacher,
-      sendMessages: true,
-      viewCameras: true,
-    });
+
+    if (db[user.id]) {
+      setUserPermissions(db[user.id]);
+    } else {
+      // Default role-specific permissions
+      const defaultTeacherPerms = {
+        recordAttendance: true,
+        recordMeals: true,
+        writeEvaluations: true,
+        uploadJournal: true,
+        manageEvents: true,
+        sendMessages: true,
+        viewCameras: true,
+      };
+      const defaultParentPerms = {
+        viewReports: true,
+        sendMessages: true,
+        submitRequests: true,
+        viewCameras: true,
+        downloadDocuments: true,
+      };
+      setUserPermissions(isTeacher ? defaultTeacherPerms : defaultParentPerms);
+    }
     setIsPermissionsModalOpen(true);
   };
 
@@ -73,7 +97,18 @@ export function UsersPage() {
   };
 
   const handleSavePermissions = () => {
-    alert(`تم حفظ صلاحيات المستخدم (${selectedUser?.name || selectedUser?.email}) بنجاح! ✅`);
+    if (!selectedUserId || !selectedUser) return;
+    try {
+      const db = loadPermissionsFromDb();
+      const updatedDb = {
+        ...db,
+        [selectedUserId]: userPermissions,
+      };
+      localStorage.setItem('kidsworld_user_permissions_db', JSON.stringify(updatedDb));
+      alert(`تم حفظ وتطبيق صلاحيات (${selectedUser.name || selectedUser.email}) بنجاح! ✅ (محفوظ دائماً)`);
+    } catch (e) {
+      console.warn(e);
+    }
     setIsPermissionsModalOpen(false);
   };
 
@@ -101,7 +136,7 @@ export function UsersPage() {
       cell: (user) => user.phone || '—'
     },
     {
-      header: 'الدور',
+      header: 'الدور القيادي',
       accessorKey: 'role',
       cell: (user) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold 
@@ -137,19 +172,30 @@ export function UsersPage() {
     }
   ];
 
-  const permissionList = [
-    { key: 'editCms', label: 'تعديل محتوى الصفحة الرئيسية للموقع (CMS)', icon: '🌐' },
-    { key: 'manageEvents', label: 'إدارة الأنشطة والفعاليات والألبومات', icon: '🎨' },
-    { key: 'uploadJournal', label: 'رفع صور في المجلة اليومية للأطفال', icon: '📸' },
-    { key: 'recordAttendance', label: 'تسجيل وتحديث الحضور والغياب اليومي', icon: '📅' },
+  // Specific permission lists for Teacher vs Parent
+  const TEACHER_PERMISSIONS_LIST = [
+    { key: 'recordAttendance', label: 'تسجيل وتحديث الحضور والغياب اليومي للطلاب', icon: '📅' },
     { key: 'recordMeals', label: 'تسجيل الوجبات الغذائية اليومية للأطفال', icon: '🍱' },
-    { key: 'writeEvaluations', label: 'كتابة التقييمات والملاحظات الأسبوعية', icon: '🏆' },
+    { key: 'writeEvaluations', label: 'كتابة وتحديث التقييمات والملاحظات الأسبوعية', icon: '🏆' },
+    { key: 'uploadJournal', label: 'رفع صور في المجلة اليومية للأطفال', icon: '📸' },
+    { key: 'manageEvents', label: 'إدارة وتعديل الفعاليات والأنشطة', icon: '🎨' },
     { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى', icon: '💬' },
     { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات', icon: '📹' },
   ];
 
+  const PARENT_PERMISSIONS_LIST = [
+    { key: 'viewReports', label: 'الاطلاع ومتابعة التقييمات والملاحظات الأسبوعية للأطفال', icon: '📊' },
+    { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى لإدارة الروضة', icon: '💬' },
+    { key: 'submitRequests', label: 'تقديم طلبات المغادرة والإذن الاستثنائي وشخص الاستلام', icon: '📝' },
+    { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات', icon: '📹' },
+    { key: 'downloadDocuments', label: 'تحميل وتنزيل المستندات والملفات المرفقة', icon: '📁' },
+  ];
+
+  const currentPermissionList =
+    selectedUser?.role === 'PARENT' ? PARENT_PERMISSIONS_LIST : TEACHER_PERMISSIONS_LIST;
+
   return (
-    <div className="space-y-6 text-start">
+    <div className="space-y-6 text-start" dir="rtl">
       <PageHeader
         title="إدارة المستخدمين والصلاحيات 👥"
         description="عرض وإضافة المستخدمين والتحكم الدقيق بصلاحيات المعلمين وأولياء الأمور"
@@ -184,7 +230,7 @@ export function UsersPage() {
           setIsPermissionsModalOpen(false);
           setSelectedUserId(null);
         }}
-        title="بيانات وصلاحيات المستخدم 🔐"
+        title={`بيانات وصلاحيات (${selectedUser?.name || ''}) 🔐`}
       >
         <div className="py-4 space-y-6 text-start">
           {selectedUser ? (
@@ -203,8 +249,10 @@ export function UsersPage() {
                       <p className="text-xs text-gray-500">{selectedUser.email}</p>
                     </div>
                   </div>
-                  <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-xs rounded-full">
-                    {selectedUser.role}
+                  <span className={`px-3 py-1 font-bold text-xs rounded-full ${
+                    selectedUser.role === 'TEACHER' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'
+                  }`}>
+                    {selectedUser.role === 'TEACHER' ? 'معلم 👩‍🏫' : 'ولي أمر 👨‍👩‍👧'}
                   </span>
                 </div>
 
@@ -216,14 +264,19 @@ export function UsersPage() {
 
               {/* Permissions List */}
               <div className="space-y-3">
-                <h4 className="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-primary" />
-                  لوحة التحكم بالصلاحيات (تفعيل / تعطيل):
-                </h4>
+                <div className="flex justify-between items-center">
+                  <h4 className="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-primary" />
+                    صلاحيات حساب {selectedUser.role === 'TEACHER' ? 'المعلم/ة' : 'ولي الأمر'} المتاحة:
+                  </h4>
+                  <span className="text-[11px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded">
+                    صلاحيات مخصصة للدور
+                  </span>
+                </div>
 
                 <div className="space-y-2">
-                  {permissionList.map((perm) => {
-                    const isEnabled = !!userPermissions[perm.key];
+                  {currentPermissionList.map((perm) => {
+                    const isEnabled = userPermissions[perm.key] !== undefined ? Boolean(userPermissions[perm.key]) : true;
                     return (
                       <div
                         key={perm.key}
@@ -258,7 +311,7 @@ export function UsersPage() {
                   className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-[1.02]"
                 >
                   <Save className="w-4 h-4" />
-                  حفظ إعدادات الصلاحيات
+                  حفظ وتأكيد صلاحيات الحساب
                 </button>
               </div>
             </>

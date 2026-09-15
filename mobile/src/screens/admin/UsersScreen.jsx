@@ -127,19 +127,49 @@ export function UsersScreen() {
   const [newChildName, setNewChildName] = useState('');
   const [newChildClass, setNewChildClass] = useState('روضة العصافير');
 
+  const TEACHER_PERMISSIONS = [
+    { key: 'recordAttendance', label: 'تسجيل وتحديث الحضور والغياب اليومي للطلاب' },
+    { key: 'recordMeals', label: 'تسجيل الوجبات الغذائية اليومية للأطفال' },
+    { key: 'writeEvaluations', label: 'كتابة وتحديث التقييمات والملاحظات' },
+    { key: 'uploadJournal', label: 'رفع صور في المجلة اليومية للأطفال' },
+    { key: 'manageEvents', label: 'إدارة وتعديل الفعاليات والأنشطة' },
+    { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى' },
+    { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات' },
+  ];
+
+  const PARENT_PERMISSIONS = [
+    { key: 'viewReports', label: 'متابعة والاطلاع على التقييمات والملاحظات الأسبوعية' },
+    { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى لإدارة الروضة' },
+    { key: 'submitRequests', label: 'تقديم طلبات المغادرة والإذن الاستثنائي' },
+    { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات' },
+    { key: 'downloadDocuments', label: 'تحميل وتنزيل المستندات والملفات المرفقة' },
+  ];
+
   const openUserDetail = (user) => {
     setSelectedUser(user);
     const isTeacher = user.role === 'TEACHER';
-    setPermissions({
-      editCms: isTeacher,
-      manageEvents: isTeacher,
-      uploadJournal: true,
-      recordAttendance: isTeacher,
-      recordMeals: isTeacher,
-      writeEvaluations: isTeacher,
-      sendMessages: true,
-      viewCameras: true,
-    });
+
+    if (user.permissions) {
+      setPermissions(user.permissions);
+    } else {
+      const defaultTeacher = {
+        recordAttendance: true,
+        recordMeals: true,
+        writeEvaluations: true,
+        uploadJournal: true,
+        manageEvents: true,
+        sendMessages: true,
+        viewCameras: true,
+      };
+      const defaultParent = {
+        viewReports: true,
+        sendMessages: true,
+        submitRequests: true,
+        viewCameras: true,
+        downloadDocuments: true,
+      };
+      setPermissions(isTeacher ? defaultTeacher : defaultParent);
+    }
     setIsPermissionsModalOpen(true);
   };
 
@@ -148,7 +178,23 @@ export function UsersScreen() {
   };
 
   const handleSavePermissions = () => {
-    Alert.alert('تم حفظ الصلاحيات 🎉', `تم تحديث صلاحيات المستخدم (${selectedUser?.name}) بنجاح.`);
+    if (!selectedUser) return;
+
+    setUsersList((prev) =>
+      prev.map((u) => {
+        if (u.id === selectedUser.id) {
+          return { ...u, permissions: { ...permissions } };
+        }
+        return u;
+      })
+    );
+
+    setSelectedUser((prev) => ({
+      ...prev,
+      permissions: { ...permissions },
+    }));
+
+    Alert.alert('تم حفظ الصلاحيات 🎉', `تم تحديث وتثبيت صلاحيات (${selectedUser?.name}) بنجاح.`);
     setIsPermissionsModalOpen(false);
   };
 
@@ -364,19 +410,12 @@ export function UsersScreen() {
                 )}
 
                 {/* PERMISSIONS CONTROL */}
-                <Text style={styles.sectionHeaderTitle}>التحكم بصلاحيات الحساب 🔐</Text>
+                <Text style={styles.sectionHeaderTitle}>
+                  التحكم بصلاحيات ({selectedUser.role === 'TEACHER' ? 'المعلم/ة' : 'ولي الأمر'}) 🔐
+                </Text>
                 <View style={styles.permissionsGrid}>
-                  {[
-                    { key: 'editCms', label: 'تعديل محتوى الصفحة الرئيسية للموقع (CMS)' },
-                    { key: 'manageEvents', label: 'إدارة الأنشطة والفعاليات والألبومات' },
-                    { key: 'uploadJournal', label: 'رفع صور في المجلة اليومية للأطفال' },
-                    { key: 'recordAttendance', label: 'تسجيل وتحديث الحضور والغياب اليومي' },
-                    { key: 'recordMeals', label: 'تسجيل الوجبات الغذائية اليومية للأطفال' },
-                    { key: 'writeEvaluations', label: 'كتابة التقييمات والملاحظات الأسبوعية' },
-                    { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى' },
-                    { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات' },
-                  ].map((perm) => {
-                    const isEnabled = permissions[perm.key];
+                  {(selectedUser.role === 'PARENT' ? PARENT_PERMISSIONS : TEACHER_PERMISSIONS).map((perm) => {
+                    const isEnabled = permissions[perm.key] !== undefined ? Boolean(permissions[perm.key]) : true;
                     return (
                       <TouchableOpacity
                         key={perm.key}
