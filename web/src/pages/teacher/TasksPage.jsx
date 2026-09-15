@@ -15,6 +15,7 @@ import {
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Modal } from '../../components/ui/Modal';
 import { useAuthStore } from '../../store/authStore';
+import { api } from '../../lib/api';
 
 export function TeacherTasksPage() {
   const { t } = useTranslation();
@@ -22,29 +23,25 @@ export function TeacherTasksPage() {
 
   const currentTeacherName = user?.name || 'أ. نورة النابلسي';
 
-  // Persistent Tasks State
-  const [tasks, setTasks] = useState(() => {
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchTasks = async () => {
     try {
-      const raw = localStorage.getItem('kidsworld_tasks_db');
-      if (raw) return JSON.parse(raw);
+      const response = await api.get('/auto/task');
+      if (response?.data?.data) {
+        setTasks(response.data.data);
+      }
     } catch (e) {
-      console.warn(e);
+      console.error('Failed to fetch tasks', e);
+    } finally {
+      setIsLoading(false);
     }
-    return [];
-  });
+  };
 
-  const [selectedTaskToComplete, setSelectedTaskToComplete] = useState(null);
-  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
-  const [teacherNote, setTeacherNote] = useState('');
-
-  // Sync to localStorage
   useEffect(() => {
-    try {
-      localStorage.setItem('kidsworld_tasks_db', JSON.stringify(tasks));
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [tasks]);
+    fetchTasks();
+  }, []);
 
   // Filter tasks assigned to THIS teacher (or matched by substring/name)
   const myTasks = tasks.filter((t) =>
@@ -65,27 +62,27 @@ export function TeacherTasksPage() {
     setIsCompletionModalOpen(true);
   };
 
-  const handleConfirmCompletion = (e) => {
+  const handleConfirmCompletion = async (e) => {
     e.preventDefault();
     if (!selectedTaskToComplete) return;
 
-    const updatedTasks = tasks.map((t) => {
-      if (t.id === selectedTaskToComplete.id) {
-        return {
-          ...t,
-          status: 'COMPLETED',
-          completedBy: currentTeacherName,
-          completedAt: new Date().toISOString(),
-          teacherNote: teacherNote.trim(),
-          adminNotificationReceived: true,
-        };
-      }
-      return t;
-    });
+    const updatePayload = {
+      status: 'COMPLETED',
+      completedBy: currentTeacherName,
+      completedAt: new Date().toISOString(),
+      teacherNote: teacherNote.trim(),
+      adminNotificationReceived: true,
+    };
 
-    setTasks(updatedTasks);
-    setIsCompletionModalOpen(false);
-    alert(`تم تسجيل إنجاز المهمة بنجاح وإرسال إشعار فوري للمدير مع ملاحظتك 🔔`);
+    try {
+      await api.put(`/auto/task/${selectedTaskToComplete.id}`, updatePayload);
+      await fetchTasks();
+      setIsCompletionModalOpen(false);
+      alert(`تم تسجيل إنجاز المهمة بنجاح وإرسال إشعار فوري للمدير مع ملاحظتك 🔔`);
+    } catch (e) {
+      console.error('Failed to update task', e);
+      alert('حدث خطأ أثناء تحديث المهمة');
+    }
   };
 
   const getPriorityBadge = (priority) => {

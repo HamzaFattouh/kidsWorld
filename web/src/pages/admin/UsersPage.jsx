@@ -51,24 +51,12 @@ export function UsersPage() {
     return data.data.find((u) => u.id === selectedUserId) || null;
   }, [selectedUserId, data?.data]);
 
-  // Helper to load saved permissions per user ID from localStorage
-  const loadPermissionsFromDb = () => {
-    try {
-      const raw = localStorage.getItem('kidsworld_user_permissions_db');
-      if (raw) return JSON.parse(raw);
-    } catch (e) {
-      console.warn(e);
-    }
-    return {};
-  };
-
   const handleOpenPermissions = (user) => {
     setSelectedUserId(user.id);
-    const db = loadPermissionsFromDb();
     const isTeacher = user.role === 'TEACHER';
 
-    if (db[user.id]) {
-      setUserPermissions(db[user.id]);
+    if (user.permissions && Object.keys(user.permissions).length > 0) {
+      setUserPermissions(user.permissions);
     } else {
       // Default role-specific permissions
       const defaultTeacherPerms = {
@@ -92,22 +80,28 @@ export function UsersPage() {
     setIsPermissionsModalOpen(true);
   };
 
+
   const togglePermission = (key) => {
     setUserPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const handleSavePermissions = () => {
+  const handleSavePermissions = async () => {
     if (!selectedUserId || !selectedUser) return;
     try {
-      const db = loadPermissionsFromDb();
-      const updatedDb = {
-        ...db,
-        [selectedUserId]: userPermissions,
-      };
-      localStorage.setItem('kidsworld_user_permissions_db', JSON.stringify(updatedDb));
-      alert(`تم حفظ وتطبيق صلاحيات (${selectedUser.name || selectedUser.email}) بنجاح! ✅ (محفوظ دائماً)`);
+      // Using generic api client assuming usersApi uses it underneath or just fetch
+      await fetch(`http://localhost:3000/api/v1/auto/user/${selectedUserId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ permissions: userPermissions })
+      });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      alert(`تم حفظ وتطبيق صلاحيات (${selectedUser.name || selectedUser.email}) بنجاح! ✅`);
     } catch (e) {
-      console.warn(e);
+      console.error(e);
+      alert('حدث خطأ أثناء حفظ الصلاحيات');
     }
     setIsPermissionsModalOpen(false);
   };

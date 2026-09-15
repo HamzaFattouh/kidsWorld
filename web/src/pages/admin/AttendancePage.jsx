@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Calendar, Users, ShieldCheck, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { useAuthStore } from '../../store/authStore';
+import { api } from '../../lib/api';
 
 export function AttendancePage() {
   const { t } = useTranslation();
@@ -38,69 +39,6 @@ export function AttendancePage() {
   const teacherClass = allClasses[0]; // Assigned class for teacher
   const visibleClasses = isTeacher ? [teacherClass] : allClasses;
 
-  // Persistent Student Attendance State BY DAY
-  const [studentAttendanceByDay, setStudentAttendanceByDay] = useState(() => {
-    try {
-      const raw = localStorage.getItem('kidsworld_student_attendance_db');
-      if (raw) return JSON.parse(raw);
-    } catch (e) {
-      console.warn(e);
-    }
-    const initial = {};
-    for (let day = 1; day <= 30; day++) {
-      const isFuture = day > TODAY_DAY;
-      initial[day] = {
-        'class-birds-3-4': [
-          { id: 'c1', name: 'عمر أحمد الشكعة', parent: 'أحمد الشكعة', present: isFuture ? false : day % 2 === 0 },
-          { id: 'c2', name: 'يوسف خالد جودت', parent: 'خالد جودت', present: isFuture ? false : day % 3 === 0 },
-          { id: 'c3', name: 'خليل سمير النابلسي', parent: 'سمير النابلسي', present: isFuture ? false : true },
-        ],
-        'class-flowers-4-5': [
-          { id: 'c4', name: 'سارة مريم المصري', parent: 'مريم المصري', present: isFuture ? false : true },
-          { id: 'c5', name: 'سلمى إبراهيم حامد', parent: 'إبراهيم حامد', present: isFuture ? false : day % 4 !== 0 },
-        ],
-        'class-hope-2-3': [
-          { id: 'c6', name: 'ليان أحمد الشكعة', parent: 'أحمد الشكعة', present: isFuture ? false : true },
-          { id: 'c7', name: 'حمزة محمود القاسم', parent: 'محمود القاسم', present: false },
-        ],
-      };
-    }
-    return initial;
-  });
-
-  // Persistent Teacher Attendance State BY DAY
-  // ALL teachers default to present: true for current/past days (days <= 15)
-  const [teacherAttendanceByDay, setTeacherAttendanceByDay] = useState(() => {
-    try {
-      const raw = localStorage.getItem('kidsworld_teacher_attendance_db');
-      if (raw) return JSON.parse(raw);
-    } catch (e) {
-      console.warn(e);
-    }
-    const initial = {};
-    for (let day = 1; day <= 30; day++) {
-      const isFuture = day > TODAY_DAY;
-      initial[day] = [
-        { id: 't1', name: 'أ. نورة النابلسي', class: 'روضة العصافير', time: isFuture ? '—' : '07:30 ص', present: isFuture ? false : true },
-        { id: 't2', name: 'أ. سارة الخالد', class: 'روضة الزهور', time: isFuture ? '—' : '07:45 ص', present: isFuture ? false : true },
-        { id: 't3', name: 'أ. منى التميمي', class: 'روضة الأمل', time: isFuture ? '—' : '08:00 ص', present: isFuture ? false : true },
-      ];
-    }
-    return initial;
-  });
-
-  // Save to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('kidsworld_student_attendance_db', JSON.stringify(studentAttendanceByDay));
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [studentAttendanceByDay]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('kidsworld_teacher_attendance_db', JSON.stringify(teacherAttendanceByDay));
     } catch (e) {
       console.warn(e);
     }
@@ -126,14 +64,21 @@ export function AttendancePage() {
   };
 
   // Toggle student attendance for selectedDay & classId
-  const toggleStudentCheck = (studentId) => {
+  const toggleStudentCheck = async (studentId) => {
     if (!selectedClass) return;
+    const dateStr = `2026-09-${selectedDay.toString().padStart(2, '0')}`;
+    let newStatus = false;
+    
     setStudentAttendanceByDay((prev) => {
       const dayData = prev[selectedDay] || {};
       const classStudents = dayData[selectedClass.id] || [];
-      const updatedStudents = classStudents.map((std) =>
-        std.id === studentId ? { ...std, present: !std.present } : std
-      );
+      const updatedStudents = classStudents.map((std) => {
+        if (std.id === studentId) {
+          newStatus = !std.present;
+          return { ...std, present: newStatus };
+        }
+        return std;
+      });
       return {
         ...prev,
         [selectedDay]: {
@@ -142,25 +87,67 @@ export function AttendancePage() {
         },
       };
     });
+
+    try {
+      await api.post('/auto/attendanceRecord', {
+        childId: studentId,
+        date: dateStr,
+        status: newStatus ? 'PRESENT' : 'ABSENT',
+      });
+    } catch (e) {
+      console.warn('API error saving attendance');
+    }
   };
 
   // Toggle teacher attendance for selectedDay
-  const toggleTeacherCheck = (teacherId) => {
+  const toggleTeacherCheck = async (teacherId) => {
+    const dateStr = `2026-09-${selectedDay.toString().padStart(2, '0')}`;
+    let newStatus = false;
+    let newTime = '—';
+
     setTeacherAttendanceByDay((prev) => {
       const dayList = prev[selectedDay] || [];
-      const updatedList = dayList.map((t) =>
-        t.id === teacherId ? { ...t, present: !t.present, time: !t.present ? '07:30 ص' : '—' } : t
-      );
+      const updatedList = dayList.map((t) => {
+        if (t.id === teacherId) {
+          newStatus = !t.present;
+          newTime = !t.present ? '07:30 ص' : '—';
+          return { ...t, present: newStatus, time: newTime };
+        }
+        return t;
+      });
       return { ...prev, [selectedDay]: updatedList };
     });
+
+    try {
+      await api.post('/auto/teacherAttendanceRecord', {
+        teacherId,
+        date: dateStr,
+        status: newStatus ? 'PRESENT' : 'ABSENT',
+        time: newTime,
+      });
+    } catch (e) {
+      console.warn('API error saving teacher attendance');
+    }
   };
 
-  const updateTeacherTime = (teacherId, newTime) => {
+  const updateTeacherTime = async (teacherId, newTime) => {
+    const dateStr = `2026-09-${selectedDay.toString().padStart(2, '0')}`;
+
     setTeacherAttendanceByDay((prev) => {
       const dayList = prev[selectedDay] || [];
       const updatedList = dayList.map((t) => (t.id === teacherId ? { ...t, time: newTime } : t));
       return { ...prev, [selectedDay]: updatedList };
     });
+
+    try {
+      await api.post('/auto/teacherAttendanceRecord', {
+        teacherId,
+        date: dateStr,
+        time: newTime,
+      });
+    } catch (e) {
+      console.warn('API error saving teacher time');
+    }
   };
 
   // Active list for current selectedDay & class

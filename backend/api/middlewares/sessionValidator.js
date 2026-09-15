@@ -16,10 +16,8 @@ const requireAuth = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
     }
 
-    if (!token || token === 'mock-token') {
-      // Mock / guest fallback mode if token is mock-token or missing in dev
-      req.user = { userId: 'user-admin-001', role: 'ADMIN' };
-      return next();
+    if (!token) {
+      return next(new _AppError.UnauthorizedError('Missing authentication token'));
     }
 
     try {
@@ -27,12 +25,10 @@ const requireAuth = async (req, res, next) => {
       req.user = payload;
       return next();
     } catch (jwtErr) {
-      // Fallback for dev / mock tokens
-      req.user = { userId: 'user-admin-001', role: 'ADMIN' };
-      return next();
+      return next(new _AppError.UnauthorizedError('Invalid or expired token'));
     }
   } catch (error) {
-    next(new _AppError.UnauthorizedError('Invalid or expired token'));
+    next(new _AppError.UnauthorizedError('Authentication failed'));
   }
 };
 exports.requireAuth = requireAuth;

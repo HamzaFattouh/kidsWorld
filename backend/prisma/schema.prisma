@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -81,6 +81,7 @@ model User {
   alternatePhone         String?
   nationalId             String?
   address                String?   @db.Text
+  permissions            Json?
 
   sessions               Session[]
   tokens                 Token[]
@@ -103,6 +104,23 @@ model User {
   streamSessions         StreamSession[]
   
   posts                  Post[]
+  teacherAttendanceRecords TeacherAttendanceRecord[]
+}
+
+model Task {
+  id                        String    @id @default(uuid())
+  title                     String
+  description               String    @db.Text
+  priority                  String
+  assignedTeachers          Json
+  dueDate                   DateTime?
+  status                    String    @default("PENDING")
+  completedBy               String?
+  completedAt               DateTime?
+  teacherNote               String?   @db.Text
+  adminNotificationReceived Boolean   @default(false)
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
 }
 
 model Permission {
@@ -459,6 +477,18 @@ model AttendanceRecord {
   child     Child            @relation(fields: [childId], references: [id], onDelete: Cascade)
 
   @@unique([childId, date])
+}
+
+model TeacherAttendanceRecord {
+  id        String           @id @default(uuid())
+  teacherId String
+  date      DateTime         @db.Date
+  status    AttendanceStatus
+  time      String?
+  notes     String?
+  teacher   User             @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@unique([teacherId, date])
 }
 
 model MealRecord {

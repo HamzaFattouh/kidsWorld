@@ -6,6 +6,9 @@ const autoRouter = (0, _express.Router)();
 
 // Generic auto routes for rapid prototyping of all modules
 autoRouter.get('/:resource', _sessionValidator.requireAuth, _auto.listResource);
-autoRouter.post('/:resource', _sessionValidator.requireAuth, _auto.createResource);var _default = exports.default =
+autoRouter.post('/:resource', _sessionValidator.requireAuth, _auto.createResource);
+autoRouter.put('/:resource/:id', _sessionValidator.requireAuth, _auto.updateResource);
+autoRouter.delete('/:resource/:id', _sessionValidator.requireAuth, _auto.deleteResource);
+var _default = exports.default =
 
 autoRouter;

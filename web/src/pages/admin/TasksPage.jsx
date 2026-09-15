@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Modal } from '../../components/ui/Modal';
+import { api } from '../../lib/api';
 
 const TEACHERS_LIST = [
   { id: 'usr-teacher-noura', name: 'أ. نورة النابلسي', class: 'روضة العصافير' },
@@ -72,16 +73,25 @@ const INITIAL_TASKS = [
 export function TasksPage() {
   const { t } = useTranslation();
 
-  // Persistent Tasks State
-  const [tasks, setTasks] = useState(() => {
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchTasks = async () => {
     try {
-      const raw = localStorage.getItem('kidsworld_tasks_db');
-      if (raw) return JSON.parse(raw);
+      const response = await api.get('/auto/task');
+      if (response?.data?.data) {
+        setTasks(response.data.data);
+      }
     } catch (e) {
-      console.warn(e);
+      console.error('Failed to fetch tasks', e);
+    } finally {
+      setIsLoading(false);
     }
-    return INITIAL_TASKS;
-  });
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const [filterTab, setFilterTab] = useState('ALL'); // ALL | PENDING | COMPLETED | URGENT
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -93,14 +103,6 @@ export function TasksPage() {
   const [taskDueDate, setTaskDueDate] = useState('2026-09-20');
   const [selectedTeachers, setSelectedTeachers] = useState([]);
 
-  // Sync to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('kidsworld_tasks_db', JSON.stringify(tasks));
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [tasks]);
 
   const handleToggleTeacherSelection = (teacherName) => {
     if (selectedTeachers.includes(teacherName)) {
@@ -118,7 +120,7 @@ export function TasksPage() {
     }
   };
 
-  const handleCreateTask = (e) => {
+  const handleCreateTask = async (e) => {
     e.preventDefault();
     if (!taskTitle.trim() || selectedTeachers.length === 0) {
       alert('يرجى كتابة عنوان المهمة واختيار معلم واحد على الأقل.');
@@ -126,32 +128,39 @@ export function TasksPage() {
     }
 
     const newTask = {
-      id: `task-${Date.now()}`,
       title: taskTitle.trim(),
       description: taskDescription.trim(),
       priority: taskPriority,
       assignedTeachers: selectedTeachers,
       dueDate: taskDueDate,
-      createdAt: new Date().toISOString(),
       status: 'PENDING',
-      completedBy: null,
-      completedAt: null,
-      teacherNote: '',
       adminNotificationReceived: false,
     };
 
-    setTasks([newTask, ...tasks]);
-    setTaskTitle('');
-    setTaskDescription('');
-    setSelectedTeachers([]);
-    setTaskPriority('MEDIUM');
-    setIsCreateModalOpen(false);
-    alert('تم إرسال المهمة للمعلمين بنجاح 🚀');
+    try {
+      await api.post('/auto/task', newTask);
+      await fetchTasks();
+      
+      setTaskTitle('');
+      setTaskDescription('');
+      setSelectedTeachers([]);
+      setTaskPriority('MEDIUM');
+      setIsCreateModalOpen(false);
+      alert('تم إرسال المهمة للمعلمين بنجاح 🚀');
+    } catch (e) {
+      console.error('Failed to create task', e);
+      alert('فشل إنشاء المهمة');
+    }
   };
 
-  const handleDeleteTask = (taskId) => {
+  const handleDeleteTask = async (taskId) => {
     if (window.confirm('هل أنت تأكد من إزالة هذه المهمة من السجل؟')) {
-      setTasks(tasks.filter((t) => t.id !== taskId));
+      try {
+        await api.delete(`/auto/task/${taskId}`);
+        await fetchTasks();
+      } catch (e) {
+        console.error('Failed to delete task', e);
+      }
     }
   };
 

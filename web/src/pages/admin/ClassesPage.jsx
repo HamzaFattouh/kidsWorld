@@ -51,27 +51,9 @@ const DEFAULT_AVAILABLE_STUDENTS = [
 export function ClassesPage() {
   const { t } = useTranslation();
 
-  // Persistent Classes State
-  const [classesList, setClassesList] = useState(() => {
-    try {
-      const raw = localStorage.getItem('kidsworld_classes_db');
-      if (raw) return JSON.parse(raw);
-    } catch (e) {
-      console.warn(e);
-    }
-    return DEFAULT_CLASSES;
-  });
-
-  // Persistent Available Students State
-  const [availableStudents, setAvailableStudents] = useState(() => {
-    try {
-      const raw = localStorage.getItem('kidsworld_available_students_db');
-      if (raw) return JSON.parse(raw);
-    } catch (e) {
-      console.warn(e);
-    }
-    return DEFAULT_AVAILABLE_STUDENTS;
-  });
+  const [classesList, setClassesList] = useState([]);
+  const [availableStudents, setAvailableStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [selectedClass, setSelectedClass] = useState(null);
   const [isStudentsModalOpen, setIsStudentsModalOpen] = useState(false);
@@ -80,22 +62,34 @@ export function ClassesPage() {
   const [newStudentToAdd, setNewStudentToAdd] = useState('');
   const [studentToRemove, setStudentToRemove] = useState('');
 
-  // Save to localStorage on any change
-  useEffect(() => {
+  const fetchData = async () => {
     try {
-      localStorage.setItem('kidsworld_classes_db', JSON.stringify(classesList));
-    } catch (e) {
-      console.warn(e);
+      setIsLoading(true);
+      const [classRes, childRes] = await Promise.all([
+        api.get('/auto/class'),
+        api.get('/auto/child'),
+      ]);
+      const classes = classRes.data.data || [];
+      const children = childRes.data.data || [];
+
+      const mappedClasses = classes.map(cls => ({
+        ...cls,
+        students: children.filter(c => c.classId === cls.id),
+      }));
+
+      setClassesList(mappedClasses);
+      setAvailableStudents(children.filter(c => !c.classId));
+    } catch (error) {
+      console.error('Failed to load classes or students:', error);
+      alert('حدث خطأ في تحميل البيانات من الخادم');
+    } finally {
+      setIsLoading(false);
     }
-  }, [classesList]);
+  };
 
   useEffect(() => {
-    try {
-      localStorage.setItem('kidsworld_available_students_db', JSON.stringify(availableStudents));
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [availableStudents]);
+    fetchData();
+  }, []);
 
   const handleOpenStudentsModal = (cls) => {
     const latestCls = classesList.find((c) => c.id === cls.id) || cls;
@@ -124,73 +118,59 @@ export function ClassesPage() {
     const studentObj = availableStudents.find((s) => s.id === newStudentToAdd);
     if (!studentObj) return;
 
-    const updatedClasses = classesList.map((cls) => {
-      if (cls.id === selectedClass.id) {
-        if (cls.students.some((s) => s.id === studentObj.id)) return cls;
-        return { ...cls, students: [...cls.students, studentObj] };
-      }
-      return cls;
-    });
-
-    const updatedAvailable = availableStudents.filter((s) => s.id !== studentObj.id);
-
-    setClassesList(updatedClasses);
-    setAvailableStudents(updatedAvailable);
-
-    const updatedSelectedClass = updatedClasses.find((c) => c.id === selectedClass.id);
-    if (updatedSelectedClass) {
-      setSelectedClass(updatedSelectedClass);
-    }
-
-    // Save to API in background
     try {
-      await api.post('/auto/class', { classId: selectedClass.id, studentId: studentObj.id }).catch(() => {});
-    } catch (e) {
-      // fallback handled
-    }
+      await api.put(`/auto/child/${studentObj.id}`, { classId: selectedClass.id });
+      
+      const updatedClasses = classesList.map((cls) => {
+        if (cls.id === selectedClass.id) {
+          return { ...cls, students: [...(cls.students || []), studentObj] };
+        }
+        return cls;
+      });
 
-    setIsAddStudentModalOpen(false);
-    alert(`تمت إضافة الطالب (${studentObj.name}) إلى صف ${selectedClass.name} بنجاح ✅ (محفوظ دائماً)`);
+      const updatedAvailable = availableStudents.filter((s) => s.id !== studentObj.id);
+
+      setClassesList(updatedClasses);
+      setAvailableStudents(updatedAvailable);
+      setSelectedClass(updatedClasses.find((c) => c.id === selectedClass.id));
+      setIsAddStudentModalOpen(false);
+      alert(`تمت إضافة الطالب (${studentObj.name}) إلى صف ${selectedClass.name} بنجاح ✅`);
+    } catch (e) {
+      alert('حدث خطأ أثناء حفظ البيانات في الخادم');
+    }
   };
 
   const handleRemoveStudent = async () => {
     if (!studentToRemove || !selectedClass) return;
 
-    let removedStudentObj = null;
-
-    const updatedClasses = classesList.map((cls) => {
-      if (cls.id === selectedClass.id) {
-        removedStudentObj = cls.students.find((s) => s.id === studentToRemove);
-        return {
-          ...cls,
-          students: cls.students.filter((s) => s.id !== studentToRemove),
-        };
-      }
-      return cls;
-    });
-
-    let updatedAvailable = availableStudents;
-    if (removedStudentObj && !availableStudents.some((s) => s.id === removedStudentObj.id)) {
-      updatedAvailable = [...availableStudents, removedStudentObj];
-    }
-
-    setClassesList(updatedClasses);
-    setAvailableStudents(updatedAvailable);
-
-    const updatedSelectedClass = updatedClasses.find((c) => c.id === selectedClass.id);
-    if (updatedSelectedClass) {
-      setSelectedClass(updatedSelectedClass);
-    }
-
-    // Save to API in background
     try {
-      await api.delete(`/auto/class/${selectedClass.id}/students/${studentToRemove}`).catch(() => {});
-    } catch (e) {
-      // fallback handled
-    }
+      await api.put(`/auto/child/${studentToRemove}`, { classId: null });
 
-    setIsRemoveStudentModalOpen(false);
-    alert(`تم حذف الطالب من صف ${selectedClass.name} وإعادته لقائمة المتاحين بنجاح 🗑️ (محفوظ دائماً)`);
+      let removedStudentObj = null;
+      const updatedClasses = classesList.map((cls) => {
+        if (cls.id === selectedClass.id) {
+          removedStudentObj = (cls.students || []).find((s) => s.id === studentToRemove);
+          return {
+            ...cls,
+            students: (cls.students || []).filter((s) => s.id !== studentToRemove),
+          };
+        }
+        return cls;
+      });
+
+      let updatedAvailable = availableStudents;
+      if (removedStudentObj) {
+        updatedAvailable = [...availableStudents, removedStudentObj];
+      }
+
+      setClassesList(updatedClasses);
+      setAvailableStudents(updatedAvailable);
+      setSelectedClass(updatedClasses.find((c) => c.id === selectedClass.id));
+      setIsRemoveStudentModalOpen(false);
+      alert(`تم حذف الطالب من صف ${selectedClass.name} وإعادته لقائمة المتاحين بنجاح 🗑️`);
+    } catch (e) {
+      alert('حدث خطأ أثناء إزالة الطالب من الخادم');
+    }
   };
 
   return (
