@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { Layout } from 'lucide-react';
-import { homepageConfigApi } from '../../api/homepageConfig';
+import React, { useState, useEffect } from'react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Card, CardContent, CardHeader, CardTitle } from'../../components/ui/Card';
+import { Button } from'../../components/ui/Button';
+import { Input } from'../../components/ui/Input';
+import { Layout } from'lucide-react';
+import { homepageConfigApi } from'../../api/homepageConfig';
 
 const textSections = [
-  { id: 'hero', name: 'الواجهة الرئيسية (Hero)' },
-  { id: 'about', name: 'عن الحضانة' },
-  { id: 'contact', name: 'معلومات التواصل' }
+  { id:'hero', name:'الواجهة الرئيسية (Hero)' },
+  { id:'about', name:'عن الحضانة' },
+  { id:'contact', name:'معلومات التواصل' }
 ];
 
 export function HomepageCMSPage() {
@@ -76,25 +76,25 @@ export function HomepageCMSPage() {
             <CardContent className="p-6 space-y-4">
               <Input
                 label="العنوان (انجليزي)"
-                value={configs[section.id]?.titleEn || ''}
-                onChange={(e) => handleChange(section.id, 'titleEn', e.target.value)}
+                value={configs[section.id]?.titleEn ||''}
+                onChange={(e) => handleChange(section.id,'titleEn', e.target.value)}
               />
               <Input
                 label="العنوان (عربي)"
-                value={configs[section.id]?.titleAr || ''}
-                onChange={(e) => handleChange(section.id, 'titleAr', e.target.value)}
+                value={configs[section.id]?.titleAr ||''}
+                onChange={(e) => handleChange(section.id,'titleAr', e.target.value)}
               />
               <Input
                 type="textarea"
                 label="النص (انجليزي)"
-                value={configs[section.id]?.bodyEn || ''}
-                onChange={(e) => handleChange(section.id, 'bodyEn', e.target.value)}
+                value={configs[section.id]?.bodyEn ||''}
+                onChange={(e) => handleChange(section.id,'bodyEn', e.target.value)}
               />
               <Input
                 type="textarea"
                 label="النص (عربي)"
-                value={configs[section.id]?.bodyAr || ''}
-                onChange={(e) => handleChange(section.id, 'bodyAr', e.target.value)}
+                value={configs[section.id]?.bodyAr ||''}
+                onChange={(e) => handleChange(section.id,'bodyAr', e.target.value)}
               />
               <Button 
                 onClick={() => handleUpdate(section.id)}

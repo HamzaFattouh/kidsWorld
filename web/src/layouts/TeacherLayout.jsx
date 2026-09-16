@@ -1,15 +1,14 @@
-import { useState } from 'react';
-import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { ThemeToggle } from '../components/ui/ThemeToggle';
-import { useAuthStore } from '../store/authStore';
-import { cn } from '../lib/utils';
-import { Button } from '../components/ui/Button';
+import { useState } from'react';
+import { Outlet, NavLink, useNavigate, Link } from'react-router-dom';
+import { useTranslation } from'react-i18next';
+import { ThemeToggle } from'../components/ui/ThemeToggle';
+import { useAuthStore } from'../store/authStore';
+import { cn } from'../lib/utils';
+import { Button } from'../components/ui/Button';
 import {
   LayoutDashboard, Baby, CalendarCheck, Utensils,
   Gamepad2, FileText, Star, AlertTriangle,
-  MessageSquare, Bell, Calendar, LogOut, Menu, X, ClipboardCheck } from
-'lucide-react';
+  MessageSquare, Bell, Calendar, LogOut, Menu, X, ClipboardCheck } from'lucide-react';
 
 export function TeacherLayout() {
   const { t, i18n } = useTranslation();
@@ -17,7 +16,7 @@ export function TeacherLayout() {
   const navigate = useNavigate();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const toggleLanguage = () => i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
+  const toggleLanguage = () => i18n.changeLanguage(i18n.language ==='en' ?'ar' :'en');
 
   const handleLogout = () => {
     clearAuth();
@@ -26,35 +25,35 @@ export function TeacherLayout() {
 
   const navGroups = [
   {
-    title: t('nav.overview', 'Overview'),
+    title: t('nav.overview','Overview'),
     items: [
-    { href: '/teacher', label: t('nav.dashboard', 'Dashboard'), icon: LayoutDashboard }]
+    { href:'/teacher', label: t('nav.dashboard','Dashboard'), icon: LayoutDashboard }]
 
   },
   {
-    title: t('nav.classroom', 'Classroom'),
+    title: t('nav.classroom','Classroom'),
     items: [
-    { href: '/teacher/children', label: t('nav.my_children', 'My Children'), icon: Baby },
-    { href: '/teacher/attendance', label: t('nav.attendance', 'Attendance'), icon: CalendarCheck },
-    { href: '/teacher/meals', label: t('nav.meals', 'Meals'), icon: Utensils },
-    { href: '/teacher/activities', label: t('nav.activities', 'Daily Activities'), icon: Gamepad2 }]
+    { href:'/teacher/children', label: t('nav.my_children','My Children'), icon: Baby },
+    { href:'/teacher/attendance', label: t('nav.attendance','Attendance'), icon: CalendarCheck },
+    { href:'/teacher/meals', label: t('nav.meals','Meals'), icon: Utensils },
+    { href:'/teacher/activities', label: t('nav.activities','Daily Activities'), icon: Gamepad2 }]
 
   },
   {
-    title: t('nav.reports', 'Reports'),
+    title: t('nav.reports','Reports'),
     items: [
-    { href: '/teacher/notes', label: t('nav.notes', 'Weekly Notes'), icon: FileText },
-    { href: '/teacher/evaluations', label: t('nav.evaluations', 'Evaluations'), icon: Star },
-    { href: '/teacher/tasks', label: t('nav.tasks', 'Tasks'), icon: ClipboardCheck }]
+    { href:'/teacher/notes', label: t('nav.notes','Weekly Notes'), icon: FileText },
+    { href:'/teacher/evaluations', label: t('nav.evaluations','Evaluations'), icon: Star },
+    { href:'/teacher/tasks', label: t('nav.tasks','Tasks'), icon: ClipboardCheck }]
 
   },
   {
-    title: t('nav.communication', 'Communication'),
+    title: t('nav.communication','Communication'),
     items: [
-    { href: '/teacher/complaints', label: t('nav.complaints', 'Complaints'), icon: AlertTriangle },
-    { href: '/teacher/messages', label: t('nav.messages', 'Messages'), icon: MessageSquare },
-    { href: '/teacher/notifications', label: t('nav.notifications', 'Notifications'), icon: Bell },
-    { href: '/teacher/calendar', label: t('nav.calendar', 'Calendar'), icon: Calendar }]
+    { href:'/teacher/complaints', label: t('nav.complaints','Complaints'), icon: AlertTriangle },
+    { href:'/teacher/messages', label: t('nav.messages','Messages'), icon: MessageSquare },
+    { href:'/teacher/notifications', label: t('nav.notifications','Notifications'), icon: Bell },
+    { href:'/teacher/calendar', label: t('nav.calendar','Calendar'), icon: Calendar }]
 
   }];
 
@@ -76,13 +75,10 @@ export function TeacherLayout() {
           <NavLink
             key={item.href}
             to={item.href}
-            end={item.href === '/teacher'}
+            end={item.href ==='/teacher'}
             onClick={() => setIsMobileOpen(false)}
-            className={({ isActive }) => cn(
-              "flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors font-medium",
-              isActive ?
-              "bg-primary/10 text-primary dark:bg-primary/20" :
-              "text-text dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-800"
+            className={({ isActive }) => cn("flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors font-medium",
+              isActive ?"bg-primary/10 text-primary dark:bg-primary/20" :"text-text dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-800"
             )}>
             
                   <item.icon className="h-4 w-4" />
@@ -100,7 +96,7 @@ export function TeacherLayout() {
     <div className="min-h-screen bg-background dark:bg-background-dark flex flex-col md:flex-row">
       <div className="md:hidden flex items-center justify-between p-4 bg-surface dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 bg-white rounded-full p-1 shadow-sm">
+          <div className="w-10 h-10 bg-white rounded-full p-1">
             <img src="/images/logo_icon.png" alt="عالم الأطفال" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-lg font-bold text-brand-green">عالم الأطفال - المعلم</h1>

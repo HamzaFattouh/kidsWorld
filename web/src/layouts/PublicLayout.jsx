@@ -1,8 +1,8 @@
-import { Outlet, Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { Button } from '../components/ui/Button';
-import { useAuthStore } from '../store/authStore';
+import { Outlet, Link } from'react-router-dom';
+import { Menu, X } from'lucide-react';
+import { useState, useEffect } from'react';
+import { Button } from'../components/ui/Button';
+import { useAuthStore } from'../store/authStore';
 
 export function PublicLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,18 +18,18 @@ export function PublicLayout() {
   }, []);
 
   const navLinks = [
-  { href: '#about', label: 'من نحن' },
-  { href: '#programs', label: 'برامجنا' },
-  { href: '#gallery', label: 'المعرض' },
-  { href: '#events', label: 'الفعاليات' },
-  { href: '#contact', label: 'اتصل بنا' }];
+  { href:'#about', label:'من نحن' },
+  { href:'#programs', label:'برامجنا' },
+  { href:'#gallery', label:'المعرض' },
+  { href:'#events', label:'الفعاليات' },
+  { href:'#contact', label:'اتصل بنا' }];
 
 
   const scrollTo = (href) => {
     setIsMobileMenuOpen(false);
     const el = document.querySelector(href);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({ behavior:'smooth' });
     }
   };
 
@@ -38,7 +38,7 @@ export function PublicLayout() {
       {/* Navbar */}
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm py-2' : 'bg-transparent py-4'}`
+        scrolled ?'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md  py-2' :'bg-transparent py-4'}`
         }>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,8 +48,8 @@ export function PublicLayout() {
               <Link to="/" className="flex items-center gap-3.5 group">
                 <div className={`relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center transition-all duration-300 group-hover:scale-105 shrink-0 ${
                   scrolled 
-                    ? 'bg-transparent p-0 shadow-none border-0' 
-                    : 'bg-white rounded-full p-2.5 shadow-xl border-2 border-white/90'
+                    ?'bg-transparent p-0  border-0' 
+                    :'bg-white rounded-full p-2.5  border-2 border-white/90'
                 }`}>
                   <img 
                     src="/images/logo_icon.png?v=7" 
@@ -58,10 +58,10 @@ export function PublicLayout() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className={`text-2xl sm:text-3xl font-display font-bold leading-none ${scrolled ? 'text-brand-dark dark:text-white' : 'text-white'}`}>
+                  <span className={`text-2xl sm:text-3xl font-display font-bold leading-none ${scrolled ?'text-brand-dark dark:text-white' :'text-white'}`}>
                     عالم الأطفال
                   </span>
-                  <span className={`text-[0.7rem] sm:text-xs font-bold tracking-wider uppercase mt-1 ${scrolled ? 'text-brand-dark/75 dark:text-gray-300' : 'text-white/90'}`}>
+                  <span className={`text-[0.7rem] sm:text-xs font-bold tracking-wider uppercase mt-1 ${scrolled ?'text-brand-dark/75 dark:text-gray-300' :'text-white/90'}`}>
                     تعلم والعب
                   </span>
                 </div>
@@ -75,7 +75,7 @@ export function PublicLayout() {
                 key={link.href}
                 onClick={() => scrollTo(link.href)}
                 className={`font-display font-semibold text-sm xl:text-base transition-colors hover:text-brand-yellow whitespace-nowrap ${
-                scrolled ? 'text-brand-dark dark:text-gray-200' : 'text-white'}`
+                scrolled ?'text-brand-dark dark:text-gray-200' :'text-white'}`
                 }>
                 
                   {link.label}
@@ -97,12 +97,12 @@ export function PublicLayout() {
                 </a>
               </div>
               {isAuthenticated ?
-              <Link to={user?.role === 'ADMIN' ? '/admin' : user?.role === 'TEACHER' ? '/teacher' : '/parent'} className="ms-2">
-                  <Button size="sm" className={scrolled ? '' : 'bg-white text-brand-green hover:bg-brand-yellow hover:text-white'}>لوحة التحكم</Button>
+              <Link to={user?.role ==='ADMIN' ?'/admin' : user?.role ==='TEACHER' ?'/teacher' :'/parent'} className="ms-2">
+                  <Button size="sm" className={scrolled ?'' :'bg-white text-brand-green hover:bg-brand-yellow hover:text-white'}>لوحة التحكم</Button>
                 </Link> :
 
               <Link to="/auth/login" className="ms-2">
-                  <Button size="sm" className={scrolled ? '' : 'bg-white text-brand-green hover:bg-brand-yellow hover:text-white'}>تسجيل الدخول</Button>
+                  <Button size="sm" className={scrolled ?'' :'bg-white text-brand-green hover:bg-brand-yellow hover:text-white'}>تسجيل الدخول</Button>
                 </Link>
               }
             </div>
@@ -111,7 +111,7 @@ export function PublicLayout() {
             <div className="flex items-center lg:hidden gap-2">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`p-2 ${scrolled ? 'text-brand-dark dark:text-white' : 'text-white'}`}>
+                className={`p-2 ${scrolled ?'text-brand-dark dark:text-white' :'text-white'}`}>
                 
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -121,7 +121,7 @@ export function PublicLayout() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen &&
-        <div className="lg:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-800 shadow-xl absolute w-full top-full start-0">
+        <div className="lg:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-gray-800 absolute w-full top-full start-0">
             <div className="px-4 pt-2 pb-6 space-y-2">
               {navLinks.map((link) =>
             <button
@@ -139,7 +139,7 @@ export function PublicLayout() {
               </div>
               <div className="px-3 pt-4">
                 {isAuthenticated ?
-              <Link to={user?.role === 'ADMIN' ? '/admin' : user?.role === 'TEACHER' ? '/teacher' : '/parent'}>
+              <Link to={user?.role ==='ADMIN' ?'/admin' : user?.role ==='TEACHER' ?'/teacher' :'/parent'}>
                     <Button className="w-full">لوحة التحكم</Button>
                   </Link> :
 
@@ -163,7 +163,7 @@ export function PublicLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full p-2.5 shadow-lg flex items-center justify-center overflow-hidden border-2 border-brand-green/20 shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full p-2.5 flex items-center justify-center overflow-hidden border-2 border-brand-green/20 shrink-0">
                 <img src="/images/logo_icon.png?v=6" alt="عالم الأطفال" className="w-full h-full object-contain" />
               </div>
               <div className="text-3xl font-display font-bold">عالم الأطفال</div>
@@ -187,9 +187,9 @@ export function PublicLayout() {
           <div>
             <h4 className="font-display font-bold text-xl mb-6">معلومات الاتصال</h4>
             <ul className="space-y-3 text-gray-400">
-              <li className="text-start font-medium">📍 نابلس- نابلس الجديدة</li>
-              <li className="text-start">✉️ info@kidsworld.ps</li>
-              <li className="text-start">📞 +970 9 234 5678</li>
+              <li className="text-start font-medium"> نابلس- نابلس الجديدة</li>
+              <li className="text-start"> info@kidsworld.ps</li>
+              <li className="text-start"> +970 9 234 5678</li>
             </ul>
           </div>
           <div>

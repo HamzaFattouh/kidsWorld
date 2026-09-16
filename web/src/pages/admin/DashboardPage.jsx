@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect, useMemo } from'react';
+import { useQuery } from'@tanstack/react-query';
 import {
   Users,
   GraduationCap,
@@ -13,10 +13,10 @@ import {
   Activity,
   ArrowUpRight,
   TrendingUp,
-} from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Card, CardContent } from '../../components/ui/Card';
-import { reportingApi } from '../../api/reporting';
+} from'lucide-react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Card, CardContent } from'../../components/ui/Card';
+import { reportingApi } from'../../api/reporting';
 
 export function DashboardPage() {
   const { data: response, isLoading, refetch } = useQuery({
@@ -25,55 +25,55 @@ export function DashboardPage() {
     refetchInterval: 30000, // Refresh every 30s
   });
 
-  const stats = response?.data || {
+  const stats = useMemo(() => response?.data || {
     studentAttendance: { total: 25, present: 22, percentage: 88 },
     teacherAttendance: { total: 10, present: 9, percentage: 90 },
     complaintsFeed: [
       {
-        id: 'c1',
-        title: 'استفسار عن رحلة الأطفال المقررة',
-        parentName: 'أم أحمد',
-        childName: 'أحمد محمود',
-        status: 'RESOLVED',
+        id:'c1',
+        title:'استفسار عن رحلة الأطفال المقررة',
+        parentName:'أم أحمد',
+        childName:'أحمد محمود',
+        status:'RESOLVED',
         hasTeacherResponded: true,
         createdAt: new Date().toISOString(),
       },
       {
-        id: 'c2',
-        title: 'ملاحظة بخصوص وجبة الإفطار الصحي',
-        parentName: 'أبو سارة',
-        childName: 'سارة خالد',
-        status: 'OPEN',
+        id:'c2',
+        title:'ملاحظة بخصوص وجبة الإفطار الصحي',
+        parentName:'أبو سارة',
+        childName:'سارة خالد',
+        status:'OPEN',
         hasTeacherResponded: false,
         createdAt: new Date().toISOString(),
       },
     ],
     incidentsFeed: [
       {
-        id: 'i1',
-        childName: 'عبدالله علي',
-        severity: 'LOW',
-        description: 'سقوط بسيط أثناء اللعب بالكرة وتم وضع كمادة باردة.',
-        actionTaken: 'تم التعقيم والاطمئنان عليه بحالة ممتازة.',
-        date: '2026-09-15',
-        time: '10:15 AM',
+        id:'i1',
+        childName:'عبدالله علي',
+        severity:'LOW',
+        description:'سقوط بسيط أثناء اللعب بالكرة وتم وضع كمادة باردة.',
+        actionTaken:'تم التعقيم والاطمئنان عليه بحالة ممتازة.',
+        date:'2026-09-15',
+        time:'10:15 AM',
       },
     ],
     cmsUpdatesFeed: [
       {
-        id: 'u1',
-        type: 'EVENT',
-        title: 'إضافة نشاط جديد: معرض الألوان والإبداع الصغير 🖌️',
+        id:'u1',
+        type:'EVENT',
+        title:'إضافة نشاط جديد: معرض الألوان والإبداع الصغير',
         date: new Date().toISOString(),
       },
       {
-        id: 'u2',
-        type: 'GALLERY',
-        title: 'رفع صور جديدة للمجلة اليومية: أنشطة الرسم والتلوين 📸',
+        id:'u2',
+        type:'GALLERY',
+        title:'رفع صور جديدة للمجلة اليومية: أنشطة الرسم والتلوين',
         date: new Date().toISOString(),
       },
     ],
-  };
+  }, [response?.data]);
 
   const studentAtt = stats.studentAttendance || { total: 25, present: 22, percentage: 88 };
   const teacherAtt = stats.teacherAttendance || { total: 10, present: 9, percentage: 90 };
@@ -81,15 +81,16 @@ export function DashboardPage() {
   return (
     <div className="space-y-8 text-start pb-12">
       <PageHeader
-        title="لوحة التحكم والمتابعة الشاملة 📊"
+        title="لوحة التحكم والمتابعة الشاملة"
         description="متابعة نسبة حضور الطلاب والمعلمين، الشكاوى والردود، الحوادث، وإشعارات تحديثات الموقع"
+        icon={Activity}
       />
 
       {/* Attendance Stats Widgets (1 & 2) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* 1. Student Attendance Widget */}
-        <Card className="border-t-4 border-t-emerald-500 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="border-t-4 border-t-emerald-500 transition-">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -118,7 +119,7 @@ export function DashboardPage() {
               <div className="w-full h-3.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden p-0.5">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-1000"
-                  style={{ width: `${Math.min(100, Math.max(0, studentAtt.percentage))}%` }}
+                  style={{ width:`${Math.min(100, Math.max(0, studentAtt.percentage))}%` }}
                 />
               </div>
             </div>
@@ -133,7 +134,7 @@ export function DashboardPage() {
         </Card>
 
         {/* 2. Teacher Attendance Widget */}
-        <Card className="border-t-4 border-t-indigo-500 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="border-t-4 border-t-indigo-500 transition-">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -162,7 +163,7 @@ export function DashboardPage() {
               <div className="w-full h-3.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden p-0.5">
                 <div
                   className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-1000"
-                  style={{ width: `${Math.min(100, Math.max(0, teacherAtt.percentage))}%` }}
+                  style={{ width:`${Math.min(100, Math.max(0, teacherAtt.percentage))}%` }}
                 />
               </div>
             </div>
@@ -181,13 +182,13 @@ export function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* 3. Parent Messages & Complaints Feed */}
-        <Card className="lg:col-span-1 shadow-md">
+        <Card className="lg:col-span-1">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-5 h-5 text-amber-600" />
                 <h2 className="font-display font-bold text-gray-900 dark:text-white text-base">
-                  الرسائل والشكاوى ومتابعة الرد 💬
+                  الرسائل والشكاوى ومتابعة الرد 
                 </h2>
               </div>
               <span className="text-xs bg-amber-50 dark:bg-amber-950/40 text-amber-600 px-2 py-0.5 rounded-md font-bold">
@@ -232,13 +233,13 @@ export function DashboardPage() {
         </Card>
 
         {/* 4. Tasks & Teacher Completion Feed */}
-        <Card className="lg:col-span-1 shadow-md">
+        <Card className="lg:col-span-1">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-blue-600" />
                 <h2 className="font-display font-bold text-gray-900 dark:text-white text-base">
-                  مهام المعلمين ومتابعة الإنجاز 📋
+                  مهام المعلمين ومتابعة الإنجاز 
                 </h2>
               </div>
               <span className="text-xs bg-blue-50 dark:bg-blue-950/40 text-blue-600 px-2 py-0.5 rounded-md font-bold">
@@ -253,14 +254,14 @@ export function DashboardPage() {
                     أ. نورة النابلسي
                   </span>
                   <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-full">
-                    مكتملة ✅
+                    مكتملة 
                   </span>
                 </div>
                 <p className="text-xs text-emerald-800 dark:text-emerald-300 font-medium">
                   إعداد تقارير التقييم الشهري للطلاب
                 </p>
                 <div className="text-[11px] text-emerald-700 dark:text-emerald-400 bg-white/70 dark:bg-slate-900/40 p-2 rounded-lg">
-                  💬 ملاحظة المعلمة: تم إنجاز كافة تقييمات روضة العصافير بنجاح.
+                   ملاحظة المعلمة: تم إنجاز كافة تقييمات روضة العصافير بنجاح.
                 </div>
               </div>
 
@@ -270,7 +271,7 @@ export function DashboardPage() {
                     أ. سارة الخالد، أ. منى التميمي
                   </span>
                   <span className="text-[10px] font-bold text-amber-700 bg-amber-100 dark:bg-amber-900/60 px-2 py-0.5 rounded-full">
-                    قيد التنفيذ ⏳
+                    قيد التنفيذ 
                   </span>
                 </div>
                 <p className="text-xs text-amber-800 dark:text-amber-300 font-medium">
@@ -282,13 +283,13 @@ export function DashboardPage() {
         </Card>
 
         {/* 5. CMS, Activities & Gallery Uploads Notifications */}
-        <Card className="lg:col-span-1 shadow-md">
+        <Card className="lg:col-span-1">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-indigo-600" />
                 <h2 className="font-display font-bold text-gray-900 dark:text-white text-base">
-                  تحديثات الموقع والأنشطة والصور ✨
+                  تحديثات الموقع والأنشطة والصور 
                 </h2>
               </div>
               <span className="text-xs bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 px-2 py-0.5 rounded-md font-bold">
@@ -301,7 +302,7 @@ export function DashboardPage() {
                 stats.cmsUpdatesFeed.map((upd, idx) => (
                   <div key={upd.id || idx} className="p-3.5 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2">
                     <div className="flex items-center gap-2">
-                      {upd.type === 'EVENT' ? (
+                      {upd.type ==='EVENT' ? (
                         <Calendar className="w-4 h-4 text-orange-600 shrink-0" />
                       ) : (
                         <ImageIcon className="w-4 h-4 text-emerald-600 shrink-0" />

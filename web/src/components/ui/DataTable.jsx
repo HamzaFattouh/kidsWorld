@@ -1,7 +1,7 @@
 
-import { cn } from '../../lib/utils';
-import { Loader2 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { cn } from'../../lib/utils';
+import { Loader2 } from'lucide-react';
+import { useTranslation } from'react-i18next';
 
 
 
@@ -17,7 +17,9 @@ import { useTranslation } from 'react-i18next';
 
 
 
-export function DataTable({ data, columns, isLoading, emptyMessage, className }) {
+import React from'react';
+
+export const DataTable = React.memo(function DataTable({ data, columns, isLoading, emptyMessage, className }) {
   const { t } = useTranslation();
 
   return (
@@ -28,7 +30,7 @@ export function DataTable({ data, columns, isLoading, emptyMessage, className })
             <tr>
               {columns.map((col, index) =>
               <th key={index} scope="col" className="px-6 py-3 font-medium">
-                  {t(`table.${col.header.toLowerCase().replace(/ /g, '_')}`, col.header)}
+                  {t(`table.${col.header.toLowerCase().replace(/ /g,'_')}`, col.header)}
                 </th>
               )}
             </tr>
@@ -66,6 +68,6 @@ export function DataTable({ data, columns, isLoading, emptyMessage, className })
           </tbody>
         </table>
       </div>
-    </div>);
-
-}
+    </div>
+  );
+});

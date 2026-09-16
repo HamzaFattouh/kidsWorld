@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components/ui/Button';
-import { api } from '../../lib/api';
-import { useAuthStore } from '../../store/authStore';
+import { useState } from'react';
+import { useForm } from'react-hook-form';
+import { zodResolver } from'@hookform/resolvers/zod';
+import * as z from'zod';
+import { useTranslation } from'react-i18next';
+import { useNavigate } from'react-router-dom';
+import { Button } from'../../components/ui/Button';
+import { api } from'../../lib/api';
+import { useAuthStore } from'../../store/authStore';
 
 const loginSchema = z.object({
-  email: z.string().min(1, 'يرجى إدخال الاسم أو البريد الإلكتروني'),
-  password: z.string().min(1, 'كلمة المرور مطلوبة')
+  email: z.string().min(1,'يرجى إدخال الاسم أو البريد الإلكتروني'),
+  password: z.string().min(1,'كلمة المرور مطلوبة')
 });
 
 export function LoginPage() {
@@ -49,12 +49,12 @@ export function LoginPage() {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-surface-dark rounded-3xl shadow-2xl overflow-hidden relative border border-gray-100 dark:border-gray-800 grid grid-cols-1 md:grid-cols-2 min-h-[580px]">
+    <div className="w-full bg-white dark:bg-surface-dark rounded-3xl overflow-hidden relative border border-gray-100 dark:border-gray-800 grid grid-cols-1 md:grid-cols-2 min-h-[580px]">
       
       {/* Right Side: Big Logo (الجهة اليمنى) */}
       <div className="p-6 lg:p-10 flex flex-col items-center justify-center text-center bg-white dark:bg-surface-dark relative z-0">
         <div className="w-80 h-72 sm:w-[420px] sm:h-[320px] lg:w-[480px] lg:h-[360px] mb-4 p-2 flex items-center justify-center">
-          <img src="/images/logo.png?v=7" alt="Kids World - عالم الأطفال" className="w-full h-full object-contain drop-shadow-sm hover:scale-105 transition-transform duration-300" />
+          <img src="/images/logo.png?v=7" alt="Kids World - عالم الأطفال" className="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
         </div>
         <h2 className="text-3xl font-display font-bold text-brand-dark dark:text-white mb-3">
           مرحباً بكم في عالم الأطفال
@@ -79,7 +79,7 @@ export function LoginPage() {
                 type="text"
                 {...register('email')}
                 placeholder="أدخل الاسم أو البريد الإلكتروني"
-                className="w-full px-4 py-3.5 rounded-xl bg-white text-brand-dark font-medium border-0 focus:ring-2 focus:ring-brand-yellow outline-none shadow-sm placeholder:text-gray-400"
+                className="w-full px-4 py-3.5 rounded-xl bg-white text-brand-dark font-medium border-0 focus:ring-2 focus:ring-brand-yellow outline-none placeholder:text-gray-400"
               />
               {errors.email && <p className="text-xs text-red-200 mt-1">{errors.email.message}</p>}
             </div>
@@ -90,7 +90,7 @@ export function LoginPage() {
                 type="password"
                 {...register('password')}
                 placeholder="••••••••"
-                className="w-full px-4 py-3.5 rounded-xl bg-white text-brand-dark font-medium border-0 focus:ring-2 focus:ring-brand-yellow outline-none shadow-sm placeholder:text-gray-400"
+                className="w-full px-4 py-3.5 rounded-xl bg-white text-brand-dark font-medium border-0 focus:ring-2 focus:ring-brand-yellow outline-none placeholder:text-gray-400"
               />
               {errors.password && <p className="text-xs text-red-200 mt-1">{errors.password.message}</p>}
             </div>
@@ -104,7 +104,7 @@ export function LoginPage() {
             <Button
               type="submit"
               isLoading={isSubmitting}
-              className="w-full py-4 bg-brand-yellow hover:bg-amber-400 text-brand-dark font-display font-bold text-lg rounded-xl shadow-lg transition-transform active:scale-95 border-0 mt-2"
+              className="w-full py-4 bg-brand-yellow hover:bg-amber-400 text-brand-dark font-display font-bold text-lg rounded-xl transition-transform active:scale-95 border-0 mt-2"
             >
               {t('login_button')}
             </Button>

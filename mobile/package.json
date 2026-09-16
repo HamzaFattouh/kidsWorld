@@ -27,15 +27,22 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@react-native/jest-preset": "^0.87.1",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^14.0.1",
+    "jest": "^30.5.1",
+    "jest-expo": "^57.0.5",
     "nativewind": "^4.2.6",
     "postcss": "^8.5.26",
+    "react-test-renderer": "^19.3.0",
     "tailwindcss": "^3.4.19"
   },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest"
   },
   "private": true
 }

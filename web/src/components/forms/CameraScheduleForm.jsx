@@ -1,15 +1,15 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
-import { useTranslation } from 'react-i18next';
+import { useForm } from'react-hook-form';
+import { zodResolver } from'@hookform/resolvers/zod';
+import * as z from'zod';
+import { Input } from'../ui/Input';
+import { Button } from'../ui/Button';
+import { useTranslation } from'react-i18next';
 
 const schema = z.object({
-  cameraId: z.string().min(1, 'Required'),
+  cameraId: z.string().min(1,'Required'),
   dayOfWeek: z.number(),
-  startTime: z.string().min(1, 'Required'),
-  endTime: z.string().min(1, 'Required')
+  startTime: z.string().min(1,'Required'),
+  endTime: z.string().min(1,'Required')
 });
 
 
@@ -60,7 +60,7 @@ export function CameraScheduleForm({ onSubmit, isLoading }) {
 
       <div className="pt-4">
         <Button type="submit" isLoading={isLoading} className="w-full">
-          {t('submit', 'Submit')}
+          {t('submit','Submit')}
         </Button>
       </div>
     </form>);

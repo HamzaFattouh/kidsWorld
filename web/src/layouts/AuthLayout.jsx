@@ -1,13 +1,13 @@
-import { Outlet, Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Button } from '../components/ui/Button';
-import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { Outlet, Link } from'react-router-dom';
+import { useTranslation } from'react-i18next';
+import { Button } from'../components/ui/Button';
+import { ThemeToggle } from'../components/ui/ThemeToggle';
 
 export function AuthLayout() {
   const { t, i18n } = useTranslation();
 
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
+    i18n.changeLanguage(i18n.language ==='en' ?'ar' :'en');
   };
 
   return (

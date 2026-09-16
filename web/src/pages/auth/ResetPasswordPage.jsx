@@ -1,20 +1,20 @@
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
-import { Input } from '../../components/ui/Input';
-import { Button } from '../../components/ui/Button';
-import { api } from '../../lib/api';
+import { useState } from'react';
+import { useForm } from'react-hook-form';
+import { zodResolver } from'@hookform/resolvers/zod';
+import * as z from'zod';
+import { useTranslation } from'react-i18next';
+import { useNavigate, useSearchParams } from'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from'../../components/ui/Card';
+import { Input } from'../../components/ui/Input';
+import { Button } from'../../components/ui/Button';
+import { api } from'../../lib/api';
 
 const resetPasswordSchema = z.object({
-  newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+  newPassword: z.string().min(8,'Password must be at least 8 characters'),
   confirmPassword: z.string()
 }).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
+  message:"Passwords don't match",
   path: ["confirmPassword"]
 });
 
@@ -35,7 +35,7 @@ export function ResetPasswordPage() {
 
   const onSubmit = async (data) => {
     if (!token) {
-      setApiError(t('missing_token', 'Invalid or missing reset token.'));
+      setApiError(t('missing_token','Invalid or missing reset token.'));
       return;
     }
 
@@ -51,23 +51,23 @@ export function ResetPasswordPage() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-center text-xl">{t('reset_password', 'Reset Password')}</CardTitle>
+        <CardTitle className="text-center text-xl">{t('reset_password','Reset Password')}</CardTitle>
       </CardHeader>
       <CardContent>
         {success ?
         <div className="text-center space-y-4">
             <p className="text-green-600 dark:text-green-400">
-              {t('password_reset_success', 'Your password has been successfully reset.')}
+              {t('password_reset_success','Your password has been successfully reset.')}
             </p>
             <Button onClick={() => navigate('/auth/login')} className="w-full">
-              {t('back_to_login', 'Back to Login')}
+              {t('back_to_login','Back to Login')}
             </Button>
           </div> :
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {!token &&
           <div className="p-3 bg-yellow-100 text-yellow-800 rounded-md text-sm text-center mb-4">
-                 {t('missing_token_warning', 'No reset token provided in URL.')}
+                 {t('missing_token_warning','No reset token provided in URL.')}
                </div>
           }
             

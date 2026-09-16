@@ -1,4 +1,4 @@
-import { api } from './index';
+import { api } from'./index';
 
 
 
@@ -20,8 +20,7 @@ export const eventApi = {
   createOne: async (data) => {
     // data is expected to be FormData since it contains an image
     const response = await api.post('/cms/events', data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+      headers: {'Content-Type':'multipart/form-data',
       },
     });
     return response.data;

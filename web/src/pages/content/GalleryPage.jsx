@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { GalleryForm } from '../../components/forms/GalleryForm';
-import { galleryImageApi } from '../../api/galleryImage';
+import { GalleryForm } from'../../components/forms/GalleryForm';
+import { galleryImageApi } from'../../api/galleryImage';
 
 
 export function GalleryPage() {
@@ -26,24 +26,24 @@ export function GalleryPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
 
   {
-    header: 'url',
-    accessorKey: 'url'
+    header:'url',
+    accessorKey:'url'
   }];
 
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.gallery.title', 'Gallery')}
-        description={t('pages.gallery.description', 'Manage Gallery')}
-        actionLabel={t('pages.gallery.create', 'Create')}
+        title={t('pages.gallery.title','Gallery')}
+        description={t('pages.gallery.description','Manage Gallery')}
+        actionLabel={t('pages.gallery.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -56,7 +56,7 @@ export function GalleryPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.gallery.create', 'Create')}>
+        title={t('pages.gallery.create','Create')}>
         
         <div className="py-4">
           <GalleryForm

@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from'zustand';
+import { persist } from'zustand/middleware';
 
 
 
@@ -13,7 +13,7 @@ export const useParentStore = create()(
       setSelectedChildId: (id) => set({ selectedChildId: id })
     }),
     {
-      name: 'parent-storage'
+      name:'parent-storage'
     }
   )
 );

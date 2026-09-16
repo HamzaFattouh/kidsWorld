@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { DataTable } from '../../components/ui/DataTable';
-import { Modal } from '../../components/ui/Modal';
-import { Button } from '../../components/ui/Button';
-import { useParentStore } from '../../store/parentStore';
-import { api } from '../../lib/api';
+import { useState } from'react';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { DataTable } from'../../components/ui/DataTable';
+import { Modal } from'../../components/ui/Modal';
+import { Button } from'../../components/ui/Button';
+import { useParentStore } from'../../store/parentStore';
+import { api } from'../../lib/api';
 
 export function ParentRequestsPage() {
   const { selectedChildId } = useParentStore();
@@ -33,7 +33,7 @@ export function ParentRequestsPage() {
       setDescription('');
     },
     onError: (err) => {
-      alert(err?.response?.data?.error?.message || 'حدث خطأ أثناء إرسال الطلب');
+      alert(err?.response?.data?.error?.message ||'حدث خطأ أثناء إرسال الطلب');
     }
   });
 
@@ -48,41 +48,41 @@ export function ParentRequestsPage() {
 
   const columns = [
     {
-      header: 'نوع الطلب',
-      accessorKey: 'type',
+      header:'نوع الطلب',
+      accessorKey:'type',
       cell: (row) => {
         const typeMap = {
-          LEAVE: 'طلب إجازة / غياب 📝',
-          EARLY_PICKUP: 'طلب مغادرة مبكرة 🚗',
-          PROFILE_UPDATE: 'تحديث بيانات 👤',
-          DOCUMENT_REQUEST: 'طلب مستندات 📄',
-          MEETING_REQUEST: 'طلب موعد اجتماع 🤝'
+          LEAVE:'طلب إجازة / غياب',
+          EARLY_PICKUP:'طلب مغادرة مبكرة',
+          PROFILE_UPDATE:'تحديث بيانات',
+          DOCUMENT_REQUEST:'طلب مستندات',
+          MEETING_REQUEST:'طلب موعد اجتماع'
         };
         return <span className="font-bold">{typeMap[row.type] || row.type}</span>;
       }
     },
     {
-      header: 'التفاصيل والسبب',
-      accessorKey: 'description',
+      header:'التفاصيل والسبب',
+      accessorKey:'description',
       cell: (row) => row.description
     },
     {
-      header: 'الحالة',
-      accessorKey: 'status',
+      header:'الحالة',
+      accessorKey:'status',
       cell: (row) => {
         const statusMap = {
-          OPEN: <span className="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs font-bold">قيد الانتظار 🟡</span>,
-          IN_PROGRESS: <span className="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full text-xs font-bold">جاري المراجعة 🔵</span>,
-          RESOLVED: <span className="text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-bold">تمت الموافقة ✅</span>,
-          CLOSED: <span className="text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full text-xs font-bold">مرفوض / مغلق 🔒</span>
+          OPEN: <span className="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs font-bold">قيد الانتظار </span>,
+          IN_PROGRESS: <span className="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full text-xs font-bold">جاري المراجعة </span>,
+          RESOLVED: <span className="text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-bold">تمت الموافقة </span>,
+          CLOSED: <span className="text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full text-xs font-bold">مرفوض / مغلق </span>
         };
-        return statusMap[row.status] || row.status || '—';
+        return statusMap[row.status] || row.status ||'—';
       }
     },
     {
-      header: 'تاريخ التقديم',
-      accessorKey: 'createdAt',
-      cell: (row) => row.createdAt ? new Date(row.createdAt).toLocaleDateString('ar-EG') : '—'
+      header:'تاريخ التقديم',
+      accessorKey:'createdAt',
+      cell: (row) => row.createdAt ? new Date(row.createdAt).toLocaleDateString('ar-EG') :'—'
     }
   ];
 

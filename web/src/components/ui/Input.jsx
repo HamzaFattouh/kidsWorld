@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { cn } from '../../lib/utils';
+import * as React from'react';
+import { cn } from'../../lib/utils';
 
 
 
@@ -17,9 +17,8 @@ export const Input = React.forwardRef(
         }
         <input
           type={type}
-          className={cn(
-            'flex h-10 w-full rounded-md border border-gray-300 bg-surface px-3 py-2 text-sm text-text placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark dark:text-text-dark dark:placeholder:text-gray-500',
-            error && 'border-red-500 focus:ring-red-500',
+          className={cn('flex h-10 w-full rounded-md border border-gray-300 bg-surface px-3 py-2 text-sm text-text placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark dark:text-text-dark dark:placeholder:text-gray-500',
+            error &&'border-red-500 focus:ring-red-500',
             className
           )}
           ref={ref}
@@ -32,4 +31,4 @@ export const Input = React.forwardRef(
 
   }
 );
-Input.displayName = 'Input';
+Input.displayName ='Input';

@@ -1,8 +1,8 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { useTranslation } from 'react-i18next';
-import { Button } from './Button';
+import React from'react';
+import { X } from'lucide-react';
+import { cn } from'../../lib/utils';
+import { useTranslation } from'react-i18next';
+import { Button } from'./Button';
 
 
 
@@ -26,10 +26,7 @@ export function Modal({ isOpen, onClose, title, children, className }) {
       
       
       {/* Modal Content */}
-      <div className={cn(
-        "relative z-50 w-full max-w-lg rounded-xl bg-surface dark:bg-surface-dark shadow-xl",
-        "border border-gray-200 dark:border-gray-800",
-        "flex flex-col mx-4 sm:mx-0 max-h-[90vh]",
+      <div className={cn("relative z-50 w-full max-w-lg rounded-xl bg-surface dark:bg-surface-dark","border border-gray-200 dark:border-gray-800","flex flex-col mx-4 sm:mx-0 max-h-[90vh]",
         className
       )}>
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
@@ -50,10 +47,10 @@ export function Modal({ isOpen, onClose, title, children, className }) {
         
         <div className="flex items-center justify-end p-4 border-t border-gray-200 dark:border-gray-800 gap-3">
           <Button variant="outline" onClick={onClose}>
-            {t('cancel', 'Cancel')}
+            {t('cancel','Cancel')}
           </Button>
           <Button onClick={onClose}>
-            {t('save', 'Save')}
+            {t('save','Save')}
           </Button>
         </div>
       </div>

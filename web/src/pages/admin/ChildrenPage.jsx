@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { User, Calendar, CheckCircle2, AlertTriangle, RefreshCw, MessageSquare, Heart, Shield, Plus } from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
-import { ChildForm } from '../../components/forms/ChildForm';
-import { childApi } from '../../api/child';
-import { api } from '../../lib/api';
+import { useState, useMemo } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { User, Calendar, CheckCircle2, AlertTriangle, RefreshCw, MessageSquare, Heart, Shield, Plus } from'lucide-react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
+import { ChildForm } from'../../components/forms/ChildForm';
+import { childApi } from'../../api/child';
+import { api } from'../../lib/api';
 
 export function ChildrenPage() {
   const { t, i18n } = useTranslation();
@@ -28,13 +28,13 @@ export function ChildrenPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   // Calculate 1-Month (30 Days) Registration Expiration Status
   const getRegistrationStatus = (enrollmentDate) => {
-    if (!enrollmentDate) return { isExpired: false, daysLeft: 30, text: 'مسجل (نشط) ✅' };
+    if (!enrollmentDate) return { isExpired: false, daysLeft: 30, text:'مسجل (نشط)' };
     
     const enrollTime = new Date(enrollmentDate).getTime();
     const nowTime = new Date().getTime();
@@ -47,7 +47,7 @@ export function ChildrenPage() {
       isExpired,
       diffDays,
       daysLeft,
-      text: isExpired ? 'انتهى تسجيله (يتطلب تجديد) ⚠️' : `مسجل (نشط) ✅ - باقي ${daysLeft} يوم`
+      text: isExpired ?'انتهى تسجيله (يتطلب تجديد)' :`مسجل (نشط)  - باقي ${daysLeft} يوم`
     };
   };
 
@@ -55,9 +55,9 @@ export function ChildrenPage() {
     try {
       await childApi.updateOne(child.id, { enrollmentDate: new Date().toISOString() });
       queryClient.invalidateQueries({ queryKey: ['child'] });
-      alert(`تم تجديد تسجيل الطفل (${child.name}) لمدة شهر آخر بنجاح! 🔄✅`);
+      alert(`تم تجديد تسجيل الطفل (${child.name}) لمدة شهر آخر بنجاح!`);
     } catch (e) {
-      alert('تم تجديد تسجيل الطفل لمدة شهر آخر بنجاح! 🔄✅');
+      alert('تم تجديد تسجيل الطفل لمدة شهر آخر بنجاح!');
     }
   };
 
@@ -79,8 +79,8 @@ export function ChildrenPage() {
 
   const columns = [
     {
-      header: 'اسم الطفل',
-      accessorKey: 'name',
+      header:'اسم الطفل',
+      accessorKey:'name',
       cell: (child) => (
         <button
           onClick={() => {
@@ -95,18 +95,18 @@ export function ChildrenPage() {
       )
     },
     {
-      header: 'تاريخ التسجيل',
-      accessorKey: 'enrollmentDate',
-      cell: (child) => child.enrollmentDate ? new Date(child.enrollmentDate).toLocaleDateString('ar-EG') : '—'
+      header:'تاريخ التسجيل',
+      accessorKey:'enrollmentDate',
+      cell: (child) => child.enrollmentDate ? new Date(child.enrollmentDate).toLocaleDateString('ar-EG') :'—'
     },
     {
-      header: 'حالة التسجيل (شهر صلاحية)',
-      accessorKey: 'enrollmentDate',
+      header:'حالة التسجيل (شهر صلاحية)',
+      accessorKey:'enrollmentDate',
       cell: (child) => {
         const reg = getRegistrationStatus(child.enrollmentDate);
         return (
           <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
-            reg.isExpired ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300'
+            reg.isExpired ?'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300' :'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300'
           }`}>
             {reg.text}
           </span>
@@ -114,8 +114,8 @@ export function ChildrenPage() {
       }
     },
     {
-      header: 'الإجراءات والتجديد',
-      accessorKey: 'id',
+      header:'الإجراءات والتجديد',
+      accessorKey:'id',
       cell: (child) => {
         const reg = getRegistrationStatus(child.enrollmentDate);
         return (
@@ -133,7 +133,7 @@ export function ChildrenPage() {
             <button
               onClick={() => handleRenewRegistration(child)}
               className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
-                reg.isExpired ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                reg.isExpired ?'bg-rose-600 hover:bg-rose-700 text-white animate-pulse' :'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export function ChildrenPage() {
   return (
     <div className="space-y-6 text-start">
       <PageHeader
-        title="إدارة وسجلات الأطفال 👶"
+        title="إدارة وسجلات الأطفال"
         description="استعراض الأطفال، الملاحظات الطبية، مراسلات الأهل، وحالة التسجيل الشهرية مع إمكانية التجديد"
         actionLabel="إضافة طفل جديد"
         onAction={() => setIsCreateModalOpen(true)}
@@ -181,7 +181,7 @@ export function ChildrenPage() {
           setIsDetailsModalOpen(false);
           setSelectedChildId(null);
         }}
-        title="ملف الطفل والمراسلات وحالة التسجيل 📋"
+        title="ملف الطفل والمراسلات وحالة التسجيل"
       >
         <div className="py-4 space-y-6 text-start">
           {selectedChild ? (
@@ -192,8 +192,8 @@ export function ChildrenPage() {
                 return (
                   <div className={`p-4 rounded-2xl border flex items-center justify-between ${
                     reg.isExpired
-                      ? 'bg-rose-50 border-rose-200 text-rose-800 dark:bg-rose-950/30'
-                      : 'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/30'
+                      ?'bg-rose-50 border-rose-200 text-rose-800 dark:bg-rose-950/30'
+                      :'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/30'
                   }`}>
                     <div>
                       <span className="text-xs font-bold block">حالة التسجيل الشهري:</span>
@@ -202,10 +202,10 @@ export function ChildrenPage() {
 
                     <button
                       onClick={() => handleRenewRegistration(selectedChild)}
-                      className="px-4 py-2 bg-primary text-white font-bold text-xs rounded-xl shadow hover:bg-primary-dark transition-transform hover:scale-105 flex items-center gap-1.5"
+                      className="px-4 py-2 bg-primary text-white font-bold text-xs rounded-xl hover:bg-primary-dark transition-transform hover:scale-105 flex items-center gap-1.5"
                     >
                       <RefreshCw className="w-4 h-4" />
-                      تجديد شهر آخر 🔄
+                      تجديد شهر آخر 
                     </button>
                   </div>
                 );
@@ -217,11 +217,11 @@ export function ChildrenPage() {
                   الطفل: {selectedChild.name}
                 </h4>
                 <div className="grid grid-cols-2 gap-3 text-xs text-gray-600 dark:text-gray-300">
-                  <div>🎂 تاريخ الميلاد: {selectedChild.dob ? new Date(selectedChild.dob).toLocaleDateString('ar-EG') : '—'}</div>
-                  <div>⚤ الجنس: {selectedChild.gender || 'طفل'}</div>
-                  <div>🏫 القاعة التعليمية: {selectedChild.classId || 'قاعة الرواد'}</div>
-                  <div>👨‍👩‍👧 معرف ولي الأمر: #{selectedChild.parentId || '—'}</div>
-                  <div className="col-span-2">🩺 الملاحظات الطبية والحساسية: {selectedChild.medicalNotes || 'لا توجد ملاحظات خاصة'}</div>
+                  <div> تاريخ الميلاد: {selectedChild.dob ? new Date(selectedChild.dob).toLocaleDateString('ar-EG') :'—'}</div>
+                  <div> الجنس: {selectedChild.gender ||'طفل'}</div>
+                  <div> القاعة التعليمية: {selectedChild.classId ||'قاعة الرواد'}</div>
+                  <div>‍‍ معرف ولي الأمر: #{selectedChild.parentId ||'—'}</div>
+                  <div className="col-span-2"> الملاحظات الطبية والحساسية: {selectedChild.medicalNotes ||'لا توجد ملاحظات خاصة'}</div>
                 </div>
               </div>
 

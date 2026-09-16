@@ -1,18 +1,17 @@
-import { useState } from 'react';
-import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
-import { ThemeToggle } from '../components/ui/ThemeToggle';
-import { useAuthStore } from '../store/authStore';
-import { useParentStore } from '../store/parentStore';
-import { api } from '../lib/api';
-import { cn } from '../lib/utils';
-import { Button } from '../components/ui/Button';
+import { useState } from'react';
+import { Outlet, NavLink, useNavigate, Link } from'react-router-dom';
+import { useTranslation } from'react-i18next';
+import { useQuery } from'@tanstack/react-query';
+import { ThemeToggle } from'../components/ui/ThemeToggle';
+import { useAuthStore } from'../store/authStore';
+import { useParentStore } from'../store/parentStore';
+import { api } from'../lib/api';
+import { cn } from'../lib/utils';
+import { Button } from'../components/ui/Button';
 import {
   LayoutDashboard, CalendarCheck, Utensils, FileText, Star,
   AlertTriangle, Megaphone, Calendar, MessageSquare, Bell,
-  FileBox, Video, LogOut, Menu, X, Baby, HelpCircle } from
-'lucide-react';
+  FileBox, Video, LogOut, Menu, X, Baby, HelpCircle } from'lucide-react';
 
 export function ParentLayout() {
   const { t, i18n } = useTranslation();
@@ -22,7 +21,7 @@ export function ParentLayout() {
   const navigate = useNavigate();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const toggleLanguage = () => i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
+  const toggleLanguage = () => i18n.changeLanguage(i18n.language ==='en' ?'ar' :'en');
 
   const handleLogout = () => {
     clearAuth();
@@ -47,41 +46,41 @@ export function ParentLayout() {
 
   const navGroups = [
   {
-    title: t('nav.overview', 'Overview'),
+    title: t('nav.overview','Overview'),
     items: [
-    { href: '/parent', label: t('nav.dashboard', 'Dashboard'), icon: LayoutDashboard }]
+    { href:'/parent', label: t('nav.dashboard','Dashboard'), icon: LayoutDashboard }]
 
   },
   {
-    title: t('nav.my_child', 'My Child'),
+    title: t('nav.my_child','My Child'),
     items: [
-    { href: '/parent/attendance', label: t('nav.attendance', 'Attendance'), icon: CalendarCheck },
-    { href: '/parent/meals', label: t('nav.meals', 'Meals'), icon: Utensils },
-    { href: '/parent/notes', label: t('nav.notes', 'Weekly Notes'), icon: FileText },
-    { href: '/parent/evaluations', label: t('nav.evaluations', 'Evaluations'), icon: Star }]
+    { href:'/parent/attendance', label: t('nav.attendance','Attendance'), icon: CalendarCheck },
+    { href:'/parent/meals', label: t('nav.meals','Meals'), icon: Utensils },
+    { href:'/parent/notes', label: t('nav.notes','Weekly Notes'), icon: FileText },
+    { href:'/parent/evaluations', label: t('nav.evaluations','Evaluations'), icon: Star }]
 
   },
   {
-    title: t('nav.nursery', 'Nursery'),
+    title: t('nav.nursery','Nursery'),
     items: [
-    { href: '/parent/announcements', label: t('nav.announcements', 'Announcements'), icon: Megaphone },
-    { href: '/parent/events', label: t('nav.events', 'Events'), icon: Calendar }]
+    { href:'/parent/announcements', label: t('nav.announcements','Announcements'), icon: Megaphone },
+    { href:'/parent/events', label: t('nav.events','Events'), icon: Calendar }]
 
   },
   {
-    title: t('nav.communication', 'Communication'),
+    title: t('nav.communication','Communication'),
     items: [
-    { href: '/parent/complaints', label: t('nav.complaints', 'Complaints'), icon: AlertTriangle },
-    { href: '/parent/requests', label: t('nav.requests', 'Requests'), icon: HelpCircle },
-    { href: '/parent/messages', label: t('nav.messages', 'Messages'), icon: MessageSquare },
-    { href: '/parent/notifications', label: t('nav.notifications', 'Notifications'), icon: Bell }]
+    { href:'/parent/complaints', label: t('nav.complaints','Complaints'), icon: AlertTriangle },
+    { href:'/parent/requests', label: t('nav.requests','Requests'), icon: HelpCircle },
+    { href:'/parent/messages', label: t('nav.messages','Messages'), icon: MessageSquare },
+    { href:'/parent/notifications', label: t('nav.notifications','Notifications'), icon: Bell }]
 
   },
   {
-    title: t('nav.resources', 'Resources'),
+    title: t('nav.resources','Resources'),
     items: [
-    { href: '/parent/documents', label: t('nav.documents', 'Documents'), icon: FileBox },
-    { href: '/parent/cameras', label: t('nav.cameras', 'Cameras'), icon: Video }]
+    { href:'/parent/documents', label: t('nav.documents','Documents'), icon: FileBox },
+    { href:'/parent/cameras', label: t('nav.cameras','Cameras'), icon: Video }]
 
   }];
 
@@ -96,16 +95,16 @@ export function ParentLayout() {
       {/* Child Selector */}
       <div className="px-6 mb-6">
         <label className="block text-xs font-semibold text-text-muted dark:text-text-mutedDark uppercase tracking-wider mb-2">
-          {t('select_child', 'Select Child Context')}
+          {t('select_child','Select Child Context')}
         </label>
         <div className="relative">
           <Baby className="absolute left-3 top-2.5 h-4 w-4 text-text-muted" />
           <select
           className="w-full pl-9 pr-3 py-2 bg-background dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-md text-sm text-text dark:text-text-dark focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
-          value={selectedChildId || ''}
+          value={selectedChildId ||''}
           onChange={(e) => setSelectedChildId(e.target.value)}>
           
-            <option value="" disabled>{t('choose_child', 'Choose a child...')}</option>
+            <option value="" disabled>{t('choose_child','Choose a child...')}</option>
             {myChildren.map((child) =>
           <option key={child.id} value={child.id}>{child.name}</option>
           )}
@@ -124,13 +123,10 @@ export function ParentLayout() {
           <NavLink
             key={item.href}
             to={item.href}
-            end={item.href === '/parent'}
+            end={item.href ==='/parent'}
             onClick={() => setIsMobileOpen(false)}
-            className={({ isActive }) => cn(
-              "flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors font-medium",
-              isActive ?
-              "bg-primary/10 text-primary dark:bg-primary/20" :
-              "text-text dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-800"
+            className={({ isActive }) => cn("flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-colors font-medium",
+              isActive ?"bg-primary/10 text-primary dark:bg-primary/20" :"text-text dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-800"
             )}>
             
                   <item.icon className="h-4 w-4" />
@@ -148,7 +144,7 @@ export function ParentLayout() {
     <div className="min-h-screen bg-background dark:bg-background-dark flex flex-col md:flex-row">
       <div className="md:hidden flex items-center justify-between p-4 bg-surface dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 bg-white rounded-full p-1 shadow-sm">
+          <div className="w-10 h-10 bg-white rounded-full p-1">
             <img src="/images/logo_icon.png" alt="عالم الأطفال" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-lg font-bold text-brand-green">عالم الأطفال - ولي الأمر</h1>
@@ -196,7 +192,7 @@ export function ParentLayout() {
 
           <div className="flex items-center justify-center h-full">
               <p className="text-lg text-text-muted dark:text-text-mutedDark">
-                {t('please_select_child', 'Please select a child from the sidebar to view their data.')}
+                {t('please_select_child','Please select a child from the sidebar to view their data.')}
               </p>
             </div>
           }

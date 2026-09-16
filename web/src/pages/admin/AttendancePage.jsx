@@ -1,38 +1,38 @@
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Calendar, Users, ShieldCheck, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { useAuthStore } from '../../store/authStore';
-import { api } from '../../lib/api';
+import { useState, useEffect } from'react';
+import { useTranslation } from'react-i18next';
+import { Calendar, Users, ShieldCheck, CheckCircle2, Clock, ArrowRight } from'lucide-react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { useAuthStore } from'../../store/authStore';
+import { api } from'../../lib/api';
 
 export function AttendancePage() {
   const { t } = useTranslation();
   const { user } = useAuthStore();
 
-  const isTeacher = user?.role === 'TEACHER';
+  const isTeacher = user?.role ==='TEACHER';
   const TODAY_DAY = 15; // Today is September 15th
 
-  // Calendar mode: 'students' | 'teachers'
+  // Calendar mode:'students' |'teachers'
   const [calendarMode, setCalendarMode] = useState('students');
 
   // Selected date square (1 to 30)
   const [selectedDay, setSelectedDay] = useState(15);
   const [selectedMonth] = useState('سبتمبر 2026');
 
-  // Student workflow steps: 'date_grid' -> 'classes_list' -> 'students_checklist'
+  // Student workflow steps:'date_grid' ->'classes_list' ->'students_checklist'
   const [studentStep, setStudentStep] = useState('date_grid');
   const [selectedClass, setSelectedClass] = useState(null);
 
-  // Teacher workflow steps: 'date_grid' -> 'teachers_checklist'
+  // Teacher workflow steps:'date_grid' ->'teachers_checklist'
   const [teacherStep, setTeacherStep] = useState('date_grid');
 
   const calendarDays = Array.from({ length: 30 }, (_, i) => i + 1);
 
   // All classes
   const allClasses = [
-    { id: 'class-birds-3-4', name: 'روضة العصافير 🐥', teacherName: 'أ. نورة النابلسي' },
-    { id: 'class-flowers-4-5', name: 'روضة الزهور 🌸', teacherName: 'أ. سارة الخالد' },
-    { id: 'class-hope-2-3', name: 'روضة الأمل 🌟', teacherName: 'أ. منى التميمي' },
+    { id:'class-birds-3-4', name:'روضة العصافير', teacherName:'أ. نورة النابلسي' },
+    { id:'class-flowers-4-5', name:'روضة الزهور', teacherName:'أ. سارة الخالد' },
+    { id:'class-hope-2-3', name:'روضة الأمل', teacherName:'أ. منى التميمي' },
   ];
 
   // If user is a teacher, restrict visible classes ONLY to their assigned class!
@@ -42,7 +42,7 @@ export function AttendancePage() {
 
   const handleDateSquareClick = (dayNum) => {
     setSelectedDay(dayNum);
-    if (calendarMode === 'students') {
+    if (calendarMode ==='students') {
       if (isTeacher) {
         setSelectedClass(teacherClass);
         setStudentStep('students_checklist');
@@ -62,7 +62,7 @@ export function AttendancePage() {
   // Toggle student attendance for selectedDay & classId
   const toggleStudentCheck = async (studentId) => {
     if (!selectedClass) return;
-    const dateStr = `2026-09-${selectedDay.toString().padStart(2, '0')}`;
+    const dateStr =`2026-09-${selectedDay.toString().padStart(2,'0')}`;
     let newStatus = false;
     
     setStudentAttendanceByDay((prev) => {
@@ -88,7 +88,7 @@ export function AttendancePage() {
       await api.post('/auto/attendanceRecord', {
         childId: studentId,
         date: dateStr,
-        status: newStatus ? 'PRESENT' : 'ABSENT',
+        status: newStatus ?'PRESENT' :'ABSENT',
       });
     } catch (e) {
       console.warn('API error saving attendance');
@@ -97,16 +97,16 @@ export function AttendancePage() {
 
   // Toggle teacher attendance for selectedDay
   const toggleTeacherCheck = async (teacherId) => {
-    const dateStr = `2026-09-${selectedDay.toString().padStart(2, '0')}`;
+    const dateStr =`2026-09-${selectedDay.toString().padStart(2,'0')}`;
     let newStatus = false;
-    let newTime = '—';
+    let newTime ='—';
 
     setTeacherAttendanceByDay((prev) => {
       const dayList = prev[selectedDay] || [];
       const updatedList = dayList.map((t) => {
         if (t.id === teacherId) {
           newStatus = !t.present;
-          newTime = !t.present ? '07:30 ص' : '—';
+          newTime = !t.present ?'07:30 ص' :'—';
           return { ...t, present: newStatus, time: newTime };
         }
         return t;
@@ -118,7 +118,7 @@ export function AttendancePage() {
       await api.post('/auto/teacherAttendanceRecord', {
         teacherId,
         date: dateStr,
-        status: newStatus ? 'PRESENT' : 'ABSENT',
+        status: newStatus ?'PRESENT' :'ABSENT',
         time: newTime,
       });
     } catch (e) {
@@ -127,7 +127,7 @@ export function AttendancePage() {
   };
 
   const updateTeacherTime = async (teacherId, newTime) => {
-    const dateStr = `2026-09-${selectedDay.toString().padStart(2, '0')}`;
+    const dateStr =`2026-09-${selectedDay.toString().padStart(2,'0')}`;
 
     setTeacherAttendanceByDay((prev) => {
       const dayList = prev[selectedDay] || [];
@@ -157,7 +157,7 @@ export function AttendancePage() {
   return (
     <div className="space-y-6" dir="rtl">
       <PageHeader
-        title="تقويم الحضور والغياب اليومي 📅"
+        title="تقويم الحضور والغياب اليومي"
         description="اختر مربع التاريخ في التقويم لعرض وتأكيد حضور وغياب اليوم المحدد"
       />
 
@@ -169,11 +169,11 @@ export function AttendancePage() {
             setStudentStep('date_grid');
           }}
           className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center transition-all ${
-            calendarMode === 'students' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+            calendarMode ==='students' ?'bg-white text-blue-600' :'text-gray-600 hover:text-gray-900'
           }`}
         >
           <Users className="w-4 h-4 ml-2" />
-          تقويم أطفال الصفوف 👶
+          تقويم أطفال الصفوف 
         </button>
 
         {/* Teacher Calendar is visible ONLY for Admin */}
@@ -184,21 +184,21 @@ export function AttendancePage() {
               setTeacherStep('date_grid');
             }}
             className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center transition-all ${
-              calendarMode === 'teachers' ? 'bg-white text-emerald-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              calendarMode ==='teachers' ?'bg-white text-emerald-600' :'text-gray-600 hover:text-gray-900'
             }`}
           >
             <ShieldCheck className="w-4 h-4 ml-2" />
-            تقويم المعلمين 👩‍🏫 (خاص بالأدمن)
+            تقويم المعلمين ‍ (خاص بالأدمن)
           </button>
         )}
       </div>
 
       {/* ---------------- STUDENT CALENDAR WORKFLOW ---------------- */}
-      {calendarMode === 'students' && (
+      {calendarMode ==='students' && (
         <div className="space-y-6">
           {/* STEP 1: Date Squares Grid */}
-          {studentStep === 'date_grid' && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">
+          {studentStep ==='date_grid' && (
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
               <div className="flex justify-between items-center border-b border-gray-100 pb-4">
                 <h3 className="text-lg font-bold text-gray-900 flex items-center">
                   <Calendar className="w-5 h-5 ml-2 text-blue-600" />
@@ -211,7 +211,7 @@ export function AttendancePage() {
 
               {/* Grid of 30 Calendar Date Squares */}
               <div className="grid grid-cols-7 gap-3">
-                {['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'].map((dayName, idx) => (
+                {['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'].map((dayName, idx) => (
                   <div key={idx} className="text-center text-xs font-bold text-gray-500 py-1">
                     {dayName}
                   </div>
@@ -223,12 +223,12 @@ export function AttendancePage() {
                     <div
                       key={d}
                       onClick={() => handleDateSquareClick(d)}
-                      className={`h-20 rounded-2xl border p-2 cursor-pointer transition-all flex flex-col justify-between hover:border-blue-500 hover:shadow-md ${
+                      className={`h-20 rounded-2xl border p-2 cursor-pointer transition-all flex flex-col justify-between hover:border-blue-500  ${
                         selectedDay === d
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-lg scale-105'
+                          ?'bg-blue-600 text-white border-blue-600  scale-105'
                           : isFuture
-                          ? 'bg-gray-50/70 border-gray-200 text-gray-400'
-                          : 'bg-white border-gray-200 text-gray-900'
+                          ?'bg-gray-50/70 border-gray-200 text-gray-400'
+                          :'bg-white border-gray-200 text-gray-900'
                       }`}
                     >
                       <div className="flex justify-between items-center">
@@ -238,13 +238,13 @@ export function AttendancePage() {
                       <span
                         className={`text-[10px] font-semibold text-center rounded-md py-0.5 ${
                           selectedDay === d
-                            ? 'bg-blue-700 text-white'
+                            ?'bg-blue-700 text-white'
                             : isFuture
-                            ? 'bg-gray-100 text-gray-500'
-                            : 'bg-blue-50 text-blue-700'
+                            ?'bg-gray-100 text-gray-500'
+                            :'bg-blue-50 text-blue-700'
                         }`}
                       >
-                        {isTeacher ? 'عرض حضور صفك' : 'عرض الصفوف'}
+                        {isTeacher ?'عرض حضور صفك' :'عرض الصفوف'}
                       </span>
                     </div>
                   );
@@ -254,8 +254,8 @@ export function AttendancePage() {
           )}
 
           {/* STEP 2: Classes List after clicking Date Square (Admin View Only) */}
-          {studentStep === 'classes_list' && !isTeacher && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
+          {studentStep ==='classes_list' && !isTeacher && (
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
               <div className="flex justify-between items-center border-b border-gray-100 pb-4">
                 <button
                   onClick={() => setStudentStep('date_grid')}
@@ -274,7 +274,7 @@ export function AttendancePage() {
                   <div
                     key={cls.id}
                     onClick={() => handleClassClick(cls)}
-                    className="bg-gray-50 border border-gray-200 rounded-2xl p-5 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all flex flex-col justify-between"
+                    className="bg-gray-50 border border-gray-200 rounded-2xl p-5 cursor-pointer hover:border-blue-500 transition-all flex flex-col justify-between"
                   >
                     <div>
                       <h4 className="text-base font-bold text-gray-900 mb-1">{cls.name}</h4>
@@ -291,15 +291,15 @@ export function AttendancePage() {
           )}
 
           {/* STEP 3: Students Checklist with SMOOTH & RESPONSIVE CHECKBOXES */}
-          {studentStep === 'students_checklist' && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
+          {studentStep ==='students_checklist' && (
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
               <div className="flex justify-between items-center border-b border-gray-100 pb-4">
                 <button
                   onClick={() => (isTeacher ? setStudentStep('date_grid') : setStudentStep('classes_list'))}
                   className="flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl hover:bg-blue-100"
                 >
                   <ArrowRight className="w-4 h-4 ml-1" />
-                  {isTeacher ? 'الرجوع للتقويم الشهري' : 'الرجوع لقائمة الصفوف'}
+                  {isTeacher ?'الرجوع للتقويم الشهري' :'الرجوع لقائمة الصفوف'}
                 </button>
 
                 <div className="text-right">
@@ -337,11 +337,11 @@ export function AttendancePage() {
                       {std.present ? (
                         <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center">
                           <CheckCircle2 className="w-3.5 h-3.5 ml-1" />
-                          حاضر اليوم ({selectedDay} {selectedMonth}) 🟢
+                          حاضر اليوم ({selectedDay} {selectedMonth}) 
                         </span>
                       ) : (
                         <span className="bg-rose-100 text-rose-800 text-xs font-bold px-3.5 py-1.5 rounded-full">
-                          غائب / لم يسجل ({selectedDay} {selectedMonth}) 🔴
+                          غائب / لم يسجل ({selectedDay} {selectedMonth}) 
                         </span>
                       )}
                     </div>
@@ -354,11 +354,11 @@ export function AttendancePage() {
       )}
 
       {/* ---------------- TEACHER CALENDAR WORKFLOW (ADMIN ONLY) ---------------- */}
-      {calendarMode === 'teachers' && !isTeacher && (
+      {calendarMode ==='teachers' && !isTeacher && (
         <div className="space-y-6">
           {/* STEP 1: Date Squares Grid for Teachers */}
-          {teacherStep === 'date_grid' && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">
+          {teacherStep ==='date_grid' && (
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
               <div className="flex justify-between items-center border-b border-gray-100 pb-4">
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 flex items-center">
@@ -370,7 +370,7 @@ export function AttendancePage() {
               </div>
 
               <div className="grid grid-cols-7 gap-3">
-                {['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'].map((dayName, idx) => (
+                {['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'].map((dayName, idx) => (
                   <div key={idx} className="text-center text-xs font-bold text-gray-500 py-1">
                     {dayName}
                   </div>
@@ -382,12 +382,12 @@ export function AttendancePage() {
                     <div
                       key={d}
                       onClick={() => handleDateSquareClick(d)}
-                      className={`h-20 rounded-2xl border p-2 cursor-pointer transition-all flex flex-col justify-between hover:border-emerald-500 hover:shadow-md ${
+                      className={`h-20 rounded-2xl border p-2 cursor-pointer transition-all flex flex-col justify-between hover:border-emerald-500  ${
                         selectedDay === d
-                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg scale-105'
+                          ?'bg-emerald-600 text-white border-emerald-600  scale-105'
                           : isFuture
-                          ? 'bg-gray-50/70 border-gray-200 text-gray-400'
-                          : 'bg-white border-gray-200 text-gray-900'
+                          ?'bg-gray-50/70 border-gray-200 text-gray-400'
+                          :'bg-white border-gray-200 text-gray-900'
                       }`}
                     >
                       <div className="flex justify-between items-center">
@@ -396,7 +396,7 @@ export function AttendancePage() {
                       </div>
                       <span
                         className={`text-[10px] font-semibold text-center rounded-md py-0.5 ${
-                          selectedDay === d ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-700'
+                          selectedDay === d ?'bg-emerald-700 text-white' :'bg-emerald-50 text-emerald-700'
                         }`}
                       >
                         عرض المعلمين
@@ -409,8 +409,8 @@ export function AttendancePage() {
           )}
 
           {/* STEP 2: Teachers List with Checkbox & Hour Input for selectedDay */}
-          {teacherStep === 'teachers_checklist' && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-6">
+          {teacherStep ==='teachers_checklist' && (
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
               <div className="flex justify-between items-center border-b border-gray-100 pb-4">
                 <button
                   onClick={() => setTeacherStep('date_grid')}
@@ -460,11 +460,11 @@ export function AttendancePage() {
                         {t.present ? (
                           <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center">
                             <CheckCircle2 className="w-3.5 h-3.5 ml-1" />
-                            مداومة يوم ({selectedDay} {selectedMonth}) 🟢
+                            مداومة يوم ({selectedDay} {selectedMonth}) 
                           </span>
                         ) : (
                           <span className="bg-rose-100 text-rose-800 text-xs font-bold px-3.5 py-1.5 rounded-full">
-                            لم تحضر 🔴
+                            لم تحضر 
                           </span>
                         )}
                       </div>

@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import { useThemeStore, applyTheme } from '../store/themeStore';
-import { useTranslation } from 'react-i18next';
-import { Button } from '../components/ui/Button';
-import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { useEffect } from'react';
+import { Outlet } from'react-router-dom';
+import { useThemeStore, applyTheme } from'../store/themeStore';
+import { useTranslation } from'react-i18next';
+import { Button } from'../components/ui/Button';
+import { ThemeToggle } from'../components/ui/ThemeToggle';
 
 export function RootLayout() {
   const { theme } = useThemeStore();
@@ -18,14 +18,14 @@ export function RootLayout() {
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
-      if (theme === 'system') applyTheme('system');
+      if (theme ==='system') applyTheme('system');
     };
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme]);
 
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
+    i18n.changeLanguage(i18n.language ==='en' ?'ar' :'en');
   };
 
   return (

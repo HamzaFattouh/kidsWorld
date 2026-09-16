@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { cn } from '../../lib/utils';
+import { useEffect, useRef, useState } from'react';
+import { cn } from'../../lib/utils';
 
 
 
@@ -14,7 +14,7 @@ export function ScrollyVideo({
   posterSrc,
   fallbackImageSrc,
   className,
-  heightClass = 'h-[300vh]'
+  heightClass ='h-[300vh]'
 }) {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
@@ -79,7 +79,7 @@ export function ScrollyVideo({
       if (video && isVideoLoaded) {
         // Smooth interpolation for the scrubbing
         const diff = targetTime - video.currentTime;
-        // Adjust the multiplier (0.1) to change the "weight" / smoothness
+        // Adjust the multiplier (0.1) to change the"weight" / smoothness
         if (Math.abs(diff) > 0.01) {
           video.currentTime += diff * 0.1;
         }
@@ -139,7 +139,7 @@ export function ScrollyVideo({
           playsInline
           className="w-full h-full object-cover"
           // Important for mobile safari to not full-screen
-          style={{ willChange: 'transform' }} />
+          style={{ willChange:'transform' }} />
         
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/50 dark:to-background-dark/80" />
       </div>

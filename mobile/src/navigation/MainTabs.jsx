@@ -1,26 +1,26 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Home, LayoutDashboard, Settings, User } from 'lucide-react-native';
+import React from'react';
+import { createBottomTabNavigator } from'@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from'@react-navigation/native-stack';
+import { Home, LayoutDashboard, Settings, User } from'lucide-react-native';
 
 // Main Screens
-import { LandingHomeScreen } from '../screens/home/LandingHomeScreen';
-import { DashboardScreen } from '../screens/dashboard/DashboardScreen';
-import { SettingsScreen } from '../screens/settings/SettingsScreen';
-import { ProfileScreen } from '../screens/profile/ProfileScreen';
+import { LandingHomeScreen } from'../screens/home/LandingHomeScreen';
+import { DashboardScreen } from'../screens/dashboard/DashboardScreen';
+import { SettingsScreen } from'../screens/settings/SettingsScreen';
+import { ProfileScreen } from'../screens/profile/ProfileScreen';
 
 // Dashboard Detail Screens
-import { ChildrenScreen } from '../screens/parent/ChildrenScreen';
-import { AttendanceScreen } from '../screens/parent/AttendanceScreen';
-import { MealsScreen } from '../screens/parent/MealsScreen';
-import { WeeklyNotesScreen } from '../screens/parent/WeeklyNotesScreen';
-import { EvaluationsScreen } from '../screens/parent/EvaluationsScreen';
-import { ComplaintsScreen } from '../screens/parent/ComplaintsScreen';
-import { RequestsScreen } from '../screens/parent/RequestsScreen';
-import { CamerasScreen } from '../screens/parent/CamerasScreen';
-import { UsersScreen } from '../screens/admin/UsersScreen';
-import { ClassesScreen } from '../screens/admin/ClassesScreen';
-import { TasksScreen } from '../screens/admin/TasksScreen';
+import { ChildrenScreen } from'../screens/parent/ChildrenScreen';
+import { AttendanceScreen } from'../screens/parent/AttendanceScreen';
+import { MealsScreen } from'../screens/parent/MealsScreen';
+import { WeeklyNotesScreen } from'../screens/parent/WeeklyNotesScreen';
+import { EvaluationsScreen } from'../screens/parent/EvaluationsScreen';
+import { ComplaintsScreen } from'../screens/parent/ComplaintsScreen';
+import { RequestsScreen } from'../screens/parent/RequestsScreen';
+import { CamerasScreen } from'../screens/parent/CamerasScreen';
+import { UsersScreen } from'../screens/admin/UsersScreen';
+import { ClassesScreen } from'../screens/admin/ClassesScreen';
+import { TasksScreen } from'../screens/admin/TasksScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -49,19 +49,19 @@ export function MainTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#10b981',
-        tabBarInactiveTintColor: '#9ca3af',
+        tabBarActiveTintColor:'#10b981',
+        tabBarInactiveTintColor:'#9ca3af',
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor:'#ffffff',
           borderTopWidth: 1,
-          borderTopColor: '#f3f4f6',
+          borderTopColor:'#f3f4f6',
           height: 60,
           paddingBottom: 8,
           paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: 'bold',
+          fontWeight:'bold',
         },
       }}
     >
@@ -69,7 +69,7 @@ export function MainTabs() {
         name="HomeTab"
         component={LandingHomeScreen}
         options={{
-          tabBarLabel: 'الرئيسية',
+          tabBarLabel:'الرئيسية',
           tabBarIcon: ({ color, size }) => <Home color={color} size={size || 22} />,
         }}
       />
@@ -78,7 +78,7 @@ export function MainTabs() {
         name="DashboardTab"
         component={DashboardStack}
         options={{
-          tabBarLabel: 'اللوحة',
+          tabBarLabel:'اللوحة',
           tabBarIcon: ({ color, size }) => <LayoutDashboard color={color} size={size || 22} />,
         }}
       />
@@ -87,7 +87,7 @@ export function MainTabs() {
         name="SettingsTab"
         component={SettingsScreen}
         options={{
-          tabBarLabel: 'الإعدادات',
+          tabBarLabel:'الإعدادات',
           tabBarIcon: ({ color, size }) => <Settings color={color} size={size || 22} />,
         }}
       />
@@ -96,7 +96,7 @@ export function MainTabs() {
         name="ProfileTab"
         component={ProfileScreen}
         options={{
-          tabBarLabel: 'الحساب',
+          tabBarLabel:'الحساب',
           tabBarIcon: ({ color, size }) => <User color={color} size={size || 22} />,
         }}
       />

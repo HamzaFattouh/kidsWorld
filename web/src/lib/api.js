@@ -1,19 +1,17 @@
-import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
+import axios from'axios';
+import { useAuthStore } from'../store/authStore';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://kidsworld-backend-pjcx.onrender.com/api/v1',
+  baseURL: import.meta.env.VITE_API_URL ||'https://kidsworld-backend-pjcx.onrender.com/api/v1',
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-    'x-app-client': 'web'
+  headers: {'Content-Type':'application/json','x-app-client':'web'
   }
 });
 
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization =`Bearer ${token}`;
   }
   return config;
 });

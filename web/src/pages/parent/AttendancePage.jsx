@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Card, CardContent } from '../../components/ui/Card';
-import { DataTable } from '../../components/ui/DataTable';
-import { useParentStore } from '../../store/parentStore';
-import { api } from '../../lib/api';
+import { useQuery } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Card, CardContent } from'../../components/ui/Card';
+import { DataTable } from'../../components/ui/DataTable';
+import { useParentStore } from'../../store/parentStore';
+import { api } from'../../lib/api';
 
 export function ParentAttendancePage() {
   const { selectedChildId } = useParentStore();
@@ -20,27 +20,27 @@ export function ParentAttendancePage() {
 
   const columns = [
     {
-      header: 'التاريخ',
-      accessorKey: 'date',
-      cell: (row) => row.date ? new Date(row.date).toLocaleDateString('ar-EG') : '—'
+      header:'التاريخ',
+      accessorKey:'date',
+      cell: (row) => row.date ? new Date(row.date).toLocaleDateString('ar-EG') :'—'
     },
     {
-      header: 'حالة الحضور',
-      accessorKey: 'status',
+      header:'حالة الحضور',
+      accessorKey:'status',
       cell: (row) => {
         const statusMap = {
-          PRESENT: <span className="text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-bold">حاضر 🟢</span>,
-          ABSENT: <span className="text-red-600 bg-red-50 px-2.5 py-1 rounded-full text-xs font-bold">غائب 🔴</span>,
-          LATE: <span className="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs font-bold">متأخر 🟡</span>,
-          EXCUSED: <span className="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full text-xs font-bold">بعذر 🔵</span>
+          PRESENT: <span className="text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-bold">حاضر </span>,
+          ABSENT: <span className="text-red-600 bg-red-50 px-2.5 py-1 rounded-full text-xs font-bold">غائب </span>,
+          LATE: <span className="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs font-bold">متأخر </span>,
+          EXCUSED: <span className="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full text-xs font-bold">بعذر </span>
         };
-        return statusMap[row.status] || row.status || '—';
+        return statusMap[row.status] || row.status ||'—';
       }
     },
     {
-      header: 'ملاحظات',
-      accessorKey: 'notes',
-      cell: (row) => row.notes || 'لا توجد ملاحظات'
+      header:'ملاحظات',
+      accessorKey:'notes',
+      cell: (row) => row.notes ||'لا توجد ملاحظات'
     }
   ];
 
@@ -48,7 +48,7 @@ export function ParentAttendancePage() {
     <div className="space-y-6 text-start">
       <PageHeader
         title="سجل الحضور والغياب"
-        description={selectedChildId ? "عرض تفاصيل حضور وغياب الطفل" : "يرجى اختيار طفل من القائمة الجانبية لعرض السجل"}
+        description={selectedChildId ?"عرض تفاصيل حضور وغياب الطفل" :"يرجى اختيار طفل من القائمة الجانبية لعرض السجل"}
       />
 
       {!selectedChildId ? (

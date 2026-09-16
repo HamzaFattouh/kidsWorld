@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { AttendanceForm } from '../../components/forms/AttendanceForm';
-import { attendanceRecordApi } from '../../api/attendanceRecord';
+import { AttendanceForm } from'../../components/forms/AttendanceForm';
+import { attendanceRecordApi } from'../../api/attendanceRecord';
 
 
 export function AttendancePage() {
@@ -26,36 +26,36 @@ export function AttendancePage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
 
   {
-    header: 'childId',
-    accessorKey: 'childId'
+    header:'childId',
+    accessorKey:'childId'
   },
   {
-    header: 'date',
-    accessorKey: 'date'
+    header:'date',
+    accessorKey:'date'
   },
   {
-    header: 'status',
-    accessorKey: 'status'
+    header:'status',
+    accessorKey:'status'
   },
   {
-    header: 'notes',
-    accessorKey: 'notes'
+    header:'notes',
+    accessorKey:'notes'
   }];
 
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.attendance.title', 'Attendance')}
-        description={t('pages.attendance.description', 'Manage Attendance')}
-        actionLabel={t('pages.attendance.create', 'Create')}
+        title={t('pages.attendance.title','Attendance')}
+        description={t('pages.attendance.description','Manage Attendance')}
+        actionLabel={t('pages.attendance.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -68,7 +68,7 @@ export function AttendancePage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.attendance.create', 'Create')}>
+        title={t('pages.attendance.create','Create')}>
         
         <div className="py-4">
           <AttendanceForm

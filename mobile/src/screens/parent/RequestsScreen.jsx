@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from'react';
 import {
   View,
   Text,
@@ -9,11 +9,11 @@ import {
   ActivityIndicator,
   Modal,
   Alert,
-} from 'react-native';
-import { FileCheck, Plus, CheckCircle2, Clock, X } from 'lucide-react-native';
-import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
-import { useParentStore } from '../../store/parentStore';
-import api from '../../services/api';
+} from'react-native';
+import { FileCheck, Plus, CheckCircle2, Clock, X } from'lucide-react-native';
+import { ScreenWrapper } from'../../components/ui/ScreenWrapper';
+import { useParentStore } from'../../store/parentStore';
+import api from'../../services/api';
 
 export function RequestsScreen() {
   const selectedChildId = useParentStore((s) => s.selectedChildId);
@@ -44,26 +44,26 @@ export function RequestsScreen() {
 
   const getFallbackRequests = () => [
     {
-      id: '1',
-      type: 'LEAVE',
-      description: 'طلب استئذان غياب ليومي الأحد والإثنين بسبب السفر العائلي.',
-      status: 'RESOLVED',
-      createdAt: '2026-09-10',
+      id:'1',
+      type:'LEAVE',
+      description:'طلب استئذان غياب ليومي الأحد والإثنين بسبب السفر العائلي.',
+      status:'RESOLVED',
+      createdAt:'2026-09-10',
     },
     {
-      id: '2',
-      type: 'EARLY_PICKUP',
-      description: 'طلب مغادرة مبكرة يوم الأربعاء الساعة 12:00 ظهراً لموعد طبي.',
-      status: 'OPEN',
-      createdAt: '2026-09-15',
+      id:'2',
+      type:'EARLY_PICKUP',
+      description:'طلب مغادرة مبكرة يوم الأربعاء الساعة 12:00 ظهراً لموعد طبي.',
+      status:'OPEN',
+      createdAt:'2026-09-15',
     },
   ];
 
   const requestTypes = [
-    { key: 'LEAVE', label: 'طلب إجازة / غياب 📝' },
-    { key: 'EARLY_PICKUP', label: 'طلب مغادرة مبكرة 🚗' },
-    { key: 'DOCUMENT_REQUEST', label: 'طلب شهادة / مستندات 📄' },
-    { key: 'MEETING_REQUEST', label: 'طلب موعد اجتماع 🤝' },
+    { key:'LEAVE', label:'طلب إجازة / غياب' },
+    { key:'EARLY_PICKUP', label:'طلب مغادرة مبكرة' },
+    { key:'DOCUMENT_REQUEST', label:'طلب شهادة / مستندات' },
+    { key:'MEETING_REQUEST', label:'طلب موعد اجتماع' },
   ];
 
   const getTypeLabel = (tKey) => {
@@ -73,7 +73,7 @@ export function RequestsScreen() {
 
   const handleSubmit = async () => {
     if (!description) {
-      Alert.alert('تنبيه', 'يرجى إدخال سبب وتفاصيل الطلب.');
+      Alert.alert('تنبيه','يرجى إدخال سبب وتفاصيل الطلب.');
       return;
     }
 
@@ -85,7 +85,7 @@ export function RequestsScreen() {
         childId: selectedChildId || undefined,
       });
 
-      Alert.alert('نجاح', 'تم تقديم الطلب للإدارة بنجاح.');
+      Alert.alert('نجاح','تم تقديم الطلب للإدارة بنجاح.');
       setDescription('');
       setModalVisible(false);
       fetchRequests();
@@ -94,13 +94,13 @@ export function RequestsScreen() {
         id: String(Date.now()),
         type,
         description,
-        status: 'OPEN',
+        status:'OPEN',
         createdAt: new Date().toISOString().split('T')[0],
       };
       setRequests([newItem, ...requests]);
       setDescription('');
       setModalVisible(false);
-      Alert.alert('تم الحفظ', 'تم تقديم طلبك بنجاح.');
+      Alert.alert('تم الحفظ','تم تقديم طلبك بنجاح.');
     } finally {
       setSubmitting(false);
     }
@@ -108,22 +108,22 @@ export function RequestsScreen() {
 
   const renderStatusBadge = (status) => {
     switch (status) {
-      case 'RESOLVED':
+      case'RESOLVED':
         return (
-          <View style={[styles.badge, { backgroundColor: '#ecfdf5' }]}>
-            <Text style={[styles.badgeText, { color: '#10b981' }]}>تمت الموافقة ✅</Text>
+          <View style={[styles.badge, { backgroundColor:'#ecfdf5' }]}>
+            <Text style={[styles.badgeText, { color:'#10b981' }]}>تمت الموافقة </Text>
           </View>
         );
-      case 'IN_PROGRESS':
+      case'IN_PROGRESS':
         return (
-          <View style={[styles.badge, { backgroundColor: '#eff6ff' }]}>
-            <Text style={[styles.badgeText, { color: '#2563eb' }]}>جاري المراجعة 🔵</Text>
+          <View style={[styles.badge, { backgroundColor:'#eff6ff' }]}>
+            <Text style={[styles.badgeText, { color:'#2563eb' }]}>جاري المراجعة </Text>
           </View>
         );
       default:
         return (
-          <View style={[styles.badge, { backgroundColor: '#fefce8' }]}>
-            <Text style={[styles.badgeText, { color: '#ca8a04' }]}>قيد الانتظار 🟡</Text>
+          <View style={[styles.badge, { backgroundColor:'#fefce8' }]}>
+            <Text style={[styles.badgeText, { color:'#ca8a04' }]}>قيد الانتظار </Text>
           </View>
         );
     }
@@ -139,7 +139,7 @@ export function RequestsScreen() {
           </TouchableOpacity>
 
           <View>
-            <Text style={styles.title}>طلبات أولياء الأمور 📄</Text>
+            <Text style={styles.title}>طلبات أولياء الأمور </Text>
             <Text style={styles.subTitle}>متابعة طلبات الإجازات والمغادرة والمستندات</Text>
           </View>
         </View>
@@ -191,7 +191,7 @@ export function RequestsScreen() {
 
             <Text style={styles.label}>السبب والتفاصيل</Text>
             <TextInput
-              style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+              style={[styles.input, { height: 100, textAlignVertical:'top' }]}
               placeholder="اكتب سبب وتفاصيل الطلب هنا..."
               multiline
               value={description}
@@ -214,34 +214,34 @@ export function RequestsScreen() {
 
 const styles = StyleSheet.create({
   container: { paddingBottom: 24 },
-  headerRow: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  title: { fontSize: 20, fontWeight: 'bold', color: '#111827', textAlign: 'right' },
-  subTitle: { fontSize: 12, color: '#6b7280', textAlign: 'right', marginTop: 2 },
-  addBtn: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: '#6366f1', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12 },
-  addBtnText: { color: '#ffffff', fontSize: 13, fontWeight: 'bold' },
+  headerRow: { flexDirection:'row-reverse', justifyContent:'space-between', alignItems:'center', marginBottom: 20 },
+  title: { fontSize: 20, fontWeight:'bold', color:'#111827', textAlign:'right' },
+  subTitle: { fontSize: 12, color:'#6b7280', textAlign:'right', marginTop: 2 },
+  addBtn: { flexDirection:'row-reverse', alignItems:'center', backgroundColor:'#6366f1', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12 },
+  addBtnText: { color:'#ffffff', fontSize: 13, fontWeight:'bold' },
 
-  card: { backgroundColor: '#ffffff', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#e5e7eb' },
-  cardTop: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  card: { backgroundColor:'#ffffff', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor:'#e5e7eb' },
+  cardTop: { flexDirection:'row-reverse', justifyContent:'space-between', alignItems:'center', marginBottom: 8 },
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  badgeText: { fontSize: 12, fontWeight: 'bold' },
-  cardDate: { fontSize: 12, color: '#9ca3af' },
+  badgeText: { fontSize: 12, fontWeight:'bold' },
+  cardDate: { fontSize: 12, color:'#9ca3af' },
 
-  cardType: { fontSize: 15, fontWeight: 'bold', color: '#111827', textAlign: 'right', marginBottom: 4 },
-  cardDesc: { fontSize: 13, color: '#4b5563', textAlign: 'right', lineHeight: 18 },
+  cardType: { fontSize: 15, fontWeight:'bold', color:'#111827', textAlign:'right', marginBottom: 4 },
+  cardDesc: { fontSize: 13, color:'#4b5563', textAlign:'right', lineHeight: 18 },
 
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: '#ffffff', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24 },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', color: '#111827' },
+  modalOverlay: { flex: 1, backgroundColor:'rgba(0,0,0,0.5)', justifyContent:'flex-end' },
+  modalContent: { backgroundColor:'#ffffff', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24 },
+  modalHeader: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom: 16 },
+  modalTitle: { fontSize: 18, fontWeight:'bold', color:'#111827' },
 
-  label: { fontSize: 13, fontWeight: 'bold', color: '#374151', textAlign: 'right', marginBottom: 6 },
-  typesGrid: { flexDirection: 'row-reverse', flexWrap: 'wrap', marginBottom: 12 },
-  typeOption: { backgroundColor: '#f3f4f6', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 8, margin: 4 },
-  activeTypeOption: { backgroundColor: '#6366f1' },
-  typeOptionText: { fontSize: 12, color: '#374151', fontWeight: '600' },
-  activeTypeOptionText: { color: '#ffffff' },
+  label: { fontSize: 13, fontWeight:'bold', color:'#374151', textAlign:'right', marginBottom: 6 },
+  typesGrid: { flexDirection:'row-reverse', flexWrap:'wrap', marginBottom: 12 },
+  typeOption: { backgroundColor:'#f3f4f6', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 8, margin: 4 },
+  activeTypeOption: { backgroundColor:'#6366f1' },
+  typeOptionText: { fontSize: 12, color:'#374151', fontWeight:'600' },
+  activeTypeOptionText: { color:'#ffffff' },
 
-  input: { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 14, marginBottom: 14, backgroundColor: '#f9fafb' },
-  submitBtn: { backgroundColor: '#6366f1', height: 48, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginTop: 8 },
-  submitBtnText: { color: '#ffffff', fontSize: 15, fontWeight: 'bold' },
+  input: { borderWidth: 1, borderColor:'#d1d5db', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 14, marginBottom: 14, backgroundColor:'#f9fafb' },
+  submitBtn: { backgroundColor:'#6366f1', height: 48, borderRadius: 12, justifyContent:'center', alignItems:'center', marginTop: 8 },
+  submitBtnText: { color:'#ffffff', fontSize: 15, fontWeight:'bold' },
 });

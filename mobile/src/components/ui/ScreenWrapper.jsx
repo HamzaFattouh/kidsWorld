@@ -1,15 +1,15 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeStore, getActiveTheme } from '../../store/themeStore';
+import React from'react';
+import { View, StyleSheet } from'react-native';
+import { SafeAreaView } from'react-native-safe-area-context';
+import { useThemeStore, getActiveTheme } from'../../store/themeStore';
 
 export function ScreenWrapper({ children }) {
   const theme = getActiveTheme(useThemeStore((s) => s.theme));
-  const isDark = theme === 'dark';
+  const isDark = theme ==='dark';
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: isDark ? '#111827' : '#f9fafb' }]}>
-      <View style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f9fafb' }]}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: isDark ?'#111827' :'#f9fafb' }]}>
+      <View style={[styles.container, { backgroundColor: isDark ?'#111827' :'#f9fafb' }]}>
         {children}
       </View>
     </SafeAreaView>

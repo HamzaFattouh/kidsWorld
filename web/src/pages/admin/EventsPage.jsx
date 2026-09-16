@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { EventForm } from '../../components/forms/EventForm';
-import { eventApi } from '../../api/event';
+import { EventForm } from'../../components/forms/EventForm';
+import { eventApi } from'../../api/event';
 
 
 export function EventsPage() {
@@ -26,33 +26,33 @@ export function EventsPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
   {
-    header: 'Image',
-    accessorKey: 'imageUrl',
+    header:'Image',
+    accessorKey:'imageUrl',
     cell: (info) => info.getValue() ? <img src={info.getValue()} alt="Event" className="w-12 h-12 object-cover rounded" /> : null
   },
   {
-    header: 'Title (EN)',
-    accessorKey: 'titleEn'
+    header:'Title (EN)',
+    accessorKey:'titleEn'
   },
   {
-    header: 'Title (AR)',
-    accessorKey: 'titleAr'
+    header:'Title (AR)',
+    accessorKey:'titleAr'
   },
   {
-    header: 'Date',
-    accessorKey: 'eventDate',
+    header:'Date',
+    accessorKey:'eventDate',
     cell: (info) => new Date(info.getValue()).toLocaleDateString()
   },
   {
-    header: 'Published',
-    accessorKey: 'isPublished',
-    cell: (info) => info.getValue() ? 'Yes' : 'No'
+    header:'Published',
+    accessorKey:'isPublished',
+    cell: (info) => info.getValue() ?'Yes' :'No'
   }];
 
   const handleCreate = (data) => {
@@ -73,9 +73,9 @@ export function EventsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.events.title', 'Events')}
-        description={t('pages.events.description', 'Manage Events')}
-        actionLabel={t('pages.events.create', 'Create')}
+        title={t('pages.events.title','Events')}
+        description={t('pages.events.description','Manage Events')}
+        actionLabel={t('pages.events.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -88,7 +88,7 @@ export function EventsPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.events.create', 'Create')}>
+        title={t('pages.events.create','Create')}>
         
         <div className="py-4">
           <EventForm

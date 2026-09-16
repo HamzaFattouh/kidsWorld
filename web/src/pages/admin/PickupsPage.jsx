@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { PickupForm } from '../../components/forms/PickupForm';
-import { authorizedPickupApi } from '../../api/authorizedPickup';
+import { PickupForm } from'../../components/forms/PickupForm';
+import { authorizedPickupApi } from'../../api/authorizedPickup';
 
 
 export function PickupsPage() {
@@ -26,32 +26,32 @@ export function PickupsPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
 
   {
-    header: 'name',
-    accessorKey: 'name'
+    header:'name',
+    accessorKey:'name'
   },
   {
-    header: 'phone',
-    accessorKey: 'phone'
+    header:'phone',
+    accessorKey:'phone'
   },
   {
-    header: 'childId',
-    accessorKey: 'childId'
+    header:'childId',
+    accessorKey:'childId'
   }];
 
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.pickups.title', 'Pickups')}
-        description={t('pages.pickups.description', 'Manage Pickups')}
-        actionLabel={t('pages.pickups.create', 'Create')}
+        title={t('pages.pickups.title','Pickups')}
+        description={t('pages.pickups.description','Manage Pickups')}
+        actionLabel={t('pages.pickups.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -64,7 +64,7 @@ export function PickupsPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.pickups.create', 'Create')}>
+        title={t('pages.pickups.create','Create')}>
         
         <div className="py-4">
           <PickupForm

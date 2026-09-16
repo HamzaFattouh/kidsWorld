@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Card, CardContent } from '../../components/ui/Card';
-import { DataTable } from '../../components/ui/DataTable';
-import { Modal } from '../../components/ui/Modal';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { useParentStore } from '../../store/parentStore';
-import { api } from '../../lib/api';
+import { useState } from'react';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Card, CardContent } from'../../components/ui/Card';
+import { DataTable } from'../../components/ui/DataTable';
+import { Modal } from'../../components/ui/Modal';
+import { Button } from'../../components/ui/Button';
+import { Input } from'../../components/ui/Input';
+import { useParentStore } from'../../store/parentStore';
+import { api } from'../../lib/api';
 
 export function ParentComplaintsPage() {
   const { selectedChildId } = useParentStore();
@@ -36,7 +36,7 @@ export function ParentComplaintsPage() {
       setDescription('');
     },
     onError: (err) => {
-      alert(err?.response?.data?.error?.message || 'حدث خطأ أثناء إرسال الشكوى');
+      alert(err?.response?.data?.error?.message ||'حدث خطأ أثناء إرسال الشكوى');
     }
   });
 
@@ -51,32 +51,32 @@ export function ParentComplaintsPage() {
 
   const columns = [
     {
-      header: 'عنوان الشكوى / الملاحظة',
-      accessorKey: 'title',
+      header:'عنوان الشكوى / الملاحظة',
+      accessorKey:'title',
       cell: (row) => <span className="font-bold">{row.title}</span>
     },
     {
-      header: 'التفاصيل',
-      accessorKey: 'description',
+      header:'التفاصيل',
+      accessorKey:'description',
       cell: (row) => row.description
     },
     {
-      header: 'الحالة',
-      accessorKey: 'status',
+      header:'الحالة',
+      accessorKey:'status',
       cell: (row) => {
         const statusMap = {
-          OPEN: <span className="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs font-bold">قيد المراجعة 🟡</span>,
-          IN_PROGRESS: <span className="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full text-xs font-bold">قيد المعالجة 🔵</span>,
-          RESOLVED: <span className="text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-bold">تم الحل ✅</span>,
-          CLOSED: <span className="text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full text-xs font-bold">مغلقة 🔒</span>
+          OPEN: <span className="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs font-bold">قيد المراجعة </span>,
+          IN_PROGRESS: <span className="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full text-xs font-bold">قيد المعالجة </span>,
+          RESOLVED: <span className="text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-bold">تم الحل </span>,
+          CLOSED: <span className="text-gray-600 bg-gray-50 px-2.5 py-1 rounded-full text-xs font-bold">مغلقة </span>
         };
-        return statusMap[row.status] || row.status || '—';
+        return statusMap[row.status] || row.status ||'—';
       }
     },
     {
-      header: 'تاريخ التقديم',
-      accessorKey: 'createdAt',
-      cell: (row) => row.createdAt ? new Date(row.createdAt).toLocaleDateString('ar-EG') : '—'
+      header:'تاريخ التقديم',
+      accessorKey:'createdAt',
+      cell: (row) => row.createdAt ? new Date(row.createdAt).toLocaleDateString('ar-EG') :'—'
     }
   ];
 

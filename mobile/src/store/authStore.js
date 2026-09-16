@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import * as SecureStore from 'expo-secure-store';
-import api from '../services/api';
+import { create } from'zustand';
+import * as SecureStore from'expo-secure-store';
+import api from'../services/api';
 
 export const useAuthStore = create((set) => ({
   token: null,
@@ -23,7 +23,7 @@ export const useAuthStore = create((set) => ({
       set({ token, role, user, isAuthenticated: true, isLoading: false, error: null });
       return { success: true, role, user };
     } catch (err) {
-      const message = err.response?.data?.message || err.message || 'Login failed';
+      const message = err.response?.data?.message || err.message ||'Login failed';
       set({ isLoading: false, error: message });
       return { success: false, error: message };
     }

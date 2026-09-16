@@ -1,14 +1,14 @@
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
-import { Input } from '../../components/ui/Input';
-import { Button } from '../../components/ui/Button';
-import { api } from '../../lib/api';
+import { useState } from'react';
+import { useForm } from'react-hook-form';
+import { zodResolver } from'@hookform/resolvers/zod';
+import * as z from'zod';
+import { useTranslation } from'react-i18next';
+import { useNavigate } from'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from'../../components/ui/Card';
+import { Input } from'../../components/ui/Input';
+import { Button } from'../../components/ui/Button';
+import { api } from'../../lib/api';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address')
@@ -45,10 +45,10 @@ export function ForgotPasswordPage() {
         {success ?
         <div className="text-center space-y-4">
             <p className="text-green-600 dark:text-green-400">
-              {t('reset_link_sent', 'If an account exists, a reset link has been sent.')}
+              {t('reset_link_sent','If an account exists, a reset link has been sent.')}
             </p>
             <Button onClick={() => navigate('/auth/login')} variant="outline" className="w-full">
-              {t('back_to_login', 'Back to Login')}
+              {t('back_to_login','Back to Login')}
             </Button>
           </div> :
 
@@ -76,7 +76,7 @@ export function ForgotPasswordPage() {
               onClick={() => navigate('/auth/login')}
               className="text-sm text-primary hover:underline">
               
-                {t('back_to_login', 'Back to Login')}
+                {t('back_to_login','Back to Login')}
               </button>
             </div>
           </form>

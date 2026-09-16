@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { EvaluationForm } from '../../components/forms/EvaluationForm';
-import { evaluationApi } from '../../api/evaluation';
+import { EvaluationForm } from'../../components/forms/EvaluationForm';
+import { evaluationApi } from'../../api/evaluation';
 
 
 export function EvaluationsPage() {
@@ -26,36 +26,36 @@ export function EvaluationsPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
 
   {
-    header: 'childId',
-    accessorKey: 'childId'
+    header:'childId',
+    accessorKey:'childId'
   },
   {
-    header: 'term',
-    accessorKey: 'term'
+    header:'term',
+    accessorKey:'term'
   },
   {
-    header: 'learning',
-    accessorKey: 'learning'
+    header:'learning',
+    accessorKey:'learning'
   },
   {
-    header: 'behavior',
-    accessorKey: 'behavior'
+    header:'behavior',
+    accessorKey:'behavior'
   }];
 
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.evaluations.title', 'Evaluations')}
-        description={t('pages.evaluations.description', 'Manage Evaluations')}
-        actionLabel={t('pages.evaluations.create', 'Create')}
+        title={t('pages.evaluations.title','Evaluations')}
+        description={t('pages.evaluations.description','Manage Evaluations')}
+        actionLabel={t('pages.evaluations.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -68,7 +68,7 @@ export function EvaluationsPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.evaluations.create', 'Create')}>
+        title={t('pages.evaluations.create','Create')}>
         
         <div className="py-4">
           <EvaluationForm

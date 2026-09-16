@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from'react';
 import {
   View,
   Text,
@@ -8,52 +8,49 @@ import {
   TextInput,
   Modal,
   Alert,
-} from 'react-native';
-import { FileText, CheckCircle2, AlertCircle, Edit, UserCheck, Save } from 'lucide-react-native';
-import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
+} from'react-native';
+import { FileText, CheckCircle2, AlertCircle, Edit, UserCheck, Save } from'lucide-react-native';
+import { ScreenWrapper } from'../../components/ui/ScreenWrapper';
 
 export function WeeklyNotesScreen() {
   const [selectedClass, setSelectedClass] = useState('class-birds-3-4');
 
   const classesList = [
-    { id: 'class-birds-3-4', name: 'روضة العصافير' },
-    { id: 'class-flowers-4-5', name: 'روضة الزهور' },
-    { id: 'class-hope-2-3', name: 'روضة الأمل' },
+    { id:'class-birds-3-4', name:'روضة العصافير' },
+    { id:'class-flowers-4-5', name:'روضة الزهور' },
+    { id:'class-hope-2-3', name:'روضة الأمل' },
   ];
 
-  const [studentsReports, setStudentsReports] = useState({
-    'class-birds-3-4': [
+  const [studentsReports, setStudentsReports] = useState({'class-birds-3-4': [
       {
-        id: '1',
-        name: 'عمر أحمد الشكعة',
+        id:'1',
+        name:'عمر أحمد الشكعة',
         written: true,
-        date: '2026-09-14',
-        content: 'أداء ممتاز وهادئ، تفاعل عالي في حصص الرسم والقراءة.',
+        date:'2026-09-14',
+        content:'أداء ممتاز وهادئ، تفاعل عالي في حصص الرسم والقراءة.',
       },
       {
-        id: '2',
-        name: 'يوسف خالد جودت',
+        id:'2',
+        name:'يوسف خالد جودت',
         written: false,
         date: null,
-        content: '',
+        content:'',
       },
-    ],
-    'class-flowers-4-5': [
+    ],'class-flowers-4-5': [
       {
-        id: '3',
-        name: 'سارة مريم المصري',
+        id:'3',
+        name:'سارة مريم المصري',
         written: true,
-        date: '2026-09-14',
-        content: 'مشاركة ممتازة ولطيفة جداً مع زملائها.',
+        date:'2026-09-14',
+        content:'مشاركة ممتازة ولطيفة جداً مع زملائها.',
       },
-    ],
-    'class-hope-2-3': [
+    ],'class-hope-2-3': [
       {
-        id: '4',
-        name: 'ليان أحمد الشكعة',
+        id:'4',
+        name:'ليان أحمد الشكعة',
         written: false,
         date: null,
-        content: '',
+        content:'',
       },
     ],
   });
@@ -63,7 +60,7 @@ export function WeeklyNotesScreen() {
 
   const openReportModal = (std) => {
     setActiveModalStudent(std);
-    setReportText(std.content || 'طفل ممتاز وتأقلم رائع في القاعة مع زملائه ورغبة عالية في التعلم.');
+    setReportText(std.content ||'طفل ممتاز وتأقلم رائع في القاعة مع زملائه ورغبة عالية في التعلم.');
   };
 
   const handleSaveReport = () => {
@@ -80,7 +77,7 @@ export function WeeklyNotesScreen() {
     });
 
     setActiveModalStudent(null);
-    Alert.alert('تم الحفظ 🎉', `تم حفظ وتحديث التقرير الأسبوعي للطالب (${activeModalStudent.name}) بنجاح.`);
+    Alert.alert('تم الحفظ',`تم حفظ وتحديث التقرير الأسبوعي للطالب (${activeModalStudent.name}) بنجاح.`);
   };
 
   const currentList = studentsReports[selectedClass] || [];
@@ -89,12 +86,12 @@ export function WeeklyNotesScreen() {
     <ScreenWrapper>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>الملاحظات الأسبوعية 📝</Text>
+          <Text style={styles.title}>الملاحظات الأسبوعية </Text>
           <Text style={styles.subTitle}>كتابة ومراجعة التقارير الأسبوعية للطلاب</Text>
         </View>
 
         {/* Class Selector Bar */}
-        <Text style={styles.sectionHeader}>اختر الصف لمتابعة الطلاب 🏫</Text>
+        <Text style={styles.sectionHeader}>اختر الصف لمتابعة الطلاب </Text>
         <View style={styles.classChipsRow}>
           {classesList.map((cls) => {
             const isSelected = cls.id === selectedClass;
@@ -113,7 +110,7 @@ export function WeeklyNotesScreen() {
         </View>
 
         {/* Students Completion List */}
-        <Text style={styles.sectionHeader}>كشف اكتمال التقارير 📋</Text>
+        <Text style={styles.sectionHeader}>كشف اكتمال التقارير </Text>
         {currentList.map((std) => (
           <TouchableOpacity
             key={std.id}
@@ -124,19 +121,19 @@ export function WeeklyNotesScreen() {
             <View style={styles.stdInfo}>
               <Text style={styles.stdName}>{std.name}</Text>
               <Text style={styles.stdSub}>
-                {std.written ? `تاريخ الإرسال: ${std.date}` : 'لم يتم كتابة التقرير بعد'}
+                {std.written ?`تاريخ الإرسال: ${std.date}` :'لم يتم كتابة التقرير بعد'}
               </Text>
             </View>
 
             {std.written ? (
-              <View style={[styles.badge, { backgroundColor: '#ecfdf5' }]}>
+              <View style={[styles.badge, { backgroundColor:'#ecfdf5' }]}>
                 <CheckCircle2 size={14} color="#10b981" style={{ marginLeft: 4 }} />
-                <Text style={[styles.badgeText, { color: '#15803d' }]}>كُتب التقرير ✅</Text>
+                <Text style={[styles.badgeText, { color:'#15803d' }]}>كُتب التقرير </Text>
               </View>
             ) : (
-              <View style={[styles.badge, { backgroundColor: '#fefce8' }]}>
+              <View style={[styles.badge, { backgroundColor:'#fefce8' }]}>
                 <AlertCircle size={14} color="#eab308" style={{ marginLeft: 4 }} />
-                <Text style={[styles.badgeText, { color: '#a16207' }]}>لم يُكتب بعد ⚠️</Text>
+                <Text style={[styles.badgeText, { color:'#a16207' }]}>لم يُكتب بعد </Text>
               </View>
             )}
           </TouchableOpacity>
@@ -182,59 +179,59 @@ export function WeeklyNotesScreen() {
 const styles = StyleSheet.create({
   container: { paddingBottom: 24 },
   header: { marginBottom: 16 },
-  title: { fontSize: 22, fontWeight: 'bold', color: '#111827', textAlign: 'right' },
-  subTitle: { fontSize: 13, color: '#6b7280', textAlign: 'right', marginTop: 2 },
+  title: { fontSize: 22, fontWeight:'bold', color:'#111827', textAlign:'right' },
+  subTitle: { fontSize: 13, color:'#6b7280', textAlign:'right', marginTop: 2 },
 
-  sectionHeader: { fontSize: 15, fontWeight: 'bold', color: '#1f2937', textAlign: 'right', marginBottom: 10 },
+  sectionHeader: { fontSize: 15, fontWeight:'bold', color:'#1f2937', textAlign:'right', marginBottom: 10 },
 
-  classChipsRow: { flexDirection: 'row-reverse', marginBottom: 20 },
+  classChipsRow: { flexDirection:'row-reverse', marginBottom: 20 },
   classChip: {
-    backgroundColor: '#f3f4f6',
+    backgroundColor:'#f3f4f6',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
     marginRight: 8,
   },
-  activeClassChip: { backgroundColor: '#8b5cf6' },
-  classChipText: { fontSize: 13, fontWeight: 'bold', color: '#4b5563' },
-  activeClassChipText: { color: '#ffffff' },
+  activeClassChip: { backgroundColor:'#8b5cf6' },
+  classChipText: { fontSize: 13, fontWeight:'bold', color:'#4b5563' },
+  activeClassChipText: { color:'#ffffff' },
 
   stdCard: {
-    flexDirection: 'row-reverse',
-    justify: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
+    flexDirection:'row-reverse',
+    justify:'space-between',
+    alignItems:'center',
+    backgroundColor:'#ffffff',
     borderRadius: 16,
     padding: 16,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor:'#e5e7eb',
   },
   stdInfo: { flex: 1 },
-  stdName: { fontSize: 15, fontWeight: 'bold', color: '#1f2937', textAlign: 'right' },
-  stdSub: { fontSize: 12, color: '#6b7280', textAlign: 'right', marginTop: 2 },
+  stdName: { fontSize: 15, fontWeight:'bold', color:'#1f2937', textAlign:'right' },
+  stdSub: { fontSize: 12, color:'#6b7280', textAlign:'right', marginTop: 2 },
 
-  badge: { flexDirection: 'row-reverse', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12 },
-  badgeText: { fontSize: 12, fontWeight: 'bold' },
+  badge: { flexDirection:'row-reverse', alignItems:'center', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12 },
+  badgeText: { fontSize: 12, fontWeight:'bold' },
 
-  modalBg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 20 },
-  modalCard: { backgroundColor: '#ffffff', borderRadius: 20, padding: 20 },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', color: '#111827', textAlign: 'right', marginBottom: 12 },
-  label: { fontSize: 13, fontWeight: 'bold', color: '#374151', textAlign: 'right', marginBottom: 6 },
+  modalBg: { flex: 1, backgroundColor:'rgba(0,0,0,0.5)', justifyContent:'center', padding: 20 },
+  modalCard: { backgroundColor:'#ffffff', borderRadius: 20, padding: 20 },
+  modalTitle: { fontSize: 18, fontWeight:'bold', color:'#111827', textAlign:'right', marginBottom: 12 },
+  label: { fontSize: 13, fontWeight:'bold', color:'#374151', textAlign:'right', marginBottom: 6 },
   textInput: {
-    backgroundColor: '#f9fafb',
+    backgroundColor:'#f9fafb',
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor:'#d1d5db',
     borderRadius: 12,
     padding: 12,
-    textAlign: 'right',
-    textAlignVertical: 'top',
+    textAlign:'right',
+    textAlignVertical:'top',
     marginBottom: 16,
     fontSize: 13,
   },
-  modalBtnRow: { flexDirection: 'row-reverse', justifyContent: 'space-between' },
-  cancelBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor: '#f3f4f6' },
-  cancelBtnText: { color: '#4b5563', fontWeight: 'bold' },
-  saveBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor: '#8b5cf6' },
-  saveBtnText: { color: '#ffffff', fontWeight: 'bold' },
+  modalBtnRow: { flexDirection:'row-reverse', justifyContent:'space-between' },
+  cancelBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor:'#f3f4f6' },
+  cancelBtnText: { color:'#4b5563', fontWeight:'bold' },
+  saveBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor:'#8b5cf6' },
+  saveBtnText: { color:'#ffffff', fontWeight:'bold' },
 });

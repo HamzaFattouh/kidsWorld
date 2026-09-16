@@ -1,14 +1,14 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
-import { useTranslation } from 'react-i18next';
+import { useForm } from'react-hook-form';
+import { zodResolver } from'@hookform/resolvers/zod';
+import * as z from'zod';
+import { Input } from'../ui/Input';
+import { Button } from'../ui/Button';
+import { useTranslation } from'react-i18next';
 
 const schema = z.object({
-  name: z.string().min(1, 'Required'),
-  phone: z.string().min(1, 'Required'),
-  childId: z.string().min(1, 'Required')
+  name: z.string().min(1,'Required'),
+  phone: z.string().min(1,'Required'),
+  childId: z.string().min(1,'Required')
 });
 
 
@@ -53,7 +53,7 @@ export function PickupForm({ onSubmit, isLoading }) {
 
       <div className="pt-4">
         <Button type="submit" isLoading={isLoading} className="w-full">
-          {t('submit', 'Submit')}
+          {t('submit','Submit')}
         </Button>
       </div>
     </form>);

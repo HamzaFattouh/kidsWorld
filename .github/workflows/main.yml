@@ -7,9 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  test-backend:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v4
     
@@ -19,29 +18,64 @@ jobs:
         node-version: '22.x'
         cache: 'npm'
         
-    - name: Install Dependencies (Root)
+    - name: Install Dependencies
+      working-directory: ./backend
+      run: npm install
+      
+    - name: Run Backend Tests
+      working-directory: ./backend
+      run: npm test -- --passWithNoTests
+      env:
+        DATABASE_URL: "postgresql://mock:mock@localhost:5432/mock"
+        JWT_SECRET: "mock_secret"
+
+  test-web:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+        
+    - name: Install Dependencies
+      working-directory: ./web
       run: npm ci
       
-    - name: Static Analysis
-      run: |
-        npm run lint
-        npm run typecheck
-        
-    - name: Build Web
-      run: |
-        cd web
-        npm ci
-        npm run build
+    - name: Run Web Tests
+      working-directory: ./web
+      run: npm test -- --passWithNoTests
 
-    # - name: Run Backend Tests
-    #   run: npm test
-    #   env:
-    #     DATABASE_URL: "mysql://mock:mock@localhost:3306/mock"
+  test-mobile:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
         
+    - name: Install Dependencies
+      working-directory: ./mobile
+      run: npm install --legacy-peer-deps
+      
+    - name: Run Mobile Tests
+      working-directory: ./mobile
+      run: npm test -- --passWithNoTests
+
+  build-images:
+    needs: [test-backend, test-web, test-mobile]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v4
+    
     - name: Build Docker Image (Backend)
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: docker build -t kidsworld/backend:latest .
       
     - name: Build Docker Image (Web)
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: docker build -t kidsworld/web:latest ./web

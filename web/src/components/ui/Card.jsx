@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { cn } from '../../lib/utils';
+import * as React from'react';
+import { cn } from'../../lib/utils';
 
 export function Card({ className, ...props }) {
   return (
     <div
-      className={cn("rounded-xl border border-gray-200 bg-surface text-text shadow-sm dark:border-gray-800 dark:bg-surface-dark", className)}
+      className={cn("rounded-xl border border-gray-200 bg-surface text-text  dark:border-gray-800 dark:bg-surface-dark", className)}
       {...props} />);
 
 

@@ -1,13 +1,31 @@
-import { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ShieldCheck, User, Key, CheckCircle, XCircle, Settings, Mail, Phone, Calendar, Save } from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
-import { UserForm } from '../../components/forms/UserForm';
-import { usersApi } from '../../api/users';
-import { api } from '../../lib/api';
+import { useState, useMemo } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { ShieldCheck, User, Key, CheckCircle, XCircle, Settings, Mail, Phone, Calendar, Save, Users, Flame, Image, Video, FileText } from'lucide-react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
+import { UserForm } from'../../components/forms/UserForm';
+import { usersApi } from'../../api/users';
+import { api } from'../../lib/api';
+
+const TEACHER_PERMISSIONS_LIST = [
+  { key:'recordAttendance', label:'تسجيل وتحديث الحضور والغياب اليومي للطلاب', icon: Calendar },
+  { key:'recordMeals', label:'تسجيل الوجبات الغذائية اليومية للأطفال', icon: Flame },
+  { key:'writeEvaluations', label:'كتابة وتحديث التقييمات والملاحظات الأسبوعية', icon: ShieldCheck },
+  { key:'uploadJournal', label:'رفع صور في المجلة اليومية للأطفال', icon: Image },
+  { key:'manageEvents', label:'إدارة وتعديل الفعاليات والأنشطة', icon: Calendar },
+  { key:'sendMessages', label:'إرسال واستقبال الرسائل والشكاوى', icon: Mail },
+  { key:'viewCameras', label:'معاينة البث المباشر وكاميرات القاعات', icon: Video },
+];
+
+const PARENT_PERMISSIONS_LIST = [
+  { key:'viewReports', label:'الاطلاع ومتابعة التقييمات والملاحظات الأسبوعية للأطفال', icon: Calendar },
+  { key:'sendMessages', label:'إرسال واستقبال الرسائل والشكاوى لإدارة الروضة', icon: Mail },
+  { key:'submitRequests', label:'تقديم طلبات المغادرة والإذن الاستثنائي وشخص الاستلام', icon: Mail },
+  { key:'viewCameras', label:'معاينة البث المباشر وكاميرات القاعات', icon: Video },
+  { key:'downloadDocuments', label:'تحميل وتنزيل المستندات والملفات المرفقة', icon: FileText },
+];
 
 export function UsersPage() {
   const { t, i18n } = useTranslation();
@@ -43,7 +61,7 @@ export function UsersPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'حدث خطأ أثناء إضافة المستخدم');
+      alert(error?.response?.data?.error?.message ||'حدث خطأ أثناء إضافة المستخدم');
     }
   });
 
@@ -54,7 +72,7 @@ export function UsersPage() {
 
   const handleOpenPermissions = (user) => {
     setSelectedUserId(user.id);
-    const isTeacher = user.role === 'TEACHER';
+    const isTeacher = user.role ==='TEACHER';
 
     if (user.permissions && Object.keys(user.permissions).length > 0) {
       setUserPermissions(user.permissions);
@@ -91,7 +109,7 @@ export function UsersPage() {
     try {
       await api.put(`/auto/user/${selectedUserId}`, { permissions: userPermissions });
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      alert(`تم حفظ وتطبيق صلاحيات (${selectedUser.name || selectedUser.email}) بنجاح! ✅`);
+      alert(`تم حفظ وتطبيق صلاحيات (${selectedUser.name || selectedUser.email}) بنجاح!`);
     } catch (e) {
       console.error(e);
       alert('حدث خطأ أثناء حفظ الصلاحيات');
@@ -99,54 +117,53 @@ export function UsersPage() {
     setIsPermissionsModalOpen(false);
   };
 
-  const columns = [
+  const columns = useMemo(() => [
     {
-      header: 'اسم المستخدم',
-      accessorKey: 'name',
+      header:'اسم المستخدم',
+      accessorKey:'name',
       cell: (user) => (
         <button
           onClick={() => handleOpenPermissions(user)}
           className="font-bold text-primary hover:text-primary-dark underline-offset-4 hover:underline text-start flex items-center gap-2"
         >
           <User className="w-4 h-4 text-gray-400" />
-          {user.name || (i18n.language === 'ar' ? 'مستخدم بدون اسم' : 'Unnamed User')}
+          {user.name || (i18n.language ==='ar' ?'مستخدم بدون اسم' :'Unnamed User')}
         </button>
       )
     },
     {
-      header: 'البريد الإلكتروني',
-      accessorKey: 'email'
+      header:'البريد الإلكتروني',
+      accessorKey:'email'
     },
     {
-      header: 'رقم الهاتف',
-      accessorKey: 'phone',
-      cell: (user) => user.phone || '—'
+      header:'رقم الهاتف',
+      accessorKey:'phone',
+      cell: (user) => user.phone ||'—'
     },
     {
-      header: 'الدور القيادي',
-      accessorKey: 'role',
+      header:'الدور القيادي',
+      accessorKey:'role',
       cell: (user) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold 
-          ${user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' : ''}
-          ${user.role === 'TEACHER' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' : ''}
-          ${user.role === 'PARENT' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' : ''}
-        `}>
-          {user.role === 'ADMIN' ? 'أدمن (Admin)' : user.role === 'TEACHER' ? 'معلم (Teacher)' : 'ولي أمر (Parent)'}
+          ${user.role ==='ADMIN' ?'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' :''}
+          ${user.role ==='TEACHER' ?'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :''}
+          ${user.role ==='PARENT' ?'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' :''}`}>
+          {user.role ==='ADMIN' ?'أدمن (Admin)' : user.role ==='TEACHER' ?'معلم (Teacher)' :'ولي أمر (Parent)'}
         </span>
       )
     },
     {
-      header: 'الحالة',
-      accessorKey: 'isActive',
+      header:'الحالة',
+      accessorKey:'isActive',
       cell: (user) => (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${user.isActive ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
-          {user.isActive ? 'نشط 🟢' : 'غير نشط 🔴'}
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${user.isActive ?'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' :'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+          {user.isActive ?'نشط' :'غير نشط'}
         </span>
       )
     },
     {
-      header: 'التحكم بالصلاحيات',
-      accessorKey: 'id',
+      header:'التحكم بالصلاحيات',
+      accessorKey:'id',
       cell: (user) => (
         <button
           onClick={() => handleOpenPermissions(user)}
@@ -157,36 +174,20 @@ export function UsersPage() {
         </button>
       )
     }
-  ];
+  ], [i18n.language]);
 
-  // Specific permission lists for Teacher vs Parent
-  const TEACHER_PERMISSIONS_LIST = [
-    { key: 'recordAttendance', label: 'تسجيل وتحديث الحضور والغياب اليومي للطلاب', icon: '📅' },
-    { key: 'recordMeals', label: 'تسجيل الوجبات الغذائية اليومية للأطفال', icon: '🍱' },
-    { key: 'writeEvaluations', label: 'كتابة وتحديث التقييمات والملاحظات الأسبوعية', icon: '🏆' },
-    { key: 'uploadJournal', label: 'رفع صور في المجلة اليومية للأطفال', icon: '📸' },
-    { key: 'manageEvents', label: 'إدارة وتعديل الفعاليات والأنشطة', icon: '🎨' },
-    { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى', icon: '💬' },
-    { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات', icon: '📹' },
-  ];
 
-  const PARENT_PERMISSIONS_LIST = [
-    { key: 'viewReports', label: 'الاطلاع ومتابعة التقييمات والملاحظات الأسبوعية للأطفال', icon: '📊' },
-    { key: 'sendMessages', label: 'إرسال واستقبال الرسائل والشكاوى لإدارة الروضة', icon: '💬' },
-    { key: 'submitRequests', label: 'تقديم طلبات المغادرة والإذن الاستثنائي وشخص الاستلام', icon: '📝' },
-    { key: 'viewCameras', label: 'معاينة البث المباشر وكاميرات القاعات', icon: '📹' },
-    { key: 'downloadDocuments', label: 'تحميل وتنزيل المستندات والملفات المرفقة', icon: '📁' },
-  ];
 
   const currentPermissionList =
-    selectedUser?.role === 'PARENT' ? PARENT_PERMISSIONS_LIST : TEACHER_PERMISSIONS_LIST;
+    selectedUser?.role ==='PARENT' ? PARENT_PERMISSIONS_LIST : TEACHER_PERMISSIONS_LIST;
 
   return (
     <div className="space-y-6 text-start" dir="rtl">
       <PageHeader
-        title="إدارة المستخدمين والصلاحيات 👥"
+        title="إدارة المستخدمين والصلاحيات"
         description="عرض وإضافة المستخدمين والتحكم الدقيق بصلاحيات المعلمين وأولياء الأمور"
         actionLabel="إضافة مستخدم جديد"
+        icon={Users}
         onAction={() => setIsCreateModalOpen(true)}
       />
 
@@ -217,7 +218,7 @@ export function UsersPage() {
           setIsPermissionsModalOpen(false);
           setSelectedUserId(null);
         }}
-        title={`بيانات وصلاحيات (${selectedUser?.name || ''}) 🔐`}
+        title={`بيانات وصلاحيات (${selectedUser?.name ||''})`}
       >
         <div className="py-4 space-y-6 text-start">
           {selectedUser ? (
@@ -227,25 +228,25 @@ export function UsersPage() {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-lg">
-                      {selectedUser.name ? selectedUser.name.charAt(0) : 'U'}
+                      {selectedUser.name ? selectedUser.name.charAt(0) :'U'}
                     </div>
                     <div>
                       <h4 className="font-bold text-base text-gray-900 dark:text-white">
-                        {selectedUser.name || 'مستخدم بدون اسم'}
+                        {selectedUser.name ||'مستخدم بدون اسم'}
                       </h4>
                       <p className="text-xs text-gray-500">{selectedUser.email}</p>
                     </div>
                   </div>
                   <span className={`px-3 py-1 font-bold text-xs rounded-full ${
-                    selectedUser.role === 'TEACHER' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'
+                    selectedUser.role ==='TEACHER' ?'bg-blue-100 text-blue-800' :'bg-emerald-100 text-emerald-800'
                   }`}>
-                    {selectedUser.role === 'TEACHER' ? 'معلم 👩‍🏫' : 'ولي أمر 👨‍👩‍👧'}
+                    {selectedUser.role ==='TEACHER' ?'معلم ‍' :'ولي أمر ‍‍'}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-700">
-                  <div>📞 الهاتف: {selectedUser.phone || '—'}</div>
-                  <div>📅 تاريخ الإنشاء: {new Date(selectedUser.createdAt).toLocaleDateString('ar-EG')}</div>
+                  <div> الهاتف: {selectedUser.phone ||'—'}</div>
+                  <div> تاريخ الإنشاء: {new Date(selectedUser.createdAt).toLocaleDateString('ar-EG')}</div>
                 </div>
               </div>
 
@@ -254,7 +255,7 @@ export function UsersPage() {
                 <div className="flex justify-between items-center">
                   <h4 className="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-primary" />
-                    صلاحيات حساب {selectedUser.role === 'TEACHER' ? 'المعلم/ة' : 'ولي الأمر'} المتاحة:
+                    صلاحيات حساب {selectedUser.role ==='TEACHER' ?'المعلم/ة' :'ولي الأمر'} المتاحة:
                   </h4>
                   <span className="text-[11px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded">
                     صلاحيات مخصصة للدور
@@ -270,20 +271,20 @@ export function UsersPage() {
                         onClick={() => togglePermission(perm.key)}
                         className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
                           isEnabled
-                            ? 'bg-emerald-50/60 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800'
-                            : 'bg-gray-50 border-gray-200 dark:bg-slate-800/40 dark:border-gray-700'
+                            ?'bg-emerald-50/60 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800'
+                            :'bg-gray-50 border-gray-200 dark:bg-slate-800/40 dark:border-gray-700'
                         }`}
                       >
                         <div className="flex items-center gap-2">
-                          <span className="text-base">{perm.icon}</span>
+                          <perm.icon className="w-5 h-5 text-gray-500" />
                           <span className="text-xs font-bold text-gray-800 dark:text-gray-200">
                             {perm.label}
                           </span>
                         </div>
                         <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                          isEnabled ? 'bg-emerald-600 text-white' : 'bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                          isEnabled ?'bg-emerald-600 text-white' :'bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
                         }`}>
-                          {isEnabled ? 'مفعل ✅' : 'معطل ❌'}
+                          {isEnabled ?'مفعل' :'معطل'}
                         </span>
                       </div>
                     );
@@ -295,7 +296,7 @@ export function UsersPage() {
               <div className="pt-2">
                 <button
                   onClick={handleSavePermissions}
-                  className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-[1.02]"
+                  className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
                 >
                   <Save className="w-4 h-4" />
                   حفظ وتأكيد صلاحيات الحساب

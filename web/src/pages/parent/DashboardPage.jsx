@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Card, CardContent } from '../../components/ui/Card';
-import { useParentStore } from '../../store/parentStore';
-import { useAuthStore } from '../../store/authStore';
-import { api } from '../../lib/api';
-import { CalendarCheck, Utensils, Star, AlertTriangle, MessageSquare, Bell } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useQuery } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Card, CardContent } from'../../components/ui/Card';
+import { useParentStore } from'../../store/parentStore';
+import { useAuthStore } from'../../store/authStore';
+import { api } from'../../lib/api';
+import { CalendarCheck, Utensils, Star, AlertTriangle, MessageSquare, Bell } from'lucide-react';
+import { Link } from'react-router-dom';
 
 export function ParentDashboardPage() {
   const { selectedChildId } = useParentStore();
@@ -44,7 +44,7 @@ export function ParentDashboardPage() {
   return (
     <div className="space-y-6 text-start">
       <PageHeader
-        title={`مرحباً بك، ${user?.name || 'ولي الأمر'}`}
+        title={`مرحباً بك، ${user?.name ||'ولي الأمر'}`}
         description="لوحة متابعة الطفل اليومية والأنشطة والتقارير"
       />
 
@@ -92,7 +92,7 @@ export function ParentDashboardPage() {
           <div>
             <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold">حالة الحضانة</p>
             <h4 className="text-xl font-bold text-blue-700 dark:text-blue-300">
-              نشط ومباشر 🟢
+              نشط ومباشر 
             </h4>
           </div>
         </Card>
@@ -133,10 +133,10 @@ export function ParentDashboardPage() {
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">تنبيهات هامة</h3>
           <div className="space-y-3 text-xs text-gray-600 dark:text-gray-300">
             <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-xl">
-              📢 يسعدنا انضمامكم لعالم الأطفال. يرجى اختيار اسم الطفل من أعلى القائمة الجانبية لمتابعة بياناته.
+               يسعدنا انضمامكم لعالم الأطفال. يرجى اختيار اسم الطفل من أعلى القائمة الجانبية لمتابعة بياناته.
             </div>
             <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-200 rounded-xl">
-              ✅ جميع السجلات والتقارير اليومية يتم تحديثها فورياً من قِبل معلمة الفصل.
+               جميع السجلات والتقارير اليومية يتم تحديثها فورياً من قِبل معلمة الفصل.
             </div>
           </div>
         </Card>

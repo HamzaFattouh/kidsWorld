@@ -1,26 +1,26 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Home, Users, MessageSquare, Menu } from 'lucide-react-native';
+import React from'react';
+import { createBottomTabNavigator } from'@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from'@react-navigation/native-stack';
+import { Home, Users, MessageSquare, Menu } from'lucide-react-native';
 
 // Screens
-import { HomeScreen } from '../screens/parent/HomeScreen';
-import { ChildrenScreen } from '../screens/parent/ChildrenScreen';
-import { AttendanceScreen } from '../screens/parent/AttendanceScreen';
-import { MealsScreen } from '../screens/parent/MealsScreen';
-import { WeeklyNotesScreen } from '../screens/parent/WeeklyNotesScreen';
-import { EvaluationsScreen } from '../screens/parent/EvaluationsScreen';
+import { HomeScreen } from'../screens/parent/HomeScreen';
+import { ChildrenScreen } from'../screens/parent/ChildrenScreen';
+import { AttendanceScreen } from'../screens/parent/AttendanceScreen';
+import { MealsScreen } from'../screens/parent/MealsScreen';
+import { WeeklyNotesScreen } from'../screens/parent/WeeklyNotesScreen';
+import { EvaluationsScreen } from'../screens/parent/EvaluationsScreen';
 
-import { MessagesScreen } from '../screens/parent/MessagesScreen';
-import { NotificationsScreen } from '../screens/parent/NotificationsScreen';
+import { MessagesScreen } from'../screens/parent/MessagesScreen';
+import { NotificationsScreen } from'../screens/parent/NotificationsScreen';
 
-import { ComplaintsScreen } from '../screens/parent/ComplaintsScreen';
-import { RequestsScreen } from '../screens/parent/RequestsScreen';
-import { EventsScreen } from '../screens/parent/EventsScreen';
-import { DocumentsScreen } from '../screens/parent/DocumentsScreen';
-import { CamerasScreen } from '../screens/parent/CamerasScreen';
-import { ProfileScreen } from '../screens/parent/ProfileScreen';
-import { SettingsScreen } from '../screens/parent/SettingsScreen';
+import { ComplaintsScreen } from'../screens/parent/ComplaintsScreen';
+import { RequestsScreen } from'../screens/parent/RequestsScreen';
+import { EventsScreen } from'../screens/parent/EventsScreen';
+import { DocumentsScreen } from'../screens/parent/DocumentsScreen';
+import { CamerasScreen } from'../screens/parent/CamerasScreen';
+import { ProfileScreen } from'../screens/parent/ProfileScreen';
+import { SettingsScreen } from'../screens/parent/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

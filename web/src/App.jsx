@@ -1,17 +1,17 @@
-import { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useThemeStore, applyTheme } from './store/themeStore';
-import { AuthLayout } from './layouts/AuthLayout';
+import { useEffect, lazy, Suspense } from'react';
+import { BrowserRouter, Routes, Route, Navigate } from'react-router-dom';
+import { useThemeStore, applyTheme } from'./store/themeStore';
+import { AuthLayout } from'./layouts/AuthLayout';
 const LoginPage = lazy(() => import('./pages/auth/LoginPage').then(m => ({ default: m.LoginPage })));
 const SetupProfilePage = lazy(() => import('./pages/auth/SetupProfilePage').then(m => ({ default: m.SetupProfilePage })));
 const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 const VerifyEmailPage = lazy(() => import('./pages/auth/VerifyEmailPage').then(m => ({ default: m.VerifyEmailPage })));
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { DashboardLayout } from './layouts/DashboardLayout';
-import { TeacherLayout } from './layouts/TeacherLayout';
-import { ParentLayout } from './layouts/ParentLayout';
-import { PublicLayout } from './layouts/PublicLayout';
+import { ProtectedRoute } from'./components/ProtectedRoute';
+import { DashboardLayout } from'./layouts/DashboardLayout';
+import { TeacherLayout } from'./layouts/TeacherLayout';
+import { ParentLayout } from'./layouts/ParentLayout';
+import { PublicLayout } from'./layouts/PublicLayout';
 
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage').then(m => ({ default: m.DashboardPage })));
 const UsersPage = lazy(() => import('./pages/admin/UsersPage').then(m => ({ default: m.UsersPage })));
@@ -83,7 +83,7 @@ export default function App() {
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
-      if (theme === 'system') applyTheme('system');
+      if (theme ==='system') applyTheme('system');
     };
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);

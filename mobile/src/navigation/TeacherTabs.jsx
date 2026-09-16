@@ -1,25 +1,25 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Home, Users, MessageSquare, Menu } from 'lucide-react-native';
+import React from'react';
+import { createBottomTabNavigator } from'@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from'@react-navigation/native-stack';
+import { Home, Users, MessageSquare, Menu } from'lucide-react-native';
 
 // Screens
-import { DashboardScreen } from '../screens/teacher/DashboardScreen';
-import { ChildrenScreen } from '../screens/teacher/ChildrenScreen';
-import { AttendanceScreen } from '../screens/teacher/AttendanceScreen';
-import { MealsScreen } from '../screens/teacher/MealsScreen';
-import { ActivitiesScreen } from '../screens/teacher/ActivitiesScreen';
-import { WeeklyNotesScreen } from '../screens/teacher/WeeklyNotesScreen';
-import { EvaluationsScreen } from '../screens/teacher/EvaluationsScreen';
-import { TasksScreen } from '../screens/teacher/TasksScreen';
+import { DashboardScreen } from'../screens/teacher/DashboardScreen';
+import { ChildrenScreen } from'../screens/teacher/ChildrenScreen';
+import { AttendanceScreen } from'../screens/teacher/AttendanceScreen';
+import { MealsScreen } from'../screens/teacher/MealsScreen';
+import { ActivitiesScreen } from'../screens/teacher/ActivitiesScreen';
+import { WeeklyNotesScreen } from'../screens/teacher/WeeklyNotesScreen';
+import { EvaluationsScreen } from'../screens/teacher/EvaluationsScreen';
+import { TasksScreen } from'../screens/teacher/TasksScreen';
 
-import { MessagesScreen } from '../screens/teacher/MessagesScreen';
-import { NotificationsScreen } from '../screens/teacher/NotificationsScreen';
+import { MessagesScreen } from'../screens/teacher/MessagesScreen';
+import { NotificationsScreen } from'../screens/teacher/NotificationsScreen';
 
-import { ComplaintsScreen } from '../screens/teacher/ComplaintsScreen';
-import { CalendarScreen } from '../screens/teacher/CalendarScreen';
-import { ProfileScreen } from '../screens/teacher/ProfileScreen';
-import { SettingsScreen } from '../screens/teacher/SettingsScreen';
+import { ComplaintsScreen } from'../screens/teacher/ComplaintsScreen';
+import { CalendarScreen } from'../screens/teacher/CalendarScreen';
+import { ProfileScreen } from'../screens/teacher/ProfileScreen';
+import { SettingsScreen } from'../screens/teacher/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

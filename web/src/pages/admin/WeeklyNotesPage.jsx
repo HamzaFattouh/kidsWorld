@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { FileText, CheckCircle2, AlertCircle, Edit, Eye, Save, Sparkles, User } from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { FileText, CheckCircle2, AlertCircle, Edit, Eye, Save, Sparkles, User } from'lucide-react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
 
 export function WeeklyNotesPage() {
   const { t } = useTranslation();
@@ -10,77 +10,74 @@ export function WeeklyNotesPage() {
   const [selectedClassId, setSelectedClassId] = useState('class-birds-3-4');
 
   const classesList = [
-    { id: 'class-birds-3-4', name: 'روضة العصافير 🐥' },
-    { id: 'class-flowers-4-5', name: 'روضة الزهور 🌸' },
-    { id: 'class-hope-2-3', name: 'روضة الأمل 🌟' },
+    { id:'class-birds-3-4', name:'روضة العصافير' },
+    { id:'class-flowers-4-5', name:'روضة الزهور' },
+    { id:'class-hope-2-3', name:'روضة الأمل' },
   ];
 
   // Mock student weekly reports state per class
-  const [reportsData, setReportsData] = useState({
-    'class-birds-3-4': [
+  const [reportsData, setReportsData] = useState({'class-birds-3-4': [
       {
-        id: 'r1',
-        studentId: 'child-omar-shakaa',
-        studentName: 'عمر أحمد الشكعة',
-        parentName: 'أحمد الشكعة',
+        id:'r1',
+        studentId:'child-omar-shakaa',
+        studentName:'عمر أحمد الشكعة',
+        parentName:'أحمد الشكعة',
         written: true,
-        reportDate: '2026-09-14',
-        behavior: 'ممتاز وهادئ ومتعاون مع أصدقائه',
-        participation: 'تفاعل عالي في حصة الإنشاد والقراءة',
-        socialSkills: 'يبادر باللعب ومشاركة الألعاب',
-        generalNotes: 'طفل متميز وذكي جداً في الأنشطة الإبداعية',
+        reportDate:'2026-09-14',
+        behavior:'ممتاز وهادئ ومتعاون مع أصدقائه',
+        participation:'تفاعل عالي في حصة الإنشاد والقراءة',
+        socialSkills:'يبادر باللعب ومشاركة الألعاب',
+        generalNotes:'طفل متميز وذكي جداً في الأنشطة الإبداعية',
       },
       {
-        id: 'r2',
-        studentId: 'child-yousef-jowdat',
-        studentName: 'يوسف خالد جودت',
-        parentName: 'خالد جودت',
+        id:'r2',
+        studentId:'child-yousef-jowdat',
+        studentName:'يوسف خالد جودت',
+        parentName:'خالد جودت',
         written: false,
         reportDate: null,
-        behavior: '',
-        participation: '',
-        socialSkills: '',
-        generalNotes: '',
+        behavior:'',
+        participation:'',
+        socialSkills:'',
+        generalNotes:'',
       },
       {
-        id: 'r3',
-        studentId: 'child-khalil',
-        studentName: 'خليل سمير النابلسي',
-        parentName: 'سمير النابلسي',
+        id:'r3',
+        studentId:'child-khalil',
+        studentName:'خليل سمير النابلسي',
+        parentName:'سمير النابلسي',
         written: true,
-        reportDate: '2026-09-13',
-        behavior: 'جيد جداً وينفذ تعليمات المعلمة',
-        participation: 'مشاركة جيدة في أنشطة الرسم والتلوين',
-        socialSkills: 'تواصل إيجابي ممتاز',
-        generalNotes: 'تقدم ملحوظ في التركيز',
+        reportDate:'2026-09-13',
+        behavior:'جيد جداً وينفذ تعليمات المعلمة',
+        participation:'مشاركة جيدة في أنشطة الرسم والتلوين',
+        socialSkills:'تواصل إيجابي ممتاز',
+        generalNotes:'تقدم ملحوظ في التركيز',
       },
-    ],
-    'class-flowers-4-5': [
+    ],'class-flowers-4-5': [
       {
-        id: 'r4',
-        studentId: 'child-sara-masri',
-        studentName: 'سارة مريم المصري',
-        parentName: 'مريم المصري',
+        id:'r4',
+        studentId:'child-sara-masri',
+        studentName:'سارة مريم المصري',
+        parentName:'مريم المصري',
         written: true,
-        reportDate: '2026-09-14',
-        behavior: 'مطيعة ولطيفة جداً',
-        participation: 'تشارك بشغف في كافة الأنشطة',
-        socialSkills: 'قيادية ومحبوبة بين زميلاتها',
-        generalNotes: 'تستحق كل التقدير والثناء',
+        reportDate:'2026-09-14',
+        behavior:'مطيعة ولطيفة جداً',
+        participation:'تشارك بشغف في كافة الأنشطة',
+        socialSkills:'قيادية ومحبوبة بين زميلاتها',
+        generalNotes:'تستحق كل التقدير والثناء',
       },
-    ],
-    'class-hope-2-3': [
+    ],'class-hope-2-3': [
       {
-        id: 'r5',
-        studentId: 'child-layan-shakaa',
-        studentName: 'ليان أحمد الشكعة',
-        parentName: 'أحمد الشكعة',
+        id:'r5',
+        studentId:'child-layan-shakaa',
+        studentName:'ليان أحمد الشكعة',
+        parentName:'أحمد الشكعة',
         written: false,
         reportDate: null,
-        behavior: '',
-        participation: '',
-        socialSkills: '',
-        generalNotes: '',
+        behavior:'',
+        participation:'',
+        socialSkills:'',
+        generalNotes:'',
       },
     ],
   });
@@ -88,19 +85,19 @@ export function WeeklyNotesPage() {
   const [selectedReportStudent, setSelectedReportStudent] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportForm, setReportForm] = useState({
-    behavior: '',
-    participation: '',
-    socialSkills: '',
-    generalNotes: '',
+    behavior:'',
+    participation:'',
+    socialSkills:'',
+    generalNotes:'',
   });
 
   const handleOpenReport = (report) => {
     setSelectedReportStudent(report);
     setReportForm({
-      behavior: report.behavior || 'ممتاز وهادئ ومتعاون مع أصدقائه',
-      participation: report.participation || 'تفاعل عالي ونشاط ملحوظ',
-      socialSkills: report.socialSkills || 'تواصل اجتماعي ممتاز',
-      generalNotes: report.generalNotes || 'طفل متميز ويتطور بشكل رائع',
+      behavior: report.behavior ||'ممتاز وهادئ ومتعاون مع أصدقائه',
+      participation: report.participation ||'تفاعل عالي ونشاط ملحوظ',
+      socialSkills: report.socialSkills ||'تواصل اجتماعي ممتاز',
+      generalNotes: report.generalNotes ||'طفل متميز ويتطور بشكل رائع',
     });
     setIsReportModalOpen(true);
   };
@@ -125,7 +122,7 @@ export function WeeklyNotesPage() {
     });
 
     setIsReportModalOpen(false);
-    alert(`تم حفظ وتحديث التقرير الأسبوعي للطالب (${selectedReportStudent.studentName}) بنجاح ✅`);
+    alert(`تم حفظ وتحديث التقرير الأسبوعي للطالب (${selectedReportStudent.studentName}) بنجاح`);
   };
 
   const currentReports = reportsData[selectedClassId] || [];
@@ -133,7 +130,7 @@ export function WeeklyNotesPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <PageHeader
-        title="الملاحظات والتقارير الأسبوعية 📝"
+        title="الملاحظات والتقارير الأسبوعية"
         description="متابعة حالة كتابة التقارير الأسبوعية للأطفال ومراجعتها والتعديل عليها"
       />
 
@@ -147,8 +144,8 @@ export function WeeklyNotesPage() {
               onClick={() => setSelectedClassId(cls.id)}
               className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border ${
                 selectedClassId === cls.id
-                  ? 'bg-purple-600 text-white border-purple-600 shadow-md scale-105'
-                  : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                  ?'bg-purple-600 text-white border-purple-600  scale-105'
+                  :'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
               }`}
             >
               {cls.name}
@@ -158,7 +155,7 @@ export function WeeklyNotesPage() {
       </div>
 
       {/* Students Reports Completion List */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">
+      <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
         <div className="flex justify-between items-center border-b border-gray-100 pb-4">
           <h3 className="text-lg font-bold text-gray-900">
             حالة كتابة التقارير الأسبوعية - {classesList.find((c) => c.id === selectedClassId)?.name}
@@ -191,13 +188,13 @@ export function WeeklyNotesPage() {
                     <span className="text-xs text-gray-500 font-medium">تاريخ الإرسال: {report.reportDate}</span>
                     <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center">
                       <CheckCircle2 className="w-3.5 h-3.5 ml-1" />
-                      كُتب التقرير الأسبوعي ✅
+                      كُتب التقرير الأسبوعي 
                     </span>
                   </>
                 ) : (
                   <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center">
                     <AlertCircle className="w-3.5 h-3.5 ml-1" />
-                    لم يُكتب بعد ⚠️
+                    لم يُكتب بعد 
                   </span>
                 )}
 
@@ -209,7 +206,7 @@ export function WeeklyNotesPage() {
                   className="bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl hover:bg-gray-800 transition-colors flex items-center mr-2"
                 >
                   <Eye className="w-3.5 h-3.5 ml-1" />
-                  {report.written ? 'عرض وتعديل' : 'كتابة التقرير'}
+                  {report.written ?'عرض وتعديل' :'كتابة التقرير'}
                 </button>
               </div>
             </div>
@@ -221,12 +218,12 @@ export function WeeklyNotesPage() {
       <Modal
         isOpen={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}
-        title={`التقرير الأسبوعي للطالب: ${selectedReportStudent?.studentName || ''}`}
+        title={`التقرير الأسبوعي للطالب: ${selectedReportStudent?.studentName ||''}`}
       >
         <div className="space-y-4 py-2" dir="rtl">
           <div className="bg-purple-50 p-3.5 rounded-xl border border-purple-100 text-xs text-purple-900 font-semibold flex justify-between items-center">
             <span>ولي الأمر: {selectedReportStudent?.parentName}</span>
-            <span>الحالة: {selectedReportStudent?.written ? 'مكتوب ومُرسل ✅' : 'قيد الإنشاء ⏳'}</span>
+            <span>الحالة: {selectedReportStudent?.written ?'مكتوب ومُرسل' :'قيد الإنشاء'}</span>
           </div>
 
           <div className="space-y-3">

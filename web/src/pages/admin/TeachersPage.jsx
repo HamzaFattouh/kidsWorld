@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { User, Calendar, CheckCircle2, XCircle, MessageSquare, Award, Clock, BookOpen } from 'lucide-react';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
-import { UserForm } from '../../components/forms/UserForm';
-import { usersApi } from '../../api/users';
-import { api } from '../../lib/api';
+import { useState, useMemo } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { User, Calendar, CheckCircle2, XCircle, MessageSquare, Award, Clock, BookOpen } from'lucide-react';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
+import { UserForm } from'../../components/forms/UserForm';
+import { usersApi } from'../../api/users';
+import { api } from'../../lib/api';
 
 export function TeachersPage() {
   const { t, i18n } = useTranslation();
@@ -19,7 +19,7 @@ export function TeachersPage() {
 
   const page = 1;
   const limit = 50;
-  const role = 'TEACHER';
+  const role ='TEACHER';
 
   const { data, isLoading } = useQuery({
     queryKey: ['users', role, page, limit],
@@ -27,13 +27,13 @@ export function TeachersPage() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (payload) => usersApi.createUser({ ...payload, role: 'TEACHER' }),
+    mutationFn: (payload) => usersApi.createUser({ ...payload, role:'TEACHER' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users', role] });
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating user');
+      alert(error?.response?.data?.error?.message ||'Error creating user');
     }
   });
 
@@ -73,11 +73,11 @@ export function TeachersPage() {
       let isPresent = isPast && !isFriday;
 
       if (teacherDb && teacherDb[day] && selectedTeacher) {
-        const teacherNameKey = selectedTeacher.name || '';
+        const teacherNameKey = selectedTeacher.name ||'';
         const teacherRec = teacherDb[day].find(
           (t) =>
             t.name === teacherNameKey ||
-            (teacherNameKey && t.name && (t.name.includes(teacherNameKey.replace('أ. ', '')) || teacherNameKey.includes(t.name.replace('أ. ', ''))))
+            (teacherNameKey && t.name && (t.name.includes(teacherNameKey.replace('أ.','')) || teacherNameKey.includes(t.name.replace('أ.',''))))
         );
         if (teacherRec !== undefined) {
           isPresent = isPast && !isFriday && Boolean(teacherRec.present);
@@ -109,8 +109,8 @@ export function TeachersPage() {
 
   const columns = [
     {
-      header: 'اسم المعلم/ة',
-      accessorKey: 'name',
+      header:'اسم المعلم/ة',
+      accessorKey:'name',
       cell: (user) => (
         <button
           onClick={() => {
@@ -120,31 +120,31 @@ export function TeachersPage() {
           className="font-bold text-primary hover:text-primary-dark underline-offset-4 hover:underline text-start flex items-center gap-2"
         >
           <User className="w-4 h-4 text-blue-500" />
-          {user.name || (i18n.language === 'ar' ? 'معلم بدون اسم' : 'Unnamed Teacher')}
+          {user.name || (i18n.language ==='ar' ?'معلم بدون اسم' :'Unnamed Teacher')}
         </button>
       )
     },
     {
-      header: 'البريد الإلكتروني',
-      accessorKey: 'email'
+      header:'البريد الإلكتروني',
+      accessorKey:'email'
     },
     {
-      header: 'رقم الهاتف',
-      accessorKey: 'phone',
-      cell: (user) => user.phone || '—'
+      header:'رقم الهاتف',
+      accessorKey:'phone',
+      cell: (user) => user.phone ||'—'
     },
     {
-      header: 'الحالة',
-      accessorKey: 'isActive',
+      header:'الحالة',
+      accessorKey:'isActive',
       cell: (user) => (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${user.isActive ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
-          {user.isActive ? 'نشط 🟢' : 'غير نشط 🔴'}
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${user.isActive ?'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300' :'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+          {user.isActive ?'نشط' :'غير نشط'}
         </span>
       )
     },
     {
-      header: 'تقرير الحضور والتقويم (خصم الجمعة)',
-      accessorKey: 'id',
+      header:'تقرير الحضور والتقويم (خصم الجمعة)',
+      accessorKey:'id',
       cell: (user) => (
         <div className="flex items-center gap-2">
           <button
@@ -165,7 +165,7 @@ export function TeachersPage() {
   return (
     <div className="space-y-6 text-start">
       <PageHeader
-        title="إدارة المعلمين والكادر 👩‍🏫"
+        title="إدارة المعلمين والكادر ‍"
         description="عرض المعلمين، تقارير الحضور والتقويم مع خصم أيام الجمعة، والرسائل والشكاوى الموجهة لهم"
         actionLabel="إضافة معلم جديد"
         onAction={() => setIsCreateModalOpen(true)}
@@ -198,20 +198,20 @@ export function TeachersPage() {
           setIsDetailsModalOpen(false);
           setSelectedTeacherId(null);
         }}
-        title="ملف المعلم/ة والسجل والتواصل 📋"
+        title="ملف المعلم/ة والسجل والتواصل"
       >
         <div className="py-4 space-y-4 text-start">
           {selectedTeacher ? (
             <div className="space-y-4">
               <div className="bg-gray-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-2">
                 <h4 className="font-bold text-base text-gray-900 dark:text-white">
-                  {selectedTeacher.name || 'معلم بدون اسم'}
+                  {selectedTeacher.name ||'معلم بدون اسم'}
                 </h4>
                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-300">
-                  <div>✉️ البريد: {selectedTeacher.email}</div>
-                  <div>📞 الهاتف: {selectedTeacher.phone || '—'}</div>
-                  <div>📍 العنوان: {selectedTeacher.address || 'نابلس - نابلس الجديدة'}</div>
-                  <div>📅 الانضمام: {new Date(selectedTeacher.createdAt).toLocaleDateString('ar-EG')}</div>
+                  <div> البريد: {selectedTeacher.email}</div>
+                  <div> الهاتف: {selectedTeacher.phone ||'—'}</div>
+                  <div> العنوان: {selectedTeacher.address ||'نابلس - نابلس الجديدة'}</div>
+                  <div> الانضمام: {new Date(selectedTeacher.createdAt).toLocaleDateString('ar-EG')}</div>
                 </div>
               </div>
 
@@ -241,7 +241,7 @@ export function TeachersPage() {
           setIsAttendanceModalOpen(false);
           setSelectedTeacherId(null);
         }}
-        title="تقرير وتقويم حضور المعلم (خصم أيام الجمعة) 📅"
+        title="تقرير وتقويم حضور المعلم (خصم أيام الجمعة)"
       >
         <div className="py-4 space-y-6 text-start">
           {selectedTeacher ? (
@@ -276,7 +276,7 @@ export function TeachersPage() {
 
               {/* Attendance Formula Notice */}
               <div className="p-3 bg-gray-50 dark:bg-slate-800/60 rounded-xl text-xs text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
-                📌 <span className="font-bold">معادلة النسبة:</span> إجمالي ألمجموع = {attendanceReport.daysInMonth} يوماً - {attendanceReport.fridayCount} أيام جمعة (عطلة رسمية) = {attendanceReport.netWorkingDays} يوماً صافي العمل.
+                 <span className="font-bold">معادلة النسبة:</span> إجمالي ألمجموع = {attendanceReport.daysInMonth} يوماً - {attendanceReport.fridayCount} أيام جمعة (عطلة رسمية) = {attendanceReport.netWorkingDays} يوماً صافي العمل.
               </div>
 
               {/* Calendar Days Grid */}
@@ -288,17 +288,17 @@ export function TeachersPage() {
                       key={d.day}
                       className={`p-2 rounded-lg border font-bold flex flex-col items-center justify-center min-h-[44px] ${
                         d.isFriday
-                          ? 'bg-amber-50 border-amber-200 text-amber-700'
+                          ?'bg-amber-50 border-amber-200 text-amber-700'
                           : d.isPresent
-                          ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                          ?'bg-emerald-50 border-emerald-300 text-emerald-700'
                           : d.isPast
-                          ? 'bg-rose-50 border-rose-200 text-rose-700'
-                          : 'bg-gray-50 border-gray-200 text-gray-400'
+                          ?'bg-rose-50 border-rose-200 text-rose-700'
+                          :'bg-gray-50 border-gray-200 text-gray-400'
                       }`}
                     >
                       <span className="text-[10px] text-gray-400">{d.day}</span>
                       <span className="text-[11px]">
-                        {d.isFriday ? 'جمعة 🌴' : d.isPresent ? 'حاضر 🟢' : d.isPast ? 'غائب 🔴' : 'مستقبل'}
+                        {d.isFriday ?'جمعة' : d.isPresent ?'حاضر' : d.isPast ?'غائب' :'مستقبل'}
                       </span>
                     </div>
                   ))}

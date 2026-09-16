@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Card, CardContent } from '../../components/ui/Card';
-import { DataTable } from '../../components/ui/DataTable';
-import { useParentStore } from '../../store/parentStore';
-import { api } from '../../lib/api';
+import { useQuery } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Card, CardContent } from'../../components/ui/Card';
+import { DataTable } from'../../components/ui/DataTable';
+import { useParentStore } from'../../store/parentStore';
+import { api } from'../../lib/api';
 
 export function ParentEvaluationsPage() {
   const { selectedChildId } = useParentStore();
@@ -19,34 +19,34 @@ export function ParentEvaluationsPage() {
   });
 
   const renderStars = (score) => {
-    const stars = '⭐'.repeat(Math.min(5, Math.max(1, score || 1)));
+    const stars =''.repeat(Math.min(5, Math.max(1, score || 1)));
     return <span className="text-amber-500 font-bold">{stars} ({score || 0}/5)</span>;
   };
 
   const columns = [
     {
-      header: 'الفصل الدراسي',
-      accessorKey: 'term',
-      cell: (row) => <span className="font-bold">{row.term || 'التقييم الدوري'}</span>
+      header:'الفصل الدراسي',
+      accessorKey:'term',
+      cell: (row) => <span className="font-bold">{row.term ||'التقييم الدوري'}</span>
     },
     {
-      header: 'التعلم والاستيعاب',
-      accessorKey: 'learning',
+      header:'التعلم والاستيعاب',
+      accessorKey:'learning',
       cell: (row) => renderStars(row.learning)
     },
     {
-      header: 'التواصل واللغة',
-      accessorKey: 'communication',
+      header:'التواصل واللغة',
+      accessorKey:'communication',
       cell: (row) => renderStars(row.communication)
     },
     {
-      header: 'المهارات الاجتماعية',
-      accessorKey: 'socialSkills',
+      header:'المهارات الاجتماعية',
+      accessorKey:'socialSkills',
       cell: (row) => renderStars(row.socialSkills)
     },
     {
-      header: 'السلوك والالتزام',
-      accessorKey: 'behavior',
+      header:'السلوك والالتزام',
+      accessorKey:'behavior',
       cell: (row) => renderStars(row.behavior)
     }
   ];
@@ -55,7 +55,7 @@ export function ParentEvaluationsPage() {
     <div className="space-y-6 text-start">
       <PageHeader
         title="تقييمات الأداء والنمو"
-        description={selectedChildId ? "عرض النماذج والتقييمات المعتمدة للطفل" : "يرجى اختيار طفل من القائمة الجانبية لعرض التقييمات"}
+        description={selectedChildId ?"عرض النماذج والتقييمات المعتمدة للطفل" :"يرجى اختيار طفل من القائمة الجانبية لعرض التقييمات"}
       />
 
       {!selectedChildId ? (

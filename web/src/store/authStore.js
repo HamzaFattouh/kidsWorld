@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from'zustand';
+import { persist } from'zustand/middleware';
 
 
 
@@ -30,7 +30,7 @@ export const useAuthStore = create()(
       clearAuth: () => set({ isAuthenticated: false, user: null, token: null })
     }),
     {
-      name: 'auth-storage'
+      name:'auth-storage'
     }
   )
 );

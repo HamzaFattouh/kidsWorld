@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { AnnouncementForm } from '../../components/forms/AnnouncementForm';
-import { announcementApi } from '../../api/announcement';
+import { AnnouncementForm } from'../../components/forms/AnnouncementForm';
+import { announcementApi } from'../../api/announcement';
 
 
 export function AnnouncementsPage() {
@@ -26,36 +26,36 @@ export function AnnouncementsPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
 
   {
-    header: 'titleEn',
-    accessorKey: 'titleEn'
+    header:'titleEn',
+    accessorKey:'titleEn'
   },
   {
-    header: 'titleAr',
-    accessorKey: 'titleAr'
+    header:'titleAr',
+    accessorKey:'titleAr'
   },
   {
-    header: 'contentEn',
-    accessorKey: 'contentEn'
+    header:'contentEn',
+    accessorKey:'contentEn'
   },
   {
-    header: 'priority',
-    accessorKey: 'priority'
+    header:'priority',
+    accessorKey:'priority'
   }];
 
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.announcements.title', 'Announcements')}
-        description={t('pages.announcements.description', 'Manage Announcements')}
-        actionLabel={t('pages.announcements.create', 'Create')}
+        title={t('pages.announcements.title','Announcements')}
+        description={t('pages.announcements.description','Manage Announcements')}
+        actionLabel={t('pages.announcements.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -68,7 +68,7 @@ export function AnnouncementsPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.announcements.create', 'Create')}>
+        title={t('pages.announcements.create','Create')}>
         
         <div className="py-4">
           <AnnouncementForm

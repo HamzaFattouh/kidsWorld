@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PageHeader } from '../../components/ui/PageHeader';
-import { Modal } from '../../components/ui/Modal';
-import { DataTable } from '../../components/ui/DataTable';
+import { useState } from'react';
+import { useTranslation } from'react-i18next';
+import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
+import { PageHeader } from'../../components/ui/PageHeader';
+import { Modal } from'../../components/ui/Modal';
+import { DataTable } from'../../components/ui/DataTable';
 
-import { PostForm } from '../../components/forms/PostForm';
-import { postApi } from '../../api/post';
+import { PostForm } from'../../components/forms/PostForm';
+import { postApi } from'../../api/post';
 
 
 export function PostsPage() {
@@ -26,28 +26,28 @@ export function PostsPage() {
       setIsCreateModalOpen(false);
     },
     onError: (error) => {
-      alert(error?.response?.data?.error?.message || 'Error creating record');
+      alert(error?.response?.data?.error?.message ||'Error creating record');
     }
   });
 
   const columns = [
 
   {
-    header: 'titleEn',
-    accessorKey: 'titleEn'
+    header:'titleEn',
+    accessorKey:'titleEn'
   },
   {
-    header: 'contentEn',
-    accessorKey: 'contentEn'
+    header:'contentEn',
+    accessorKey:'contentEn'
   }];
 
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.posts.title', 'Posts')}
-        description={t('pages.posts.description', 'Manage Posts')}
-        actionLabel={t('pages.posts.create', 'Create')}
+        title={t('pages.posts.title','Posts')}
+        description={t('pages.posts.description','Manage Posts')}
+        actionLabel={t('pages.posts.create','Create')}
         onAction={() => setIsCreateModalOpen(true)} />
       
       
@@ -60,7 +60,7 @@ export function PostsPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.posts.create', 'Create')}>
+        title={t('pages.posts.create','Create')}>
         
         <div className="py-4">
           <PostForm
