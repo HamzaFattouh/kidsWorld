@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   modalCard: { backgroundColor:'#ffffff', borderRadius: 20, padding: 20 },
   modalHeader: { flexDirection:'row-reverse', justifyContent:'space-between', alignItems:'center', marginBottom: 12 },
   modalTitle: { fontSize: 16, fontWeight:'bold', color:'#111827' },
-  taskLabel: { fontSize: 13, fontWeight:'bold', color:'#2563eb', textAlign:'right', marginBottom: 10 },
+  taskLabel: { fontSize: 13, fontWeight:'bold', color:'#10b981', textAlign:'right', marginBottom: 10 },
 
   inputLabel: { fontSize: 13, fontWeight:'bold', color:'#374151', textAlign:'right', marginBottom: 6 },
   textInput: { backgroundColor:'#f9fafb', borderWidth: 1, borderColor:'#d1d5db', borderRadius: 12, padding: 10, textAlign:'right', fontSize: 13, marginBottom: 16 },
@@ -207,3 +207,4 @@ const styles = StyleSheet.create({
   confirmBtn: { flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#16a34a', paddingVertical: 12, borderRadius: 12 },
   confirmBtnText: { color:'#ffffff', fontWeight:'bold', fontSize: 13 },
 });
+

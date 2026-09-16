@@ -122,8 +122,8 @@ export function LandingHomeScreen() {
     {
       title:'التعلم واللعب',
       desc:'يتعلم طفلك كل شيء وفقًا للبرنامج التعليمي أثناء اللعب الإبداعي.',
-      bg:'#eff6ff',
-      border:'#3b82f6',
+      bg:'#dcfce7',
+      border:'#10b981',
       icon: BookOpen,
     },
     {
@@ -485,3 +485,4 @@ const styles = StyleSheet.create({
   savePhotoBtn: { flexDirection:'row-reverse', justifyContent:'center', alignItems:'center', backgroundColor:'#10b981', paddingVertical: 8 },
   savePhotoText: { color:'#ffffff', fontSize: 12, fontWeight:'bold' },
 });
+

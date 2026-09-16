@@ -34,7 +34,7 @@ export function ProfileScreen() {
       :'ولي أمر (Parent)';
 
   const roleColor =
-    role ==='ADMIN' ?'#8b5cf6' : role ==='TEACHER' ?'#3b82f6' :'#10b981';
+    role ==='ADMIN' ?'#10b981' : role ==='TEACHER' ?'#059669' :'#34d399';
 
   return (
     <ScreenWrapper>
@@ -130,11 +130,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderWidth: 1,
     borderColor:'#e5e7eb',
-
-
-
-
-
   },
   avatarCircle: {
     width: 80,
@@ -166,7 +161,7 @@ const styles = StyleSheet.create({
 
   infoItem: {
     flexDirection:'row-reverse',
-    justify:'space-between',
+    justifyContent:'space-between',
     alignItems:'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -178,7 +173,7 @@ const styles = StyleSheet.create({
 
   actionRow: {
     flexDirection:'row-reverse',
-    justify:'space-between',
+    justifyContent:'space-between',
     alignItems:'center',
     paddingVertical: 12,
   },

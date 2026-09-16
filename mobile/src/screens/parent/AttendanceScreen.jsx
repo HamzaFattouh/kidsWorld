@@ -60,9 +60,9 @@ export function AttendanceScreen() {
         );
       case'EXCUSED':
         return (
-          <View style={[styles.badge, { backgroundColor:'#eff6ff' }]}>
+          <View style={[styles.badge, { backgroundColor:'#dcfce7' }]}>
             <AlertCircle size={14} color="#3b82f6" style={{ marginLeft: 4 }} />
-            <Text style={[styles.badgeText, { color:'#2563eb' }]}>بعذر </Text>
+            <Text style={[styles.badgeText, { color:'#10b981' }]}>بعذر </Text>
           </View>
         );
       default:

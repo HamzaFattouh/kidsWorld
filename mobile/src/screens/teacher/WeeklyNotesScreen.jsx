@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 8,
   },
-  activeClassChip: { backgroundColor:'#8b5cf6' },
+  activeClassChip: { backgroundColor:'#059669' },
   classChipText: { fontSize: 13, fontWeight:'bold', color:'#4b5563' },
   activeClassChipText: { color:'#ffffff' },
 
@@ -232,6 +232,6 @@ const styles = StyleSheet.create({
   modalBtnRow: { flexDirection:'row-reverse', justifyContent:'space-between' },
   cancelBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor:'#f3f4f6' },
   cancelBtnText: { color:'#4b5563', fontWeight:'bold' },
-  saveBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor:'#8b5cf6' },
+  saveBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor:'#059669' },
   saveBtnText: { color:'#ffffff', fontWeight:'bold' },
 });

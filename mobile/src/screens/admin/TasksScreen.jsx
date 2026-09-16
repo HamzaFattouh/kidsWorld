@@ -8,6 +8,7 @@ import {
   Modal,
   TextInput,
   Alert,
+  FlatList,
 } from'react-native';
 import {
   ClipboardList,
@@ -252,8 +253,8 @@ const styles = StyleSheet.create({
   addBtn: {
     flexDirection:'row-reverse',
     alignItems:'center',
-    justify:'center',
-    backgroundColor:'#2563eb',
+    justifyContent:'center',
+    backgroundColor:'#10b981',
     paddingVertical: 12,
     borderRadius: 14,
     marginBottom: 16,
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
 
   teachersRow: { flexDirection:'row-reverse', alignItems:'center', marginBottom: 10 },
   teachersLabel: { fontSize: 12, fontWeight:'bold', color:'#374151' },
-  teachersList: { fontSize: 12, color:'#2563eb', fontWeight:'bold' },
+  teachersList: { fontSize: 12, color:'#10b981', fontWeight:'bold' },
 
   completedBox: { backgroundColor:'#ffffff', padding: 12, borderRadius: 12, borderWidth: 1, borderColor:'#86efac' },
   completedRow: { flexDirection:'row-reverse', alignItems:'center', marginBottom: 4 },
@@ -300,10 +301,10 @@ const styles = StyleSheet.create({
   textInput: { backgroundColor:'#f9fafb', borderWidth: 1, borderColor:'#d1d5db', borderRadius: 12, padding: 10, textAlign:'right', fontSize: 13 },
 
   teacherOption: { flexDirection:'row-reverse', justifyContent:'space-between', padding: 12, backgroundColor:'#f3f4f6', borderRadius: 12, marginBottom: 8 },
-  selectedTeacherOption: { backgroundColor:'#dbeafe', borderWidth: 1, borderColor:'#93c5fd' },
+  selectedTeacherOption: { backgroundColor:'#dcfce7', borderWidth: 1, borderColor:'#86efac' },
   teacherOptName: { fontSize: 13, fontWeight:'bold', color:'#1f2937' },
-  teacherOptStatus: { fontSize: 12, fontWeight:'bold', color:'#2563eb' },
+  teacherOptStatus: { fontSize: 12, fontWeight:'bold', color:'#166534' },
 
-  submitBtn: { backgroundColor:'#2563eb', paddingVertical: 12, borderRadius: 12, alignItems:'center', marginTop: 16 },
+  submitBtn: { backgroundColor:'#10b981', paddingVertical: 12, borderRadius: 12, alignItems:'center', marginTop: 16 },
   submitBtnText: { color:'#ffffff', fontWeight:'bold', fontSize: 14 },
 });

@@ -329,10 +329,10 @@ export function UsersScreen() {
                 </>
               ) : (
                 <TouchableOpacity
-                  style={[styles.detailsSecondaryBtn, { flex: 1, backgroundColor:'#eff6ff' }]}
+                  style={[styles.detailsSecondaryBtn, { flex: 1, backgroundColor:'#dcfce7' }]}
                   onPress={() => openUserDetail(user)}
                 >
-                  <Text style={[styles.detailsSecondaryBtnText, { color:'#2563eb' }]}>عرض التفاصيل والتغطية والصلاحيات</Text>
+                  <Text style={[styles.detailsSecondaryBtnText, { color:'#10b981' }]}>عرض التفاصيل والتغطية والصلاحيات</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -423,7 +423,7 @@ export function UsersScreen() {
                             <Text style={styles.statValLbl}>خصم الجمعة</Text>
                           </View>
                           <View style={styles.statSummaryItem}>
-                            <Text style={[styles.statValNum, { color:'#2563eb' }]}>26 يوم</Text>
+                            <Text style={[styles.statValNum, { color:'#10b981' }]}>26 يوم</Text>
                             <Text style={styles.statValLbl}>دوام صافي</Text>
                           </View>
                           <View style={styles.statSummaryItem}>
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
   subSectionTitle: { fontSize: 13, fontWeight:'bold', color:'#166534', textAlign:'right', marginTop: 12, marginBottom: 4 },
   logText: { fontSize: 12, color:'#374151', textAlign:'right', marginBottom: 2 },
 
-  calendarBtn: { flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#2563eb', paddingVertical: 10, borderRadius: 12, marginTop: 10 },
+  calendarBtn: { flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#10b981', paddingVertical: 10, borderRadius: 12, marginTop: 10 },
   calendarBtnText: { color:'#ffffff', fontWeight:'bold', fontSize: 13 },
 
   permissionsGrid: { marginTop: 10, marginBottom: 16 },
@@ -613,16 +613,17 @@ const styles = StyleSheet.create({
   confirmAddBtn: { paddingVertical: 10, paddingHorizontal: 16, backgroundColor:'#16a34a', borderRadius: 10 },
   confirmAddBtnText: { color:'#ffffff', fontWeight:'bold' },
 
-  teacherStatsBox: { backgroundColor:'#eff6ff', padding: 16, borderRadius: 16, marginBottom: 16 },
+  teacherStatsBox: { backgroundColor:'#dcfce7', padding: 16, borderRadius: 16, marginBottom: 16 },
   statsNotice: { fontSize: 12, fontWeight:'bold', color:'#1e40af', textAlign:'right', marginBottom: 12 },
   statsSummaryGrid: { flexDirection:'row-reverse', flexWrap:'wrap', marginBottom: 12 },
   statSummaryItem: { width:'50%', alignItems:'center', marginBottom: 10 },
   statValNum: { fontSize: 16, fontWeight:'bold', color:'#1f2937' },
   statValLbl: { fontSize: 11, color:'#6b7280', marginTop: 2 },
   rateDisplay: { backgroundColor:'#ffffff', padding: 12, borderRadius: 12, alignItems:'center' },
-  rateDisplayLabel: { fontSize: 12, color:'#3b82f6', fontWeight:'bold' },
+  rateDisplayLabel: { fontSize: 12, color:'#10b981', fontWeight:'bold' },
   rateDisplayNum: { fontSize: 24, fontWeight:'bold', color:'#1d4ed8', marginTop: 2 },
 
   closeBtn: { backgroundColor:'#64748b', paddingVertical: 10, borderRadius: 10, alignItems:'center' },
   closeBtnText: { color:'#ffffff', fontWeight:'bold' },
 });
+

@@ -116,8 +116,8 @@ export function RequestsScreen() {
         );
       case'IN_PROGRESS':
         return (
-          <View style={[styles.badge, { backgroundColor:'#eff6ff' }]}>
-            <Text style={[styles.badgeText, { color:'#2563eb' }]}>جاري المراجعة </Text>
+          <View style={[styles.badge, { backgroundColor:'#dcfce7' }]}>
+            <Text style={[styles.badgeText, { color:'#10b981' }]}>جاري المراجعة </Text>
           </View>
         );
       default:

@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   menuContainer: { spaceBetween: 12 },
   menuHeader: { fontSize: 15, fontWeight:'bold', color:'#1f2937', textAlign:'right', marginBottom: 12 },
   menuCard: { backgroundColor:'#ffffff', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor:'#e5e7eb' },
-  dayBadge: { backgroundColor:'#eff6ff', alignSelf:'flex-end', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 10, marginBottom: 10 },
+  dayBadge: { backgroundColor:'#dcfce7', alignSelf:'flex-end', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 10, marginBottom: 10 },
   dayText: { fontSize: 13, fontWeight:'bold', color:'#1d4ed8' },
   mealDetailRow: { flexDirection:'row-reverse', borderBottomWidth: 1, borderBottomColor:'#f3f4f6', paddingVertical: 6 },
   mealLabel: { fontSize: 13, fontWeight:'bold', color:'#374151', width: 110, textAlign:'right' },

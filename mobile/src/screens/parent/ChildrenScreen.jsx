@@ -109,7 +109,7 @@ export function ChildrenScreen() {
                 onPress={() => setSelectedChildId(ch.id)}
                 activeOpacity={0.7}
               >
-                <Users size={16} color={isSelected ?'#ffffff' :'#3b82f6'} style={{ marginLeft: 6 }} />
+                <Users size={16} color={isSelected ?'#ffffff' :'#10b981'} style={{ marginLeft: 6 }} />
                 <Text style={[styles.childChipText, isSelected && styles.activeChildChipText]}>
                   {ch.name} {st.expired ?'' :''}
                 </Text>
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   childChip: {
     flexDirection:'row-reverse',
     alignItems:'center',
-    backgroundColor:'#eff6ff',
+    backgroundColor:'#dcfce7',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor:'#bfdbfe',
   },
-  activeChildChip: { backgroundColor:'#3b82f6', borderColor:'#3b82f6' },
+  activeChildChip: { backgroundColor:'#10b981', borderColor:'#10b981' },
   childChipText: { fontSize: 13, fontWeight:'bold', color:'#1e40af' },
   activeChildChipText: { color:'#ffffff' },
 

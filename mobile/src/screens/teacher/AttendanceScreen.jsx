@@ -176,7 +176,7 @@ export function AttendanceScreen() {
                 <Text style={styles.statLbl}>الجمعة المخصومة</Text>
               </View>
               <View style={styles.statItem}>
-                <Text style={[styles.statVal, { color:'#3b82f6' }]}>{netWorkingDays} يوم</Text>
+                <Text style={[styles.statVal, { color:'#10b981' }]}>{netWorkingDays} يوم</Text>
                 <Text style={styles.statLbl}>أيام العمل الفعلية</Text>
               </View>
               <View style={styles.statItem}>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
   },
-  activeDaySquare: { backgroundColor:'#3b82f6', borderColor:'#3b82f6' },
+  activeDaySquare: { backgroundColor:'#10b981', borderColor:'#10b981' },
   futureDaySquare: { backgroundColor:'#f9fafb' },
   dayNum: { fontSize: 14, fontWeight:'bold', color:'#1f2937' },
   activeDayNum: { color:'#ffffff' },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   checklistHeader: { flexDirection:'row-reverse', justifyContent:'space-between', alignItems:'center' },
   checklistTitle: { fontSize: 15, fontWeight:'bold', color:'#111827', textAlign:'right' },
   checklistSub: { fontSize: 12, color:'#6b7280', textAlign:'right', marginTop: 2 },
-  saveBtn: { backgroundColor:'#3b82f6', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
+  saveBtn: { backgroundColor:'#10b981', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
   saveBtnText: { color:'#ffffff', fontWeight:'bold', fontSize: 12 },
 
   divider: { height: 1, backgroundColor:'#f3f4f6', marginVertical: 12 },
@@ -260,8 +260,8 @@ const styles = StyleSheet.create({
   statVal: { fontSize: 16, fontWeight:'bold', color:'#1f2937' },
   statLbl: { fontSize: 11, color:'#6b7280', marginTop: 2 },
 
-  rateBox: { backgroundColor:'#eff6ff', borderRadius: 16, padding: 16, alignItems:'center', borderWidth: 1, borderColor:'#bfdbfe' },
+  rateBox: { backgroundColor:'#dcfce7', borderRadius: 16, padding: 16, alignItems:'center', borderWidth: 1, borderColor:'#bfdbfe' },
   rateTitle: { fontSize: 13, fontWeight:'bold', color:'#1e40af', marginBottom: 4 },
-  rateValue: { fontSize: 32, fontWeight:'bold', color:'#2563eb' },
-  rateSub: { fontSize: 11, color:'#3b82f6', marginTop: 4, textAlign:'center' },
+  rateValue: { fontSize: 32, fontWeight:'bold', color:'#10b981' },
+  rateSub: { fontSize: 11, color:'#10b981', marginTop: 4, textAlign:'center' },
 });

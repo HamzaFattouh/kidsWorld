@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
+  FlatList,
 } from'react-native';
 import { ShieldCheck, UserPlus, UserMinus, Eye, Users, ChevronRight, XCircle } from'lucide-react-native';
 import { ScreenWrapper } from'../../components/ui/ScreenWrapper';
@@ -131,53 +132,59 @@ export function ClassesScreen() {
           <Text style={styles.subTitle}>عرض الصفوف، المعلمين المسؤولين، وإدارة تسجيل الطلاب</Text>
         </View>
 
-        {classesList.map((cls) => (
-          <View key={cls.id} style={styles.classCard}>
-            <TouchableOpacity style={styles.classTopRow} onPress={() => openStudentsModal(cls)}>
-              <View style={styles.classTitleCol}>
-                <Text style={styles.className}>{cls.name}</Text>
-                <Text style={styles.classSub}>الفئة: {cls.ageGroup}</Text>
+        <FlatList
+          data={classesList}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ gap: 16 }}
+          scrollEnabled={false} // Since it's inside a ScrollView, or better yet, make the whole screen a FlatList
+          renderItem={({ item: cls }) => (
+            <View style={styles.classCard}>
+              <TouchableOpacity style={styles.classTopRow} onPress={() => openStudentsModal(cls)}>
+                <View style={styles.classTitleCol}>
+                  <Text style={styles.className}>{cls.name}</Text>
+                  <Text style={styles.classSub}>الفئة: {cls.ageGroup}</Text>
+                </View>
+
+                <View style={styles.countBadge}>
+                  <Text style={styles.countText}>
+                    {cls.students.length} / {cls.capacity} طالب
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <View style={styles.teacherBox}>
+                <ShieldCheck size={16} color="#166534" style={{ marginLeft: 6 }} />
+                <Text style={styles.teacherText}>المعلمة المسؤولة عن الصف: {cls.teacher}</Text>
               </View>
 
-              <View style={styles.countBadge}>
-                <Text style={styles.countText}>
-                  {cls.students.length} / {cls.capacity} طالب
-                </Text>
+              <View style={styles.actionsRow}>
+                <TouchableOpacity
+                  style={styles.addBtn}
+                  onPress={() => openAddStudentModal(cls)}
+                >
+                  <UserPlus size={14} color="#ffffff" style={{ marginLeft: 4 }} />
+                  <Text style={styles.addBtnText}>إضافة طلاب</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.removeBtn}
+                  onPress={() => openRemoveStudentModal(cls)}
+                >
+                  <UserMinus size={14} color="#dc2626" style={{ marginLeft: 4 }} />
+                  <Text style={styles.removeBtnText}>حذف طلاب</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.viewBtn}
+                  onPress={() => openStudentsModal(cls)}
+                >
+                  <Eye size={14} color="#166534" style={{ marginLeft: 4 }} />
+                  <Text style={styles.viewBtnText}>الطلاب ({cls.students.length})</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-
-            <View style={styles.teacherBox}>
-              <ShieldCheck size={16} color="#166534" style={{ marginLeft: 6 }} />
-              <Text style={styles.teacherText}>المعلمة المسؤولة عن الصف: {cls.teacher}</Text>
             </View>
-
-            <View style={styles.actionsRow}>
-              <TouchableOpacity
-                style={styles.addBtn}
-                onPress={() => openAddStudentModal(cls)}
-              >
-                <UserPlus size={14} color="#ffffff" style={{ marginLeft: 4 }} />
-                <Text style={styles.addBtnText}>إضافة طلاب</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.removeBtn}
-                onPress={() => openRemoveStudentModal(cls)}
-              >
-                <UserMinus size={14} color="#dc2626" style={{ marginLeft: 4 }} />
-                <Text style={styles.removeBtnText}>حذف طلاب</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.viewBtn}
-                onPress={() => openStudentsModal(cls)}
-              >
-                <Eye size={14} color="#374151" style={{ marginLeft: 4 }} />
-                <Text style={styles.viewBtnText}>الطلاب ({cls.students.length})</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+          )}
+        />
 
         {/* Modal: View Enrolled Students List */}
         {isStudentsModalOpen && selectedClass && (
@@ -305,21 +312,21 @@ const styles = StyleSheet.create({
   className: { fontSize: 17, fontWeight:'bold', color:'#1f2937', textAlign:'right' },
   classSub: { fontSize: 12, color:'#6b7280', textAlign:'right', marginTop: 2 },
 
-  countBadge: { backgroundColor:'#eff6ff', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12 },
-  countText: { fontSize: 12, fontWeight:'bold', color:'#2563eb' },
+  countBadge: { backgroundColor:'#dcfce7', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12 },
+  countText: { fontSize: 12, fontWeight:'bold', color:'#166534' },
 
   teacherBox: { flexDirection:'row-reverse', alignItems:'center', backgroundColor:'#f0fdf4', padding: 10, borderRadius: 12, marginBottom: 12 },
   teacherText: { fontSize: 13, fontWeight:'bold', color:'#166534' },
 
   actionsRow: { flexDirection:'row-reverse', gap: 6 },
-  addBtn: { flex: 1, flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#2563eb', paddingVertical: 8, borderRadius: 10 },
+  addBtn: { flex: 1, flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#10b981', paddingVertical: 8, borderRadius: 10 },
   addBtnText: { color:'#ffffff', fontWeight:'bold', fontSize: 12 },
 
   removeBtn: { flex: 1, flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#fef2f2', borderWidth: 1, borderColor:'#fecdd3', paddingVertical: 8, borderRadius: 10 },
   removeBtnText: { color:'#dc2626', fontWeight:'bold', fontSize: 12 },
 
-  viewBtn: { flex: 1, flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#f3f4f6', paddingVertical: 8, borderRadius: 10 },
-  viewBtnText: { color:'#374151', fontWeight:'bold', fontSize: 12 },
+  viewBtn: { flex: 1, flexDirection:'row-reverse', alignItems:'center', justifyContent:'center', backgroundColor:'#dcfce7', paddingVertical: 8, borderRadius: 10 },
+  viewBtnText: { color:'#166534', fontWeight:'bold', fontSize: 12 },
 
   modalBg: { flex: 1, backgroundColor:'rgba(0,0,0,0.5)', justifyContent:'center', padding: 20 },
   modalCard: { backgroundColor:'#ffffff', borderRadius: 20, padding: 20 },
@@ -328,7 +335,7 @@ const styles = StyleSheet.create({
   modalTeacherSub: { fontSize: 12, color:'#6b7280', textAlign:'right', marginBottom: 10 },
 
   stdModalRow: { flexDirection:'row-reverse', alignItems:'center', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor:'#f3f4f6' },
-  stdNum: { width: 24, height: 24, borderRadius: 12, backgroundColor:'#eff6ff', color:'#2563eb', fontWeight:'bold', fontSize: 12, textAlign:'center', lineHeight: 24 },
+  stdNum: { width: 24, height: 24, borderRadius: 12, backgroundColor:'#dcfce7', color:'#166534', fontWeight:'bold', fontSize: 12, textAlign:'center', lineHeight: 24 },
   stdModalName: { fontSize: 14, fontWeight:'bold', color:'#1f2937', textAlign:'right' },
   stdModalParent: { fontSize: 12, color:'#6b7280', textAlign:'right' },
 
@@ -337,6 +344,6 @@ const styles = StyleSheet.create({
   selectStdName: { fontSize: 14, fontWeight:'bold', color:'#1f2937', textAlign:'right' },
   selectStdParent: { fontSize: 12, color:'#6b7280', textAlign:'right' },
 
-  closeBtn: { backgroundColor:'#64748b', paddingVertical: 10, borderRadius: 10, alignItems:'center', marginTop: 10 },
+  closeBtn: { backgroundColor:'#10b981', paddingVertical: 10, borderRadius: 10, alignItems:'center', marginTop: 10 },
   closeBtnText: { color:'#ffffff', fontWeight:'bold' },
 });

@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   menuContainer: { spaceBetween: 12 },
   menuTitle: { fontSize: 16, fontWeight:'bold', color:'#1f2937', textAlign:'right', marginBottom: 12 },
   menuCard: { backgroundColor:'#ffffff', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor:'#e5e7eb' },
-  dayBadge: { backgroundColor:'#eff6ff', alignSelf:'flex-end', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 10, marginBottom: 8 },
+  dayBadge: { backgroundColor:'#dcfce7', alignSelf:'flex-end', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 10, marginBottom: 8 },
   dayText: { fontSize: 13, fontWeight:'bold', color:'#1d4ed8' },
   menuLine: { fontSize: 13, color:'#374151', textAlign:'right', marginBottom: 4, lineHeight: 18 },
 });

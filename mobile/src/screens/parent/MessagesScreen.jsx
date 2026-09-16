@@ -18,7 +18,7 @@ export function MessagesScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, justifyContent:'center', alignItems:'center' },
-  title: { fontSize: 24, fontWeight:'bold', marginBottom: 8, color:'#3b82f6' },
+  title: { fontSize: 24, fontWeight:'bold', marginBottom: 8, color:'#10b981' },
   subtitle: { fontSize: 16, marginBottom: 16, color:'#6b7280' },
   note: { fontSize: 14, color:'#9ca3af' }
 });
