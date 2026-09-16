@@ -239,8 +239,16 @@ export function UsersScreen() {
     <ScreenWrapper>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>إدارة المستخدمين والصلاحيات </Text>
-          <Text style={styles.subTitle}>التحكم بحسابات وصلاحيات المعلمين وأولياء الأمور</Text>
+          <View style={styles.headerTitleRow}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.title}>إدارة المستخدمين والصلاحيات </Text>
+              <Text style={styles.subTitle}>التحكم بحسابات وصلاحيات المعلمين وأولياء الأمور</Text>
+            </View>
+            <TouchableOpacity style={styles.addNewBtn}>
+              <Plus size={16} color="#ffffff" style={{ marginLeft: 4 }} />
+              <Text style={styles.addNewBtnText}>إضافة ولي أمر جديد</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Filter Tabs */}
@@ -275,70 +283,60 @@ export function UsersScreen() {
 
         {/* Users Cards List */}
         {filteredUsers.map((user) => (
-          <TouchableOpacity
+          <View
             key={user.id}
             style={styles.userCard}
-            onPress={() => openUserDetail(user)}
-            activeOpacity={0.7}
           >
             <View style={styles.userCardHeader}>
               <View style={styles.userInfoLeft}>
-                <Text style={styles.userName}>{user.name}</Text>
+                <View style={styles.userNameRow}>
+                  <User size={18} color="#10b981" />
+                  <Text style={styles.userName}>{user.name}</Text>
+                </View>
                 <Text style={styles.userEmail}>{user.email}</Text>
                 <Text style={styles.userPhone}> {user.phone}</Text>
               </View>
 
               <View style={styles.userBadgeCol}>
-                <View
-                  style={[
-                    styles.roleBadge,
-                    {
-                      backgroundColor:
-                        user.role ==='TEACHER'
-                          ?'#eff6ff'
-                          : user.role ==='PARENT'
-                          ?'#ecfdf5'
-                          :'#f3e8ff',
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.roleBadgeText,
-                      {
-                        color:
-                          user.role ==='TEACHER'
-                            ?'#2563eb'
-                            : user.role ==='PARENT'
-                            ?'#166534'
-                            :'#7e22ce',
-                      },
-                    ]}
-                  >
-                    {user.role ==='TEACHER' ?'معلم ‍' :'ولي أمر ‍‍'}
-                  </Text>
+                <View style={styles.statusBadge}>
+                  <Text style={styles.statusBadgeText}>نشط</Text>
                 </View>
               </View>
             </View>
 
-            {/* Sub-info summary */}
-            <View style={styles.userSubInfoRow}>
+            {/* Action Row matching the web image */}
+            <View style={styles.actionRow}>
               {user.role ==='PARENT' ? (
-                <Text style={styles.userSubText}>
-                   الأطفال المربوطين: <Text style={styles.boldText}>{user.children?.length || 0} أطفال</Text>
-                </Text>
-              ) : (
-                <Text style={styles.userSubText}>
-                   الصف المسؤول: <Text style={styles.boldText}>{user.assignedClass ||'—'}</Text>
-                </Text>
-              )}
+                <>
+                  <TouchableOpacity
+                    style={styles.addChildPrimaryBtn}
+                    onPress={() => {
+                       setSelectedUser(user);
+                       setNewChildName('');
+                       setIsAddChildModalOpen(true);
+                    }}
+                  >
+                    <Plus size={14} color="#ffffff" style={{ marginLeft: 4 }} />
+                    <Text style={styles.addChildPrimaryBtnText}>إضافة طفل</Text>
+                  </TouchableOpacity>
 
-              <TouchableOpacity style={styles.settingsBtn} onPress={() => openUserDetail(user)}>
-                <Settings size={14} color="#3b82f6" style={{ marginLeft: 4 }} />
-                <Text style={styles.settingsBtnText}>الصلاحيات</Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.detailsSecondaryBtn}
+                    onPress={() => openUserDetail(user)}
+                  >
+                    <Text style={styles.detailsSecondaryBtnText}>عرض التفاصيل والأبناء والرسائل</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.detailsSecondaryBtn, { flex: 1, backgroundColor:'#eff6ff' }]}
+                  onPress={() => openUserDetail(user)}
+                >
+                  <Text style={[styles.detailsSecondaryBtnText, { color:'#2563eb' }]}>عرض التفاصيل والتغطية والصلاحيات</Text>
+                </TouchableOpacity>
+              )}
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
 
         {/* User Detail & Permissions Modal */}
@@ -537,28 +535,33 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight:'bold', color:'#111827', textAlign:'right' },
   subTitle: { fontSize: 13, color:'#6b7280', textAlign:'right', marginTop: 2 },
 
+  headerTitleRow: { flexDirection:'row-reverse', alignItems:'center', justifyContent:'space-between' },
+  addNewBtn: { flexDirection:'row-reverse', alignItems:'center', backgroundColor:'#10b981', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10 },
+  addNewBtnText: { color:'#ffffff', fontSize: 13, fontWeight:'bold' },
+
   filterRow: { flexDirection:'row-reverse', marginBottom: 20 },
   filterChip: { backgroundColor:'#f3f4f6', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20, marginRight: 8 },
-  activeFilterChip: { backgroundColor:'#3b82f6' },
+  activeFilterChip: { backgroundColor:'#10b981' },
   filterChipText: { fontSize: 13, fontWeight:'bold', color:'#4b5563' },
   activeFilterChipText: { color:'#ffffff' },
 
   userCard: { backgroundColor:'#ffffff', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor:'#e5e7eb' },
   userCardHeader: { flexDirection:'row-reverse', justifyContent:'space-between', alignItems:'flex-start' },
-  userInfoLeft: { flex: 1 },
-  userName: { fontSize: 16, fontWeight:'bold', color:'#1f2937', textAlign:'right' },
+  userInfoLeft: { flex: 1, alignItems:'flex-end' },
+  userNameRow: { flexDirection:'row-reverse', alignItems:'center', marginBottom: 4 },
+  userName: { fontSize: 16, fontWeight:'bold', color:'#10b981', textAlign:'right', marginRight: 6 },
   userEmail: { fontSize: 12, color:'#6b7280', textAlign:'right', marginTop: 2 },
   userPhone: { fontSize: 12, color:'#9ca3af', textAlign:'right', marginTop: 2 },
 
-  userBadgeCol: { alignItems:'flex-end' },
-  roleBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  roleBadgeText: { fontSize: 12, fontWeight:'bold' },
+  userBadgeCol: { alignItems:'flex-start' },
+  statusBadge: { backgroundColor:'#dcfce7', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
+  statusBadgeText: { color:'#166534', fontSize: 12, fontWeight:'bold' },
 
-  userSubInfoRow: { flexDirection:'row-reverse', justifyContent:'space-between', alignItems:'center', marginTop: 12, borderTopWidth: 1, borderTopColor:'#f3f4f6', paddingTop: 10 },
-  userSubText: { fontSize: 12, color:'#4b5563' },
-  boldText: { fontWeight:'bold', color:'#111827' },
-  settingsBtn: { flexDirection:'row-reverse', alignItems:'center', backgroundColor:'#eff6ff', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 10 },
-  settingsBtnText: { fontSize: 12, fontWeight:'bold', color:'#2563eb' },
+  actionRow: { flexDirection:'row-reverse', alignItems:'center', marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor:'#f3f4f6', gap: 8 },
+  addChildPrimaryBtn: { flexDirection:'row-reverse', alignItems:'center', backgroundColor:'#10b981', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
+  addChildPrimaryBtnText: { color:'#ffffff', fontSize: 12, fontWeight:'bold' },
+  detailsSecondaryBtn: { flex: 1, alignItems:'center', backgroundColor:'#dcfce7', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
+  detailsSecondaryBtnText: { color:'#166534', fontSize: 12, fontWeight:'bold' },
 
   modalBg: { flex: 1, backgroundColor:'rgba(0,0,0,0.5)', justifyContent:'center', padding: 20 },
   modalContentCard: { backgroundColor:'#ffffff', borderRadius: 20, padding: 20, maxHeight:'85%' },
