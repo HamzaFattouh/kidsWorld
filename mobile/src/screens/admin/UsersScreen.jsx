@@ -396,16 +396,54 @@ export function UsersScreen() {
                 {/* TEACHER SPECIFIC SECTION */}
                 {selectedUser.role ==='TEACHER' && (
                   <View style={styles.roleSectionCard}>
-                    <Text style={styles.sectionHeaderTitle}>بيانات وتغطية المعلمة ‍</Text>
+                    <Text style={styles.sectionHeaderTitle}>بيانات وتغطية المعلمة </Text>
                     <Text style={styles.detailLine}> الصف المسؤول: {selectedUser.assignedClass}</Text>
 
                     <TouchableOpacity
                       style={styles.calendarBtn}
-                      onPress={() => setIsTeacherCalendarModalOpen(true)}
+                      onPress={() => setIsTeacherCalendarModalOpen(!isTeacherCalendarModalOpen)}
                     >
                       <Calendar size={16} color="#ffffff" style={{ marginLeft: 6 }} />
-                      <Text style={styles.calendarBtnText}>عرض تقويم أيام حضور المعلمة والتقرير</Text>
+                      <Text style={styles.calendarBtnText}>
+                        {isTeacherCalendarModalOpen ? 'إخفاء التقويم والتقرير' : 'عرض تقويم أيام حضور المعلمة والتقرير'}
+                      </Text>
                     </TouchableOpacity>
+
+                    {isTeacherCalendarModalOpen && (
+                      <View style={[styles.teacherStatsBox, { marginTop: 12 }]}>
+                        <Text style={styles.statsNotice}>
+                           تم تطبيق خصم أيام الجمعة (4 أيام) من نسبة الحضور الرسمية.
+                        </Text>
+
+                        <View style={styles.statsSummaryGrid}>
+                          <View style={styles.statSummaryItem}>
+                            <Text style={styles.statValNum}>30 يوم</Text>
+                            <Text style={styles.statValLbl}>أيام الشهر</Text>
+                          </View>
+                          <View style={styles.statSummaryItem}>
+                            <Text style={[styles.statValNum, { color:'#ef4444' }]}>-4 جمعة</Text>
+                            <Text style={styles.statValLbl}>خصم الجمعة</Text>
+                          </View>
+                          <View style={styles.statSummaryItem}>
+                            <Text style={[styles.statValNum, { color:'#2563eb' }]}>26 يوم</Text>
+                            <Text style={styles.statValLbl}>دوام صافي</Text>
+                          </View>
+                          <View style={styles.statSummaryItem}>
+                            <Text style={[styles.statValNum, { color:'#10b981' }]}>
+                              {selectedUser.attendanceStats?.attendedDays || 25} يوم
+                            </Text>
+                            <Text style={styles.statValLbl}>الأيام المدوّمة</Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.rateDisplay}>
+                          <Text style={styles.rateDisplayLabel}>نسبة الحضور الرسمية الدقيقة:</Text>
+                          <Text style={styles.rateDisplayNum}>
+                            {selectedUser.attendanceStats?.rate ||'96.2%'}
+                          </Text>
+                        </View>
+                      </View>
+                    )}
                   </View>
                 )}
 
@@ -485,59 +523,7 @@ export function UsersScreen() {
           </Modal>
         )}
 
-        {/* Modal: Teacher Attendance Calendar & Friday Deduction Report */}
-        {isTeacherCalendarModalOpen && selectedUser && (
-          <Modal visible animationType="slide" transparent>
-            <View style={styles.modalBg}>
-              <View style={styles.modalCardSmall}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>تقويم حضور: {selectedUser.name}</Text>
-                  <TouchableOpacity onPress={() => setIsTeacherCalendarModalOpen(false)}>
-                    <XCircle size={22} color="#9ca3af" />
-                  </TouchableOpacity>
-                </View>
 
-                <View style={styles.teacherStatsBox}>
-                  <Text style={styles.statsNotice}>
-                     تم تطبيق خصم أيام الجمعة (4 أيام) من نسبة الحضور الرسمية.
-                  </Text>
-
-                  <View style={styles.statsSummaryGrid}>
-                    <View style={styles.statSummaryItem}>
-                      <Text style={styles.statValNum}>30 يوم</Text>
-                      <Text style={styles.statValLbl}>أيام الشهر</Text>
-                    </View>
-                    <View style={styles.statSummaryItem}>
-                      <Text style={[styles.statValNum, { color:'#ef4444' }]}>-4 جمعة</Text>
-                      <Text style={styles.statValLbl}>خصم الجمعة</Text>
-                    </View>
-                    <View style={styles.statSummaryItem}>
-                      <Text style={[styles.statValNum, { color:'#2563eb' }]}>26 يوم</Text>
-                      <Text style={styles.statValLbl}>دوام صافي</Text>
-                    </View>
-                    <View style={styles.statSummaryItem}>
-                      <Text style={[styles.statValNum, { color:'#10b981' }]}>
-                        {selectedUser.attendanceStats?.attendedDays || 25} يوم
-                      </Text>
-                      <Text style={styles.statValLbl}>الأيام المدوّمة</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.rateDisplay}>
-                    <Text style={styles.rateDisplayLabel}>نسبة الحضور الرسمية الدقيقة:</Text>
-                    <Text style={styles.rateDisplayNum}>
-                      {selectedUser.attendanceStats?.rate ||'96.2%'}
-                    </Text>
-                  </View>
-                </View>
-
-                <TouchableOpacity style={styles.closeBtn} onPress={() => setIsTeacherCalendarModalOpen(false)}>
-                  <Text style={styles.closeBtnText}>إغلاق النافذة</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        )}
 
         <View style={{ height: 32 }} />
       </ScrollView>
