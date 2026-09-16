@@ -97,10 +97,10 @@ export function DashboardPage() {
                   <GraduationCap className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-lg font-display font-bold text-gray-900 dark:text-white">
                     حضور الطلاب اليوم
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">نسبة حضور الأطفال والطلاب</p>
+                  </h2>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">نسبة حضور الأطفال والطلاب</p>
                 </div>
               </div>
               <span className="text-2xl font-display font-extrabold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-xl">
@@ -109,7 +109,7 @@ export function DashboardPage() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between text-sm font-bold text-gray-700 dark:text-gray-300">
+              <div className="flex justify-between text-sm font-bold text-gray-700 dark:text-gray-500">
                 <span>الحاضرون: {studentAtt.present} طفل</span>
                 <span>العدد الكلي: {studentAtt.total} طفل</span>
               </div>
@@ -141,10 +141,10 @@ export function DashboardPage() {
                   <Users className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-lg font-display font-bold text-gray-900 dark:text-white">
                     حضور الكادر والمعلمين
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">نسبة التزام الحضور للهيئة التعليمية</p>
+                  </h2>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">نسبة التزام الحضور للهيئة التعليمية</p>
                 </div>
               </div>
               <span className="text-2xl font-display font-extrabold text-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1 rounded-xl">
@@ -153,7 +153,7 @@ export function DashboardPage() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between text-sm font-bold text-gray-700 dark:text-gray-300">
+              <div className="flex justify-between text-sm font-bold text-gray-700 dark:text-gray-500">
                 <span>الحاضرون: {teacherAtt.present} معلم/ة</span>
                 <span>العدد الكلي: {teacherAtt.total} معلم/ة</span>
               </div>
@@ -185,10 +185,10 @@ export function DashboardPage() {
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-amber-500" />
-                <h3 className="font-display font-bold text-gray-900 dark:text-white text-base">
+                <MessageSquare className="w-5 h-5 text-amber-600" />
+                <h2 className="font-display font-bold text-gray-900 dark:text-white text-base">
                   الرسائل والشكاوى ومتابعة الرد 💬
-                </h3>
+                </h2>
               </div>
               <span className="text-xs bg-amber-50 dark:bg-amber-950/40 text-amber-600 px-2 py-0.5 rounded-md font-bold">
                 {stats.complaintsFeed?.length || 0}
@@ -218,14 +218,14 @@ export function DashboardPage() {
                       {comp.description}
                     </p>
 
-                    <div className="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-gray-200/50 dark:border-gray-700/50">
+                    <div className="flex justify-between items-center text-[10px] text-gray-500 pt-1 border-t border-gray-200/50 dark:border-gray-700/50">
                       <span>المرسل: {comp.parentName} ({comp.childName})</span>
                       <span>{new Date(comp.createdAt).toLocaleDateString('ar-EG')}</span>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-xs text-center text-gray-400 py-6">لا يوجد شكاوى أو رسائل جديدة حالياً.</p>
+                <p className="text-xs text-center text-gray-500 py-6">لا يوجد شكاوى أو رسائل جديدة حالياً.</p>
               )}
             </div>
           </CardContent>
@@ -237,9 +237,9 @@ export function DashboardPage() {
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                <h3 className="font-display font-bold text-gray-900 dark:text-white text-base">
+                <h2 className="font-display font-bold text-gray-900 dark:text-white text-base">
                   مهام المعلمين ومتابعة الإنجاز 📋
-                </h3>
+                </h2>
               </div>
               <span className="text-xs bg-blue-50 dark:bg-blue-950/40 text-blue-600 px-2 py-0.5 rounded-md font-bold">
                 مباشر
@@ -286,10 +286,10 @@ export function DashboardPage() {
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-indigo-500" />
-                <h3 className="font-display font-bold text-gray-900 dark:text-white text-base">
+                <Sparkles className="w-5 h-5 text-indigo-600" />
+                <h2 className="font-display font-bold text-gray-900 dark:text-white text-base">
                   تحديثات الموقع والأنشطة والصور ✨
-                </h3>
+                </h2>
               </div>
               <span className="text-xs bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 px-2 py-0.5 rounded-md font-bold">
                 نشط
@@ -302,23 +302,23 @@ export function DashboardPage() {
                   <div key={upd.id || idx} className="p-3.5 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2">
                     <div className="flex items-center gap-2">
                       {upd.type === 'EVENT' ? (
-                        <Calendar className="w-4 h-4 text-orange-500 shrink-0" />
+                        <Calendar className="w-4 h-4 text-orange-600 shrink-0" />
                       ) : (
-                        <ImageIcon className="w-4 h-4 text-emerald-500 shrink-0" />
+                        <ImageIcon className="w-4 h-4 text-emerald-600 shrink-0" />
                       )}
                       <span className="text-xs font-bold text-gray-900 dark:text-white leading-snug">
                         {upd.title}
                       </span>
                     </div>
 
-                    <div className="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-gray-200/50 dark:border-gray-700/50">
+                    <div className="flex justify-between items-center text-[10px] text-gray-500 pt-1 border-t border-gray-200/50 dark:border-gray-700/50">
                       <span>تحديث مباشر</span>
                       <span>{new Date(upd.date).toLocaleDateString('ar-EG')}</span>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-xs text-center text-gray-400 py-6">لا توجد تحديثات جديدة مسجلة.</p>
+                <p className="text-xs text-center text-gray-500 py-6">لا توجد تحديثات جديدة مسجلة.</p>
               )}
             </div>
           </CardContent>

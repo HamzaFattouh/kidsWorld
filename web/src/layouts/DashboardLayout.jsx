@@ -90,15 +90,15 @@ export function DashboardLayout() {
   const SidebarContent = () => (
     <div className="h-full flex flex-col overflow-y-auto bg-surface dark:bg-surface-dark border-e border-gray-200 dark:border-gray-800">
       <Link to="/" className="p-6 flex flex-col items-center gap-3 hover:opacity-80 transition-opacity">
-        <img src="/images/logo_icon.png?v=6" alt="عالم الأطفال" className="h-32 w-auto object-contain" />
+        <img src="/images/logo_icon.png?v=6" alt="عالم الأطفال" width="128" height="128" className="h-32 w-auto object-contain" />
         <h1 className="text-xl font-bold text-brand-green">عالم الأطفال - الإدارة</h1>
       </Link>
       <div className="flex-1 px-4 space-y-6 pb-20">
         {navGroups.map((group, idx) => (
           <div key={idx}>
-            <h3 className="px-2 mb-2 text-xs font-semibold text-text-muted dark:text-text-mutedDark uppercase tracking-wider">
+            <h2 className="px-2 mb-2 text-xs font-semibold text-text-muted dark:text-text-mutedDark uppercase tracking-wider">
               {group.title}
-            </h3>
+            </h2>
             <div className="space-y-1">
               {group.items.map((item) => (
                 <NavLink
@@ -130,7 +130,7 @@ export function DashboardLayout() {
       <div className="md:hidden flex items-center justify-between p-4 bg-surface dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="w-10 h-10 bg-white rounded-full p-1 shadow-sm">
-            <img src="/images/logo_icon.png" alt="عالم الأطفال" className="w-full h-full object-contain" />
+            <img src="/images/logo_icon.png" alt="عالم الأطفال" width="40" height="40" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-lg font-bold text-brand-green">عالم الأطفال - الإدارة</h1>
         </Link>
