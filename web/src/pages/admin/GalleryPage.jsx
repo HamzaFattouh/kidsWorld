@@ -5,45 +5,69 @@ import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Trash2, Image as ImageIcon, UploadCloud } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { galleryImageApi } from '../../api/galleryImage';
 
 export function GalleryPage() {
   const { t } = useTranslation();
   
-  const [images, setImages] = useState([
-    { id: 1, url: 'https://images.unsplash.com/photo-1587691592099-24045742c181?q=80&w=500&auto=format&fit=crop', title: 'أنشطة الرسم' },
-    { id: 2, url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=500&auto=format&fit=crop', title: 'لعب الأطفال' },
-    { id: 3, url: 'https://images.unsplash.com/photo-1544626127-148184d08151?q=80&w=500&auto=format&fit=crop', title: 'تعلم الأرقام' },
-    { id: 4, url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=500&auto=format&fit=crop', title: 'ألعاب الذكاء' },
-    { id: 5, url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=500&auto=format&fit=crop', title: 'المسرح المدرسي' },
-    { id: 6, url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=500&auto=format&fit=crop', title: 'القراءة الحرة' }
-  ]);
+  const queryClient = useQueryClient();
+  const { data: rawImages = [], isLoading } = useQuery({
+    queryKey: ['gallery'],
+    queryFn: galleryImageApi.getMany
+  });
+  const images = Array.isArray(rawImages?.data) ? rawImages.data : Array.isArray(rawImages) ? rawImages : [];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ imageUrl: '', title: '' });
+  const [formData, setFormData] = useState({ title: '' });
+  const [fileToUpload, setFileToUpload] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+
+  const createMutation = useMutation({
+    mutationFn: galleryImageApi.createOne,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gallery'] });
+      setIsModalOpen(false);
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: galleryImageApi.deleteOne,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gallery'] });
+    }
+  });
 
   const handleOpenModal = () => {
-    setFormData({ imageUrl: '', title: '' });
+    setFormData({ title: '' });
+    setFileToUpload(null);
+    setPreviewUrl('');
     setIsModalOpen(true);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setFileToUpload(file);
       const url = URL.createObjectURL(file);
-      setFormData({ ...formData, imageUrl: url });
+      setPreviewUrl(url);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.imageUrl) return;
-    setImages([{ url: formData.imageUrl, title: formData.title, id: Date.now() }, ...images]); // Add new at top
-    setIsModalOpen(false);
+    if (!fileToUpload) return;
+    const data = new FormData();
+    data.append('image', fileToUpload);
+    data.append('captionAr', formData.title);
+    data.append('captionEn', formData.title);
+    
+    createMutation.mutate(data);
   };
 
   const handleDelete = (id) => {
     if(confirm('هل أنت متأكد من حذف هذه الصورة من المعرض؟')) {
-      setImages(images.filter(img => img.id !== id));
+      deleteMutation.mutate(id);
     }
   };
 
@@ -63,7 +87,7 @@ export function GalleryPage() {
             
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-              <h3 className="text-white font-bold text-sm truncate">{item.title}</h3>
+              <h3 className="text-white font-bold text-sm truncate">{item.captionAr || item.title}</h3>
             </div>
             
             {/* Delete Action */}
@@ -109,12 +133,12 @@ export function GalleryPage() {
             placeholder="مثال: نشاط الرسم الحر"
           />
 
-          {formData.imageUrl && (
+          {previewUrl && (
             <div className="mt-4 rounded-xl overflow-hidden border border-gray-200 aspect-video bg-gray-50 flex items-center justify-center relative group">
-              <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+              <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
               <button 
                 type="button"
-                onClick={() => setFormData({...formData, imageUrl: ''})} 
+                onClick={() => { setPreviewUrl(''); setFileToUpload(null); }}
                 className="absolute top-2 end-2 p-1.5 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 className="w-4 h-4" />

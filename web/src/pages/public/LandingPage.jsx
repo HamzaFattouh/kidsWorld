@@ -2,8 +2,10 @@ import { Check, Plus, Minus, Calendar, Download, Image as ImageIcon, X, Sparkles
 import { useState, useEffect } from'react';
 import { useTranslation } from'react-i18next';
 import { homepageConfigApi } from'../../api/homepageConfig';
-import { eventApi } from'../../api/event';
-import { galleryImageApi } from'../../api/galleryImage';
+import { eventApi } from '../../api/event';
+import { galleryImageApi } from '../../api/galleryImage';
+import { postApi } from '../../api/post';
+import { announcementApi } from '../../api/announcement';
 
 export function LandingPage() {
   const { i18n } = useTranslation();
@@ -13,12 +15,16 @@ export function LandingPage() {
   const [configs, setConfigs] = useState({});
   const [events, setEvents] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   useEffect(() => {
     fetchConfigs();
     fetchEvents();
     fetchGallery();
+    fetchPosts();
+    fetchAnnouncements();
   }, []);
 
   const fetchConfigs = async () => {
@@ -49,6 +55,22 @@ export function LandingPage() {
     } catch (e) { console.error(e); }
   };
 
+  const fetchPosts = async () => {
+    try {
+      const res = await postApi.getMany();
+      const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+      setPosts(items.filter(p => p && p.isPublished));
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchAnnouncements = async () => {
+    try {
+      const res = await announcementApi.getMany();
+      const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+      setAnnouncements(items.filter(a => a && a.isPublished));
+    } catch (e) { console.error(e); }
+  };
+
   const scrollToAbout = () => {
     const el = document.getElementById('about');
     if (el) {
@@ -75,8 +97,8 @@ export function LandingPage() {
 
   const activitiesList = events.length > 0 ? events.map(e => ({
     ...e,
-    album: [
-      e.imageUrl ||'/images/dynamic/value_1.jpg','/images/dynamic/value_2.jpg','/images/dynamic/value_3.jpg','/images/dynamic/welcome.jpg'
+    album: e.album && e.album.length > 0 ? e.album : [
+      e.imageUrl || '/images/dynamic/value_1.jpg',
     ]
   })) : [
     {
@@ -160,6 +182,33 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Announcements Section */}
+      {announcements.length > 0 && (
+        <section id="announcements" className="py-16 px-4 sm:px-6 lg:px-8 bg-brand-yellow/10 relative">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-display font-bold text-brand-dark mb-8 text-center">
+              إعلانات هامة
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {announcements.slice(0, 3).map((item) => (
+                <div key={item.id} className="bg-white p-6 rounded-2xl shadow-sm border border-brand-yellow/20 text-start">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-bold text-lg text-brand-dark">{item.titleAr || item.titleEn}</h3>
+                    {item.priority === 'HIGH' || item.priority === 'URGENT' ? (
+                      <span className="bg-rose-100 text-rose-700 text-xs px-2 py-1 rounded font-bold">هام جداً</span>
+                    ) : (
+                      <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded font-bold">إعلان</span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">{item.contentAr || item.contentEn}</p>
+                  <span className="text-xs text-gray-400">{item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-EG') : ''}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Core Values Section */}
       <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 relative">
@@ -447,6 +496,40 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Posts Section */}
+      {posts.length > 0 && (
+        <section id="posts" className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative">
+          <div className="max-w-7xl mx-auto text-center space-y-4 mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-brand-dark">
+              أحدث <span className="text-brand-blue">المنشورات </span>
+            </h2>
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+              <div className="w-8 h-2 bg-brand-yellow rounded-full"></div>
+              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+            </div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.slice(0, 3).map((post) => (
+              <div key={post.id} className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 flex flex-col text-start hover:-translate-y-2 transition-transform duration-300">
+                <div className="h-48 overflow-hidden relative">
+                  <img src={post.thumbnailUrl || post.image || '/images/dynamic/value_1.jpg'} alt={post.titleAr} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <span className="text-xs font-bold text-gray-500 mb-2">{post.createdAt ? new Date(post.createdAt).toLocaleDateString('ar-EG') : ''}</span>
+                  <h3 className="text-xl font-bold text-brand-dark mb-3">{post.titleAr || post.titleEn}</h3>
+                  <p className="text-gray-600 text-sm line-clamp-3 mb-4 flex-1">{post.contentAr || post.contentEn}</p>
+                  <div className="flex items-center gap-2 text-brand-blue font-bold text-sm">
+                    <Check className="w-4 h-4" /> اقرأ المزيد
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Footer Address Info Bar */}
       <div className="bg-brand-dark border-t border-white/10 py-6 text-center text-gray-400 text-sm font-semibold">

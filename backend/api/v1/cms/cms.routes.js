@@ -16,8 +16,8 @@ cmsRouter.get('/homepage-config', _cms.getHomepageConfig);
 
 // Protected Admin Routes
 cmsRouter.post('/announcements', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), (0, _validateRequest.validateRequest)(_cms2.createAnnouncementSchema), _cms.createAnnouncement);
-cmsRouter.post('/posts', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), (0, _validateRequest.validateRequest)(_cms2.createPostSchema), _cms.createPost);
-cmsRouter.post('/events', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), _upload.upload.single('image'), (0, _validateRequest.validateRequest)(_cms2.createEventSchema), _cms.createEvent);
+cmsRouter.post('/posts', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), _upload.upload.single('image'), (0, _validateRequest.validateRequest)(_cms2.createPostSchema), _cms.createPost);
+cmsRouter.post('/events', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), _upload.upload.fields([{ name: 'image', maxCount: 1 }, { name: 'album', maxCount: 10 }]), (0, _validateRequest.validateRequest)(_cms2.createEventSchema), _cms.createEvent);
 cmsRouter.post('/homepage-config', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), (0, _validateRequest.validateRequest)(_cms2.updateHomepageConfigSchema), _cms.updateHomepageConfig);
 cmsRouter.post('/gallery', _sessionValidator.requireAuth, (0, _authorize.requirePermission)('MANAGE_USERS'), _upload.upload.single('image'), _cms.uploadGallery);var _default = exports.default =
 

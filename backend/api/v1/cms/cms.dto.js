@@ -13,12 +13,12 @@ const createAnnouncementSchema = exports.createAnnouncementSchema = _zod.z.objec
 
 const createPostSchema = exports.createPostSchema = _zod.z.object({
   body: _zod.z.object({
-    categoryId: _zod.z.string().uuid(),
-    titleEn: _zod.z.string().min(3),
+    categoryId: _zod.z.string().uuid().optional(),
+    titleEn: _zod.z.string().min(3).optional(),
     titleAr: _zod.z.string().min(3),
-    contentEn: _zod.z.string().min(10),
-    contentAr: _zod.z.string().min(10),
-    isPublished: _zod.z.boolean().optional()
+    contentEn: _zod.z.string().min(5).optional(),
+    contentAr: _zod.z.string().min(5),
+    isPublished: _zod.z.boolean().optional().or(_zod.z.string().transform(v => v === 'true'))
   })
 });
 

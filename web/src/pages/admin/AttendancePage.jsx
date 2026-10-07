@@ -62,7 +62,8 @@ export function AttendancePage() {
     const dateParam = searchParams.get('date');
     const classIdParam = searchParams.get('classId');
     if (dateParam && classIdParam) {
-      setSelectedDay(parseInt(dateParam));
+      const day = dateParam.includes('-') ? parseInt(dateParam.split('-')[2], 10) : parseInt(dateParam, 10);
+      setSelectedDay(day);
       const cls = allClasses.find(c => c.id === classIdParam);
       if (cls) {
         setSelectedClass(cls);

@@ -22,7 +22,11 @@ const getAnnouncements = async (req, res, next) => {
 const createPost = async (req, res, next) => {
   try {
     const user = req.user;
-    const payload = { ...req.body, authorId: user.userId };
+    const thumbnailUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    const payload = { ...req.body, thumbnailUrl, authorId: user.userId };
+    if (typeof payload.isPublished === 'string') {
+        payload.isPublished = payload.isPublished === 'true';
+    }
     const record = await cmsService.createPost(payload, user.userId);
     res.status(201).json({ data: record });
   } catch (error) {next(error);}
@@ -39,8 +43,15 @@ const getPosts = async (req, res, next) => {
 const createEvent = async (req, res, next) => {
   try {
     const user = req.user;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-    const payload = { ...req.body, imageUrl, eventDate: new Date(req.body.eventDate) };
+    let imageUrl = null;
+    let album = [];
+    if (req.files) {
+      if (req.files.image && req.files.image.length > 0) imageUrl = `/uploads/${req.files.image[0].filename}`;
+      if (req.files.album && req.files.album.length > 0) album = req.files.album.map(f => `/uploads/${f.filename}`);
+    } else if (req.file) {
+      imageUrl = `/uploads/${req.file.filename}`;
+    }
+    const payload = { ...req.body, imageUrl, album, eventDate: new Date(req.body.eventDate) };
     if (typeof payload.isPublished === 'string') {
         payload.isPublished = payload.isPublished === 'true';
     }

@@ -24,5 +24,10 @@ export const eventApi = {
       },
     });
     return response.data;
+  },
+
+  deleteOne: async (id) => {
+    const response = await api.delete(`/auto/event/${id}`);
+    return response.data;
   }
 };

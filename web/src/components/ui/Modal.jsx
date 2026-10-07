@@ -12,7 +12,7 @@ import { Button } from'./Button';
 
 
 
-export function Modal({ isOpen, onClose, title, children, className }) {
+export function Modal({ isOpen, onClose, title, children, className, showFooter = false }) {
   const { t } = useTranslation();
 
   if (!isOpen) return null;
@@ -45,14 +45,16 @@ export function Modal({ isOpen, onClose, title, children, className }) {
           {children}
         </div>
         
-        <div className="flex items-center justify-end p-4 border-t border-gray-200 dark:border-gray-800 gap-3">
-          <Button variant="outline" onClick={onClose}>
-            {t('cancel','Cancel')}
-          </Button>
-          <Button onClick={onClose}>
-            {t('save','Save')}
-          </Button>
-        </div>
+        {showFooter && (
+          <div className="flex items-center justify-end p-4 border-t border-gray-200 dark:border-gray-800 gap-3">
+            <Button variant="outline" onClick={onClose}>
+              {t('cancel','Cancel')}
+            </Button>
+            <Button onClick={onClose}>
+              {t('save','Save')}
+            </Button>
+          </div>
+        )}
       </div>
     </div>);
 

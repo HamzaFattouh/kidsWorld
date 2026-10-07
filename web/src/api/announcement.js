@@ -19,7 +19,12 @@ export const announcementApi = {
   },
 
   createOne: async (data) => {
-    const response = await api.post('/auto/announcement', data);
+    const response = await api.post('/cms/announcements', data);
+    return response.data;
+  },
+
+  deleteOne: async (id) => {
+    const response = await api.delete(`/auto/announcement/${id}`);
     return response.data;
   }
 };

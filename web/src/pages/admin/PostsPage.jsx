@@ -5,48 +5,71 @@ import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Edit2, Trash2, Calendar, User, FileText } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { postApi } from '../../api/post';
 
 export function PostsPage() {
   const { t } = useTranslation();
   
-  const [posts, setPosts] = useState([
-    { 
-      id: 1, 
-      title: 'أهمية القراءة المبكرة للأطفال', 
-      content: 'تعتبر القراءة المبكرة من أهم الركائز في تطور لغة الطفل وتنمية خياله. ننصح بتخصيص 15 دقيقة يومياً للقراءة مع طفلك لتعزيز الروابط وتقوية مهاراته اللغوية والاستيعابية...', 
-      date: '2026-10-01',
-      author: 'أ. نورة النابلسي',
-      image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500&auto=format&fit=crop'
-    },
-    { 
-      id: 2, 
-      title: 'نصائح لغذاء صحي ومتوازن', 
-      content: 'تغذية الطفل السليمة تنعكس على نشاطه وتركيزه في الروضة. احرصي على توفير وجبات متكاملة تحتوي على الخضار والفواكه الطازجة، وتجنبي الحلويات المصنعة...', 
-      date: '2026-09-25',
-      author: 'قسم التغذية',
-      image: 'https://images.unsplash.com/photo-1505253758473-96b7015fcd40?q=80&w=500&auto=format&fit=crop'
-    },
-  ]);
+  const queryClient = useQueryClient();
+  const { data: rawPosts = [], isLoading } = useQuery({
+    queryKey: ['posts'],
+    queryFn: postApi.getMany
+  });
+  const posts = Array.isArray(rawPosts?.data) ? rawPosts.data : Array.isArray(rawPosts) ? rawPosts : [];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [fileToUpload, setFileToUpload] = useState(null);
   
-  const [formData, setFormData] = useState({ title: '', content: '', author: '', image: '', date: '' });
+  const [formData, setFormData] = useState({ 
+    titleEn: '', titleAr: '', contentEn: '', contentAr: '', 
+    author: '', image: '', date: '', isPublished: true
+  });
+
+  const createMutation = useMutation({
+    mutationFn: postApi.createOne,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      setIsModalOpen(false);
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: postApi.deleteOne,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    }
+  });
 
   const handleOpenModal = (post = null) => {
     if (post) {
       setEditingId(post.id);
-      setFormData(post);
+      setFormData({
+        titleEn: post.titleEn || '',
+        titleAr: post.titleAr || '',
+        contentEn: post.contentEn || '',
+        contentAr: post.contentAr || '',
+        author: post.author?.name || 'الإدارة',
+        date: post.createdAt ? new Date(post.createdAt).toISOString().split('T')[0] : '',
+        isPublished: post.isPublished,
+        image: post.thumbnailUrl || ''
+      });
     } else {
       setEditingId(null);
-      setFormData({ title: '', content: '', author: 'الإدارة', image: '', date: new Date().toISOString().split('T')[0] });
+      setFormData({ 
+        titleEn: '', titleAr: '', contentEn: '', contentAr: '', 
+        author: 'الإدارة', image: '', date: new Date().toISOString().split('T')[0], isPublished: true
+      });
     }
+    setFileToUpload(null);
     setIsModalOpen(true);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setFileToUpload(file);
       const url = URL.createObjectURL(file);
       setFormData({ ...formData, image: url });
     }
@@ -54,21 +77,22 @@ export function PostsPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedData = {
-      ...formData,
-      image: formData.image || 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=500&auto=format&fit=crop' // placeholder
-    };
-    if (editingId) {
-      setPosts(posts.map(p => p.id === editingId ? { ...updatedData, id: editingId } : p));
-    } else {
-      setPosts([{ ...updatedData, id: Date.now() }, ...posts]); // Add new at top
+    const data = new FormData();
+    data.append('titleAr', formData.titleAr);
+    data.append('titleEn', formData.titleEn || formData.titleAr);
+    data.append('contentAr', formData.contentAr);
+    data.append('contentEn', formData.contentEn || formData.contentAr);
+    data.append('isPublished', formData.isPublished);
+    if (fileToUpload) {
+      data.append('image', fileToUpload);
     }
-    setIsModalOpen(false);
+
+    createMutation.mutate(data);
   };
 
   const handleDelete = (id) => {
     if(confirm('هل أنت متأكد من حذف هذا المنشور؟')) {
-      setPosts(posts.filter(p => p.id !== id));
+      deleteMutation.mutate(id);
     }
   };
 
@@ -85,13 +109,13 @@ export function PostsPage() {
         {posts.map((item) => (
           <div key={item.id} className="bg-surface dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden group flex flex-col sm:flex-row">
             <div className="w-full sm:w-2/5 h-48 sm:h-auto relative bg-gray-100 dark:bg-gray-800">
-              <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+              <img src={item.thumbnailUrl || item.image || 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=500&auto=format&fit=crop'} alt={item.titleAr} className="w-full h-full object-cover" />
             </div>
             
             <div className="p-5 flex-1 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-bold text-text dark:text-text-dark">{item.title}</h3>
+                  <h3 className="text-lg font-bold text-text dark:text-text-dark">{item.titleAr}</h3>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onClick={() => handleOpenModal(item)} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                       <Edit2 className="w-4 h-4" />
@@ -101,7 +125,7 @@ export function PostsPage() {
                     </button>
                   </div>
                 </div>
-                <p className="text-sm text-text-muted dark:text-text-mutedDark line-clamp-3 mb-4 leading-relaxed">{item.content}</p>
+                <p className="text-sm text-text-muted dark:text-text-mutedDark line-clamp-3 mb-4 leading-relaxed">{item.contentAr}</p>
               </div>
               
               <div className="flex items-center justify-between text-xs font-semibold text-gray-500 pt-3 border-t border-gray-100 dark:border-gray-800">
@@ -109,7 +133,7 @@ export function PostsPage() {
                   <User className="w-3.5 h-3.5 text-primary" /> {item.author}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-primary" /> {item.date}
+                  <Calendar className="w-3.5 h-3.5 text-primary" /> {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : item.date}
                 </div>
               </div>
             </div>
@@ -126,8 +150,8 @@ export function PostsPage() {
           <Input
             label="عنوان المنشور"
             required
-            value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
+            value={formData.titleAr}
+            onChange={(e) => setFormData({...formData, titleAr: e.target.value})}
           />
           
           <div className="space-y-2">
@@ -136,8 +160,8 @@ export function PostsPage() {
               required
               rows={6}
               className="w-full rounded-xl border border-gray-200 bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-gray-800 dark:bg-surface-dark"
-              value={formData.content}
-              onChange={(e) => setFormData({...formData, content: e.target.value})}
+              value={formData.contentAr}
+              onChange={(e) => setFormData({...formData, contentAr: e.target.value})}
             />
           </div>
 

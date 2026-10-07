@@ -16,7 +16,14 @@ export const galleryImageApi = {
   },
 
   createOne: async (data) => {
-    const response = await api.post('/auto/galleryImage', data);
+    const response = await api.post('/cms/gallery', data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
+  deleteOne: async (id) => {
+    const response = await api.delete(`/auto/galleryImage/${id}`);
     return response.data;
   }
 };

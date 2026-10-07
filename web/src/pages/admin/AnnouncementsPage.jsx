@@ -6,44 +6,71 @@ import { Button } from '../../components/ui/Button';
 import { Plus, Edit2, Trash2, Megaphone, AlertCircle } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { cn } from '../../lib/utils';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { announcementApi } from '../../api/announcement';
 
 export function AnnouncementsPage() {
   const { t } = useTranslation();
   
-  const [announcements, setAnnouncements] = useState([
-    { id: 1, title: 'عطلة رسمية', content: 'نود إعلامكم بأن يوم الخميس القادم سيكون عطلة رسمية بمناسبة العيد الوطني.', priority: 'High', date: '2026-10-10' },
-    { id: 2, title: 'اجتماع أولياء الأمور', content: 'يرجى العلم بأن اجتماع أولياء الأمور سيعقد يوم الثلاثاء في تمام الساعة 5 مساءً.', priority: 'Normal', date: '2026-10-12' },
-  ]);
+  const queryClient = useQueryClient();
+  const { data: rawAnnouncements = [], isLoading } = useQuery({
+    queryKey: ['announcements'],
+    queryFn: announcementApi.getMany
+  });
+  const announcements = Array.isArray(rawAnnouncements?.data) ? rawAnnouncements.data : Array.isArray(rawAnnouncements) ? rawAnnouncements : [];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
-  const [formData, setFormData] = useState({ title: '', content: '', priority: 'Normal', date: '' });
+  const [formData, setFormData] = useState({ titleEn: '', titleAr: '', contentEn: '', contentAr: '', priority: 'NORMAL' });
+
+  const createMutation = useMutation({
+    mutationFn: announcementApi.createOne,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['announcements'] });
+      setIsModalOpen(false);
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: announcementApi.deleteOne,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['announcements'] });
+    }
+  });
 
   const handleOpenModal = (announcement = null) => {
     if (announcement) {
       setEditingId(announcement.id);
-      setFormData(announcement);
+      setFormData({
+        titleEn: announcement.titleEn || '',
+        titleAr: announcement.titleAr || '',
+        contentEn: announcement.contentEn || '',
+        contentAr: announcement.contentAr || '',
+        priority: announcement.priority || 'NORMAL'
+      });
     } else {
       setEditingId(null);
-      setFormData({ title: '', content: '', priority: 'Normal', date: new Date().toISOString().split('T')[0] });
+      setFormData({ titleEn: '', titleAr: '', contentEn: '', contentAr: '', priority: 'NORMAL' });
     }
     setIsModalOpen(true);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (editingId) {
-      setAnnouncements(announcements.map(a => a.id === editingId ? { ...formData, id: editingId } : a));
-    } else {
-      setAnnouncements([...announcements, { ...formData, id: Date.now() }]);
-    }
-    setIsModalOpen(false);
+    createMutation.mutate({
+      titleAr: formData.titleAr,
+      titleEn: formData.titleEn || formData.titleAr,
+      contentAr: formData.contentAr,
+      contentEn: formData.contentEn || formData.contentAr,
+      priority: formData.priority,
+      isPublished: true
+    });
   };
 
   const handleDelete = (id) => {
     if(confirm('هل أنت متأكد من حذف هذا الإعلان؟')) {
-      setAnnouncements(announcements.filter(a => a.id !== id));
+      deleteMutation.mutate(id);
     }
   };
 
@@ -63,9 +90,9 @@ export function AnnouncementsPage() {
               <div className="flex justify-between items-start mb-4">
                 <div className={cn(
                   "p-2 rounded-xl flex items-center justify-center",
-                  item.priority === 'High' ? "bg-rose-100 text-rose-600" : "bg-blue-100 text-blue-600"
+                  item.priority === 'HIGH' || item.priority === 'URGENT' ? "bg-rose-100 text-rose-600" : "bg-blue-100 text-blue-600"
                 )}>
-                  {item.priority === 'High' ? <AlertCircle className="w-5 h-5" /> : <Megaphone className="w-5 h-5" />}
+                  {item.priority === 'HIGH' || item.priority === 'URGENT' ? <AlertCircle className="w-5 h-5" /> : <Megaphone className="w-5 h-5" />}
                 </div>
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => handleOpenModal(item)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
@@ -77,18 +104,18 @@ export function AnnouncementsPage() {
                 </div>
               </div>
               
-              <h3 className="text-lg font-bold text-text dark:text-text-dark mb-2">{item.title}</h3>
-              <p className="text-sm text-text-muted dark:text-text-mutedDark leading-relaxed">{item.content}</p>
+              <h3 className="text-lg font-bold text-text dark:text-text-dark mb-2">{item.titleAr}</h3>
+              <p className="text-sm text-text-muted dark:text-text-mutedDark leading-relaxed">{item.contentAr}</p>
             </div>
             
             <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-xs font-semibold">
               <span className={cn(
                 "px-2.5 py-1 rounded-md",
-                item.priority === 'High' ? "bg-rose-50 text-rose-700" : "bg-blue-50 text-blue-700"
+                item.priority === 'HIGH' || item.priority === 'URGENT' ? "bg-rose-50 text-rose-700" : "bg-blue-50 text-blue-700"
               )}>
-                {item.priority === 'High' ? 'هام جداً' : 'عادي'}
+                {item.priority === 'HIGH' || item.priority === 'URGENT' ? 'هام جداً' : 'عادي'}
               </span>
-              <span className="text-gray-400">{item.date}</span>
+              <span className="text-gray-400">{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : item.date}</span>
             </div>
           </div>
         ))}
@@ -103,8 +130,8 @@ export function AnnouncementsPage() {
           <Input
             label="عنوان الإعلان"
             required
-            value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
+            value={formData.titleAr}
+            onChange={(e) => setFormData({...formData, titleAr: e.target.value})}
           />
           
           <div className="space-y-2">
@@ -113,8 +140,8 @@ export function AnnouncementsPage() {
               required
               rows={4}
               className="w-full rounded-xl border border-gray-200 bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-gray-800 dark:bg-surface-dark"
-              value={formData.content}
-              onChange={(e) => setFormData({...formData, content: e.target.value})}
+              value={formData.contentAr}
+              onChange={(e) => setFormData({...formData, contentAr: e.target.value})}
             />
           </div>
 

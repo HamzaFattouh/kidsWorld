@@ -387,6 +387,7 @@ model Event {
   descriptionEn String   @db.Text
   descriptionAr String   @db.Text
   imageUrl      String?
+  album         String[] @default([])
   eventDate     DateTime
   isPublished   Boolean  @default(false)
   createdAt     DateTime @default(now())
