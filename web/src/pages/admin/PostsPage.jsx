@@ -44,6 +44,14 @@ export function PostsPage() {
     setIsModalOpen(true);
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setFormData({ ...formData, image: url });
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedData = {
@@ -149,13 +157,28 @@ export function PostsPage() {
             />
           </div>
 
-          <Input
-            label="رابط الصورة البارزة (اختياري)"
-            type="url"
-            value={formData.image}
-            onChange={(e) => setFormData({...formData, image: e.target.value})}
-            placeholder="https://..."
-          />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-text dark:text-text-dark">الصورة البارزة (اختياري)</label>
+            <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <p className="mb-1 text-sm text-gray-500"><span className="font-semibold">اضغط لرفع الصورة</span></p>
+                <p className="text-xs text-gray-500">PNG, JPG</p>
+              </div>
+              <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+            </label>
+            {formData.image && (
+              <div className="mt-2 h-24 rounded-xl overflow-hidden border border-gray-200 aspect-video relative group">
+                <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                <button 
+                  type="button"
+                  onClick={() => setFormData({...formData, image: ''})} 
+                  className="absolute top-1 end-1 p-1 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="pt-4 flex gap-3">
             <Button type="submit" className="flex-1 flex items-center justify-center gap-2">

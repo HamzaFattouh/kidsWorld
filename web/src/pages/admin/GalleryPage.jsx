@@ -19,17 +19,25 @@ export function GalleryPage() {
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ url: '', title: '' });
+  const [formData, setFormData] = useState({ imageUrl: '', title: '' });
 
   const handleOpenModal = () => {
-    setFormData({ url: '', title: '' });
+    setFormData({ imageUrl: '', title: '' });
     setIsModalOpen(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setFormData({ ...formData, imageUrl: url });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.url) return;
-    setImages([{ ...formData, id: Date.now() }, ...images]); // Add new at top
+    if (!formData.imageUrl) return;
+    setImages([{ url: formData.imageUrl, title: formData.title, id: Date.now() }, ...images]); // Add new at top
     setIsModalOpen(false);
   };
 
@@ -81,16 +89,17 @@ export function GalleryPage() {
         title="إضافة صورة للمعرض"
       >
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <Input
-            label="رابط الصورة (URL)"
-            type="url"
-            required
-            value={formData.url}
-            onChange={(e) => setFormData({...formData, url: e.target.value})}
-            placeholder="https://..."
-            dir="ltr"
-            className="text-left"
-          />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-text dark:text-text-dark">رفع الصورة</label>
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 transition-colors">
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <UploadCloud className="w-8 h-8 mb-3 text-gray-400" />
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">اضغط لرفع الصورة</span> أو اسحب الصورة وأفلتها هنا</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, JPEG (الحد الأقصى 5MB)</p>
+              </div>
+              <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+            </label>
+          </div>
           
           <Input
             label="وصف / عنوان الصورة"
@@ -100,10 +109,16 @@ export function GalleryPage() {
             placeholder="مثال: نشاط الرسم الحر"
           />
 
-          {formData.url && (
-            <div className="mt-4 rounded-xl overflow-hidden border border-gray-200 aspect-video bg-gray-50 flex items-center justify-center">
-              <img src={formData.url} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
-              <div className="hidden text-gray-400 text-xs">الرابط غير صالح أو الصورة غير متاحة</div>
+          {formData.imageUrl && (
+            <div className="mt-4 rounded-xl overflow-hidden border border-gray-200 aspect-video bg-gray-50 flex items-center justify-center relative group">
+              <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+              <button 
+                type="button"
+                onClick={() => setFormData({...formData, imageUrl: ''})} 
+                className="absolute top-2 end-2 p-1.5 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
           )}
 
