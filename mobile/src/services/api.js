@@ -7,7 +7,7 @@ export const api = axios.create({
   baseURL: API_URL,
   headers: {'Content-Type':'application/json','x-app-client':'mobile',
   },
-  timeout: 10000,
+  timeout: 60000,
 });
 
 api.interceptors.request.use(

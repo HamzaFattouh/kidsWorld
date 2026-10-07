@@ -6,6 +6,7 @@ import { ThemeToggle } from'../components/ui/ThemeToggle';
 import { useAuthStore } from'../store/authStore';
 import { cn } from'../lib/utils';
 import { Button } from'../components/ui/Button';
+import { NotificationDropdown } from '../components/ui/NotificationDropdown';
 import {
   LayoutDashboard, Users, UserCog, User, Baby, GraduationCap,
   CalendarCheck, Utensils, FileText, Star, AlertTriangle, UserMinus,
@@ -158,6 +159,7 @@ export function DashboardLayout() {
         <header className="sticky top-0 z-10 bg-surface/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-4 sm:px-6">
           <div className="flex-1" />
           <div className="flex items-center gap-2 sm:gap-4">
+            <NotificationDropdown />
             <ThemeToggle />
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
             <span className="text-sm font-medium text-text dark:text-text-dark hidden sm:inline-block">

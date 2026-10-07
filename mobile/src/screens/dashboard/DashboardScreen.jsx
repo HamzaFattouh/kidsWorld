@@ -28,15 +28,15 @@ export function DashboardScreen({ navigation }) {
   const selectedChildId = useParentStore((s) => s.selectedChildId);
 
   const dashboardItems = [
-    { id:'Users', label:'إدارة المستخدمين والصلاحيات', icon: Users, color:'#10b981', bg:'#f0fdf4', screen:'Users' },
-    { id:'Classes', label:'إدارة الصفوف والشعب والمعلمين', icon: FileCheck, color:'#059669', bg:'#ecfdf5', screen:'Classes' },
-    { id:'Tasks', label:'إدارة وتكليف مهام المعلمين', icon: ClipboardList, color:'#047857', bg:'#d1fae5', screen:'Tasks' },
+    { id:'Users', label:'إدارة المستخدمين والصلاحيات', icon: Users, color:'#8b5cf6', bg:'#ede9fe', screen:'Users' },
+    { id:'Classes', label:'إدارة الصفوف والشعب والمعلمين', icon: FileCheck, color:'#7c3aed', bg:'#f3e8ff', screen:'Classes' },
+    { id:'Tasks', label:'إدارة وتكليف مهام المعلمين', icon: ClipboardList, color:'#6d28d9', bg:'#faf5ff', screen:'Tasks' },
     { id:'Children', label:'الأطفال والمستندات والتسجيل', icon: Users, color:'#10b981', bg:'#ecfdf5', screen:'Children' },
     { id:'Attendance', label:'سجل الحضور والغياب للطلاب والمعلمين', icon: CalendarCheck, color:'#059669', bg:'#d1fae5', screen:'Attendance' },
-    { id:'Meals', label:'الوجبات والجدول الأسبوعي', icon: Utensils, color:'#10b981', bg:'#f0fdf4', screen:'Meals' },
-    { id:'WeeklyNotes', label:'الملاحظات والتقارير الأسبوعية', icon: FileText, color:'#059669', bg:'#ecfdf5', screen:'WeeklyNotes' },
-    { id:'Evaluations', label:'التقييمات والتطور', icon: Award, color:'#047857', bg:'#d1fae5', screen:'Evaluations' },
-    { id:'Cameras', label:'البث المباشر (الكاميرات)', icon: Camera, color:'#10b981', bg:'#ecfdf5', screen:'Cameras' },
+    { id:'Meals', label:'الوجبات والجدول الأسبوعي', icon: Utensils, color:'#8b5cf6', bg:'#ede9fe', screen:'Meals' },
+    { id:'WeeklyNotes', label:'الملاحظات والتقارير الأسبوعية', icon: FileText, color:'#7c3aed', bg:'#f3e8ff', screen:'WeeklyNotes' },
+    { id:'Evaluations', label:'التقييمات والتطور', icon: Award, color:'#10b981', bg:'#ecfdf5', screen:'Evaluations' },
+    { id:'Cameras', label:'البث المباشر (الكاميرات)', icon: Camera, color:'#8b5cf6', bg:'#ede9fe', screen:'Cameras' },
     { id:'Complaints', label:'الشكاوى والمقترحات', icon: MessageSquare, color:'#059669', bg:'#d1fae5', screen:'Complaints' },
     { id:'Requests', label:'الطلبات والاستئذان', icon: FileCheck, color:'#10b981', bg:'#f0fdf4', screen:'Requests' },
   ];
@@ -108,14 +108,14 @@ export function DashboardScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { paddingBottom: 24 },
   headerBox: {
-    backgroundColor:'#10b981',
+    backgroundColor: '#8b5cf6',
     borderRadius: 20,
     padding: 20,
     marginBottom: 20,
   },
-  headerTag: { color:'#dcfce7', fontSize: 12, fontWeight:'bold', textAlign:'right', marginBottom: 4 },
-  headerTitle: { color:'#ffffff', fontSize: 22, fontWeight:'bold', textAlign:'right', marginBottom: 6 },
-  headerSub: { color:'#ecfdf5', fontSize: 13, textAlign:'right', lineHeight: 18 },
+  headerTag: { color: '#ede9fe', fontSize: 12, fontWeight: 'bold', textAlign: 'right', marginBottom: 4 },
+  headerTitle: { color: '#ffffff', fontSize: 22, fontWeight: 'bold', textAlign: 'right', marginBottom: 6 },
+  headerSub: { color: '#ddd6fe', fontSize: 13, textAlign: 'right', lineHeight: 18 },
   childBadge: {
     backgroundColor:'rgba(255, 255, 255, 0.2)',
     alignSelf:'flex-end',
