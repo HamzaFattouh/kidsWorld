@@ -1,102 +1,210 @@
-import { useState } from'react';
-import { useTranslation } from'react-i18next';
-import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
-import { PageHeader } from'../../components/ui/PageHeader';
-import { Modal } from'../../components/ui/Modal';
-import { DataTable } from'../../components/ui/DataTable';
-
-import { EventForm } from'../../components/forms/EventForm';
-import { eventApi } from'../../api/event';
-
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { Modal } from '../../components/ui/Modal';
+import { Button } from '../../components/ui/Button';
+import { Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, CheckCircle, XCircle } from 'lucide-react';
+import { Input } from '../../components/ui/Input';
+import { cn } from '../../lib/utils';
 
 export function EventsPage() {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['event'],
-    queryFn: () => eventApi.getMany()
-  });
-
-  const createMutation = useMutation({
-    mutationFn: (payload) => eventApi.createOne(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['event'] });
-      setIsCreateModalOpen(false);
+  
+  const [events, setEvents] = useState([
+    { 
+      id: 1, 
+      title: 'رحلة حديقة الحيوان', 
+      description: 'رحلة ترفيهية وتعليمية لأطفال الروضة إلى حديقة الحيوان للتعرف على الحيوانات وبيئاتها.', 
+      date: '2026-10-20', 
+      time: '08:00 AM', 
+      location: 'حديقة الحيوان الوطنية', 
+      isPublished: true,
+      image: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=500&auto=format&fit=crop'
     },
-    onError: (error) => {
-      alert(error?.response?.data?.error?.message ||'Error creating record');
-    }
-  });
+    { 
+      id: 2, 
+      title: 'حفل نهاية الفصل', 
+      description: 'حفل لتكريم الأطفال وتوزيع الشهادات والهدايا بحضور أولياء الأمور.', 
+      date: '2026-12-15', 
+      time: '10:00 AM', 
+      location: 'مسرح الحضانة', 
+      isPublished: false,
+      image: 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=500&auto=format&fit=crop'
+    },
+  ]);
 
-  const columns = [
-  {
-    header:'Image',
-    accessorKey:'imageUrl',
-    cell: (info) => info.getValue() ? <img src={info.getValue()} alt="Event" className="w-12 h-12 object-cover rounded" /> : null
-  },
-  {
-    header:'Title (EN)',
-    accessorKey:'titleEn'
-  },
-  {
-    header:'Title (AR)',
-    accessorKey:'titleAr'
-  },
-  {
-    header:'Date',
-    accessorKey:'eventDate',
-    cell: (info) => new Date(info.getValue()).toLocaleDateString()
-  },
-  {
-    header:'Published',
-    accessorKey:'isPublished',
-    cell: (info) => info.getValue() ?'Yes' :'No'
-  }];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  
+  const [formData, setFormData] = useState({ title: '', description: '', date: '', time: '', location: '', isPublished: false, image: '' });
 
-  const handleCreate = (data) => {
-    const formData = new FormData();
-    formData.append('titleEn', data.titleEn);
-    formData.append('titleAr', data.titleAr);
-    formData.append('descriptionEn', data.descriptionEn);
-    formData.append('descriptionAr', data.descriptionAr);
-    formData.append('eventDate', data.eventDate);
-    formData.append('isPublished', !!data.isPublished);
-    if (data.image && data.image.length > 0) {
-      formData.append('image', data.image[0]);
+  const handleOpenModal = (eventItem = null) => {
+    if (eventItem) {
+      setEditingId(eventItem.id);
+      setFormData(eventItem);
+    } else {
+      setEditingId(null);
+      setFormData({ title: '', description: '', date: '', time: '', location: '', isPublished: false, image: '' });
     }
-    createMutation.mutate(formData);
+    setIsModalOpen(true);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedData = {
+      ...formData,
+      image: formData.image || 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=500&auto=format&fit=crop' // placeholder if empty
+    };
+    if (editingId) {
+      setEvents(events.map(e => e.id === editingId ? { ...updatedData, id: editingId } : e));
+    } else {
+      setEvents([...events, { ...updatedData, id: Date.now() }]);
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = (id) => {
+    if(confirm('هل أنت متأكد من حذف هذه الفعالية؟')) {
+      setEvents(events.filter(e => e.id !== id));
+    }
+  };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.events.title','Events')}
-        description={t('pages.events.description','Manage Events')}
-        actionLabel={t('pages.events.create','Create')}
-        onAction={() => setIsCreateModalOpen(true)} />
+        title={t('pages.events.title', 'الفعاليات')}
+        description="إدارة فعاليات وأنشطة الحضانة"
+        actionLabel="إضافة فعالية جديدة"
+        onAction={() => handleOpenModal()}
+      />
       
-      
-      <DataTable
-        data={data?.data || []}
-        columns={columns}
-        isLoading={isLoading} />
-      
-      
-      <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.events.create','Create')}>
-        
-        <div className="py-4">
-          <EventForm
-            onSubmit={handleCreate}
-            isLoading={createMutation.isPending} />
-          
-        </div>
-      </Modal>
-    </div>);
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {events.map((item) => (
+          <div key={item.id} className="bg-surface dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden group">
+            <div className="relative h-48 w-full bg-gray-100 dark:bg-gray-800">
+              <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+              
+              <div className="absolute top-4 end-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => handleOpenModal(item)} className="p-2 bg-white/90 dark:bg-gray-800/90 text-blue-600 hover:bg-white rounded-lg backdrop-blur-sm transition-colors">
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button onClick={() => handleDelete(item.id)} className="p-2 bg-white/90 dark:bg-gray-800/90 text-rose-600 hover:bg-white rounded-lg backdrop-blur-sm transition-colors">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
 
+              <div className="absolute top-4 start-4">
+                {item.isPublished ? (
+                  <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-bold rounded-md flex items-center gap-1 shadow-none">
+                    <CheckCircle className="w-3 h-3" /> منشور
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-1 bg-gray-800 text-white text-xs font-bold rounded-md flex items-center gap-1 shadow-none">
+                    <XCircle className="w-3 h-3" /> مسودة
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            <div className="p-5">
+              <h3 className="text-lg font-bold text-text dark:text-text-dark mb-2">{item.title}</h3>
+              <p className="text-sm text-text-muted dark:text-text-mutedDark line-clamp-2 mb-4">{item.description}</p>
+              
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <CalendarIcon className="w-4 h-4 text-primary" /> {item.date}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <Clock className="w-4 h-4 text-primary" /> {item.time}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <MapPin className="w-4 h-4 text-primary" /> {item.location}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={editingId ? 'تعديل الفعالية' : 'إضافة فعالية جديدة'}
+      >
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <Input
+            label="اسم الفعالية"
+            required
+            value={formData.title}
+            onChange={(e) => setFormData({...formData, title: e.target.value})}
+          />
+          
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-text dark:text-text-dark">الوصف</label>
+            <textarea
+              required
+              rows={3}
+              className="w-full rounded-xl border border-gray-200 bg-surface px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-gray-800 dark:bg-surface-dark"
+              value={formData.description}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="التاريخ"
+              type="date"
+              required
+              value={formData.date}
+              onChange={(e) => setFormData({...formData, date: e.target.value})}
+            />
+            <Input
+              label="الوقت"
+              type="time"
+              required
+              value={formData.time}
+              onChange={(e) => setFormData({...formData, time: e.target.value})}
+            />
+          </div>
+
+          <Input
+            label="الموقع (المكان)"
+            required
+            value={formData.location}
+            onChange={(e) => setFormData({...formData, location: e.target.value})}
+          />
+
+          <Input
+            label="رابط الصورة (اختياري)"
+            type="url"
+            value={formData.image}
+            onChange={(e) => setFormData({...formData, image: e.target.value})}
+            placeholder="https://..."
+          />
+
+          <label className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-800 rounded-xl cursor-pointer bg-gray-50 dark:bg-gray-900/50">
+            <input
+              type="checkbox"
+              checked={formData.isPublished}
+              onChange={(e) => setFormData({...formData, isPublished: e.target.checked})}
+              className="w-5 h-5 text-primary rounded focus:ring-primary accent-primary"
+            />
+            <div>
+              <p className="text-sm font-bold text-text dark:text-text-dark">نشر الفعالية فوراً</p>
+              <p className="text-xs text-text-muted dark:text-text-mutedDark">ستظهر الفعالية للأهالي إذا قمت بتحديد هذا الخيار.</p>
+            </div>
+          </label>
+
+          <div className="pt-4 flex gap-3">
+            <Button type="submit" className="flex-1">
+              {editingId ? 'حفظ التعديلات' : 'إضافة الفعالية'}
+            </Button>
+            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)} className="flex-1">
+              إلغاء
+            </Button>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  );
 }

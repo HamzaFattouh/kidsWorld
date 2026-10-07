@@ -1,70 +1,122 @@
-import { useState } from'react';
-import { useTranslation } from'react-i18next';
-import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
-import { PageHeader } from'../../components/ui/PageHeader';
-import { Modal } from'../../components/ui/Modal';
-import { DataTable } from'../../components/ui/DataTable';
-
-import { GalleryForm } from'../../components/forms/GalleryForm';
-import { galleryImageApi } from'../../api/galleryImage';
-
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { Modal } from '../../components/ui/Modal';
+import { Button } from '../../components/ui/Button';
+import { Trash2, Image as ImageIcon, UploadCloud } from 'lucide-react';
+import { Input } from '../../components/ui/Input';
 
 export function GalleryPage() {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  
+  const [images, setImages] = useState([
+    { id: 1, url: 'https://images.unsplash.com/photo-1587691592099-24045742c181?q=80&w=500&auto=format&fit=crop', title: 'أنشطة الرسم' },
+    { id: 2, url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=500&auto=format&fit=crop', title: 'لعب الأطفال' },
+    { id: 3, url: 'https://images.unsplash.com/photo-1544626127-148184d08151?q=80&w=500&auto=format&fit=crop', title: 'تعلم الأرقام' },
+    { id: 4, url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=500&auto=format&fit=crop', title: 'ألعاب الذكاء' },
+    { id: 5, url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=500&auto=format&fit=crop', title: 'المسرح المدرسي' },
+    { id: 6, url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=500&auto=format&fit=crop', title: 'القراءة الحرة' }
+  ]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['galleryImage'],
-    queryFn: () => galleryImageApi.getMany()
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ url: '', title: '' });
 
-  const createMutation = useMutation({
-    mutationFn: (payload) => galleryImageApi.createOne(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['galleryImage'] });
-      setIsCreateModalOpen(false);
-    },
-    onError: (error) => {
-      alert(error?.response?.data?.error?.message ||'Error creating record');
+  const handleOpenModal = () => {
+    setFormData({ url: '', title: '' });
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.url) return;
+    setImages([{ ...formData, id: Date.now() }, ...images]); // Add new at top
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = (id) => {
+    if(confirm('هل أنت متأكد من حذف هذه الصورة من المعرض؟')) {
+      setImages(images.filter(img => img.id !== id));
     }
-  });
-
-  const columns = [
-
-  {
-    header:'url',
-    accessorKey:'url'
-  }];
-
+  };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('pages.gallery.title','Gallery')}
-        description={t('pages.gallery.description','Manage Gallery')}
-        actionLabel={t('pages.gallery.create','Create')}
-        onAction={() => setIsCreateModalOpen(true)} />
+        title={t('pages.gallery.title', 'معرض الصور')}
+        description="إدارة صور الحضانة والأنشطة والفعاليات"
+        actionLabel="رفع صورة جديدة"
+        onAction={() => handleOpenModal()}
+      />
       
-      
-      <DataTable
-        data={data?.data || []}
-        columns={columns}
-        isLoading={isLoading} />
-      
-      
-      <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title={t('pages.gallery.create','Create')}>
-        
-        <div className="py-4">
-          <GalleryForm
-            onSubmit={(data) => createMutation.mutate(data)}
-            isLoading={createMutation.isPending} />
-          
-        </div>
-      </Modal>
-    </div>);
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        {images.map((item) => (
+          <div key={item.id} className="relative group rounded-2xl overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <img src={item.url} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+              <h3 className="text-white font-bold text-sm truncate">{item.title}</h3>
+            </div>
+            
+            {/* Delete Action */}
+            <div className="absolute top-3 end-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <button onClick={() => handleDelete(item.id)} className="p-2 bg-rose-500 hover:bg-rose-600 text-white rounded-full transition-colors">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
+      {images.length === 0 && (
+        <div className="py-20 text-center flex flex-col items-center justify-center bg-surface border border-dashed border-gray-300 rounded-2xl">
+          <ImageIcon className="w-12 h-12 text-gray-300 mb-4" />
+          <p className="text-text-muted font-bold">لا يوجد صور في المعرض حالياً</p>
+        </div>
+      )}
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="إضافة صورة للمعرض"
+      >
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <Input
+            label="رابط الصورة (URL)"
+            type="url"
+            required
+            value={formData.url}
+            onChange={(e) => setFormData({...formData, url: e.target.value})}
+            placeholder="https://..."
+            dir="ltr"
+            className="text-left"
+          />
+          
+          <Input
+            label="وصف / عنوان الصورة"
+            required
+            value={formData.title}
+            onChange={(e) => setFormData({...formData, title: e.target.value})}
+            placeholder="مثال: نشاط الرسم الحر"
+          />
+
+          {formData.url && (
+            <div className="mt-4 rounded-xl overflow-hidden border border-gray-200 aspect-video bg-gray-50 flex items-center justify-center">
+              <img src={formData.url} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+              <div className="hidden text-gray-400 text-xs">الرابط غير صالح أو الصورة غير متاحة</div>
+            </div>
+          )}
+
+          <div className="pt-4 flex gap-3">
+            <Button type="submit" className="flex-1 flex items-center justify-center gap-2">
+              <UploadCloud className="w-4 h-4" /> رفع للصورة
+            </Button>
+            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)} className="flex-1">
+              إلغاء
+            </Button>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  );
 }
