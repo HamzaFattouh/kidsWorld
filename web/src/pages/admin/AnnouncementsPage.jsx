@@ -6,12 +6,14 @@ import { Button } from '../../components/ui/Button';
 import { Plus, Edit2, Trash2, Megaphone, AlertCircle } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { cn } from '../../lib/utils';
-import { useContentStore } from '../../store/contentStore';
 
 export function AnnouncementsPage() {
   const { t } = useTranslation();
   
-  const { announcements, setAnnouncements } = useContentStore();
+  const [announcements, setAnnouncements] = useState([
+    { id: 1, title: 'عطلة رسمية', content: 'نود إعلامكم بأن يوم الخميس القادم سيكون عطلة رسمية بمناسبة العيد الوطني.', priority: 'High', date: '2026-10-10' },
+    { id: 2, title: 'اجتماع أولياء الأمور', content: 'يرجى العلم بأن اجتماع أولياء الأمور سيعقد يوم الثلاثاء في تمام الساعة 5 مساءً.', priority: 'Normal', date: '2026-10-12' },
+  ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);

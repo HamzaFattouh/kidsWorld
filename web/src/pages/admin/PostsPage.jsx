@@ -5,12 +5,28 @@ import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Edit2, Trash2, Calendar, User, FileText } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
-import { useContentStore } from '../../store/contentStore';
 
 export function PostsPage() {
   const { t } = useTranslation();
   
-  const { posts, setPosts } = useContentStore();
+  const [posts, setPosts] = useState([
+    { 
+      id: 1, 
+      title: 'أهمية القراءة المبكرة للأطفال', 
+      content: 'تعتبر القراءة المبكرة من أهم الركائز في تطور لغة الطفل وتنمية خياله. ننصح بتخصيص 15 دقيقة يومياً للقراءة مع طفلك لتعزيز الروابط وتقوية مهاراته اللغوية والاستيعابية...', 
+      date: '2026-10-01',
+      author: 'أ. نورة النابلسي',
+      image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500&auto=format&fit=crop'
+    },
+    { 
+      id: 2, 
+      title: 'نصائح لغذاء صحي ومتوازن', 
+      content: 'تغذية الطفل السليمة تنعكس على نشاطه وتركيزه في الروضة. احرصي على توفير وجبات متكاملة تحتوي على الخضار والفواكه الطازجة، وتجنبي الحلويات المصنعة...', 
+      date: '2026-09-25',
+      author: 'قسم التغذية',
+      image: 'https://images.unsplash.com/photo-1505253758473-96b7015fcd40?q=80&w=500&auto=format&fit=crop'
+    },
+  ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -31,11 +47,8 @@ export function PostsPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, image: reader.result });
-      };
-      reader.readAsDataURL(file);
+      const url = URL.createObjectURL(file);
+      setFormData({ ...formData, image: url });
     }
   };
 

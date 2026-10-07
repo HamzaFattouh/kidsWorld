@@ -6,12 +6,32 @@ import { Button } from '../../components/ui/Button';
 import { Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, CheckCircle, XCircle } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { cn } from '../../lib/utils';
-import { useContentStore } from '../../store/contentStore';
 
 export function EventsPage() {
   const { t } = useTranslation();
   
-  const { events, setEvents } = useContentStore();
+  const [events, setEvents] = useState([
+    { 
+      id: 1, 
+      title: 'رحلة حديقة الحيوان', 
+      description: 'رحلة ترفيهية وتعليمية لأطفال الروضة إلى حديقة الحيوان للتعرف على الحيوانات وبيئاتها.', 
+      date: '2026-10-20', 
+      time: '08:00 AM', 
+      location: 'حديقة الحيوان الوطنية', 
+      isPublished: true,
+      image: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=500&auto=format&fit=crop'
+    },
+    { 
+      id: 2, 
+      title: 'حفل نهاية الفصل', 
+      description: 'حفل لتكريم الأطفال وتوزيع الشهادات والهدايا بحضور أولياء الأمور.', 
+      date: '2026-12-15', 
+      time: '10:00 AM', 
+      location: 'مسرح الحضانة', 
+      isPublished: false,
+      image: 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=500&auto=format&fit=crop'
+    },
+  ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -32,11 +52,8 @@ export function EventsPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, image: reader.result });
-      };
-      reader.readAsDataURL(file);
+      const url = URL.createObjectURL(file);
+      setFormData({ ...formData, image: url });
     }
   };
 
@@ -44,16 +61,12 @@ export function EventsPage() {
     e.preventDefault();
     const updatedData = {
       ...formData,
-      titleAr: formData.title,
-      descriptionAr: formData.description,
-      eventDate: formData.date,
-      imageUrl: formData.image || 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=500&auto=format&fit=crop',
       image: formData.image || 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=500&auto=format&fit=crop' // placeholder if empty
     };
     if (editingId) {
-      setEvents(events.map(ev => ev.id === editingId ? { ...updatedData, id: editingId } : ev));
+      setEvents(events.map(e => e.id === editingId ? { ...updatedData, id: editingId } : e));
     } else {
-      setEvents([{ ...updatedData, id: Date.now() }, ...events]);
+      setEvents([...events, { ...updatedData, id: Date.now() }]);
     }
     setIsModalOpen(false);
   };
