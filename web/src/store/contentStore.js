@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 const initialEvents = [
   { 
@@ -40,10 +41,17 @@ const initialGallery = [
   { id: 4, url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=500&auto=format&fit=crop', title: 'ألعاب الذكاء', captionAr: 'ألعاب الذكاء', date: '2026-10-04' }
 ];
 
-export const useContentStore = create((set) => ({
-  events: initialEvents,
-  galleryImages: initialGallery,
-  
-  setEvents: (newEvents) => set({ events: newEvents }),
-  setGalleryImages: (newGallery) => set({ galleryImages: newGallery }),
-}));
+export const useContentStore = create(
+  persist(
+    (set) => ({
+      events: initialEvents,
+      galleryImages: initialGallery,
+      
+      setEvents: (newEvents) => set({ events: newEvents }),
+      setGalleryImages: (newGallery) => set({ galleryImages: newGallery }),
+    }),
+    {
+      name: 'kids-world-content-storage',
+    }
+  )
+);
