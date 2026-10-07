@@ -1,9 +1,8 @@
 import { Check, Plus, Minus, Calendar, Download, Image as ImageIcon, X, Sparkles, Heart } from'lucide-react';
 import { useState, useEffect } from'react';
 import { useTranslation } from'react-i18next';
-import { homepageConfigApi } from'../../api/homepageConfig';
-import { eventApi } from'../../api/event';
-import { galleryImageApi } from'../../api/galleryImage';
+import { homepageConfigApi } from '../../api/homepageConfig';
+import { useContentStore } from '../../store/contentStore';
 
 export function LandingPage() {
   const { i18n } = useTranslation();
@@ -11,14 +10,11 @@ export function LandingPage() {
   const [openProgram, setOpenProgram] = useState(0);
 
   const [configs, setConfigs] = useState({});
-  const [events, setEvents] = useState([]);
-  const [galleryImages, setGalleryImages] = useState([]);
+  const { events, galleryImages } = useContentStore();
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   useEffect(() => {
     fetchConfigs();
-    fetchEvents();
-    fetchGallery();
   }, []);
 
   const fetchConfigs = async () => {
@@ -30,22 +26,6 @@ export function LandingPage() {
         if (item && item.section) configMap[item.section] = item;
       });
       setConfigs(configMap);
-    } catch (e) { console.error(e); }
-  };
-
-  const fetchEvents = async () => {
-    try {
-      const res = await eventApi.getMany();
-      const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
-      setEvents(items.filter(e => e && e.isPublished));
-    } catch (e) { console.error(e); }
-  };
-
-  const fetchGallery = async () => {
-    try {
-      const res = await galleryImageApi.getMany();
-      const items = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
-      setGalleryImages(items);
     } catch (e) { console.error(e); }
   };
 

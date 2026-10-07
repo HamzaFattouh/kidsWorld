@@ -5,18 +5,12 @@ import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Trash2, Image as ImageIcon, UploadCloud } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
+import { useContentStore } from '../../store/contentStore';
 
 export function GalleryPage() {
   const { t } = useTranslation();
   
-  const [images, setImages] = useState([
-    { id: 1, url: 'https://images.unsplash.com/photo-1587691592099-24045742c181?q=80&w=500&auto=format&fit=crop', title: 'أنشطة الرسم' },
-    { id: 2, url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=500&auto=format&fit=crop', title: 'لعب الأطفال' },
-    { id: 3, url: 'https://images.unsplash.com/photo-1544626127-148184d08151?q=80&w=500&auto=format&fit=crop', title: 'تعلم الأرقام' },
-    { id: 4, url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=500&auto=format&fit=crop', title: 'ألعاب الذكاء' },
-    { id: 5, url: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=500&auto=format&fit=crop', title: 'المسرح المدرسي' },
-    { id: 6, url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=500&auto=format&fit=crop', title: 'القراءة الحرة' }
-  ]);
+  const { galleryImages: images, setGalleryImages: setImages } = useContentStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ imageUrl: '', title: '' });
@@ -37,7 +31,7 @@ export function GalleryPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.imageUrl) return;
-    setImages([{ url: formData.imageUrl, title: formData.title, id: Date.now() }, ...images]); // Add new at top
+    setImages([{ url: formData.imageUrl, title: formData.title, captionAr: formData.title, date: new Date().toISOString().split('T')[0], id: Date.now() }, ...images]); // Add new at top
     setIsModalOpen(false);
   };
 
