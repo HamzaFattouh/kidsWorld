@@ -39,6 +39,10 @@ export function DashboardScreen({ navigation }) {
     { id:'Cameras', label:'البث المباشر (الكاميرات)', icon: Camera, color:'#8b5cf6', bg:'#ede9fe', screen:'Cameras' },
     { id:'Complaints', label:'الشكاوى والمقترحات', icon: MessageSquare, color:'#059669', bg:'#d1fae5', screen:'Complaints' },
     { id:'Requests', label:'الطلبات والاستئذان', icon: FileCheck, color:'#10b981', bg:'#f0fdf4', screen:'Requests' },
+    { id:'Events', label:'الفعاليات والأنشطة', icon: CalendarCheck, color:'#3b82f6', bg:'#eff6ff', screen:'Events' },
+    { id:'Posts', label:'المنشورات', icon: FileText, color:'#8b5cf6', bg:'#ede9fe', screen:'Posts' },
+    { id:'Announcements', label:'الإعلانات الهامة', icon: ClipboardList, color:'#ef4444', bg:'#fef2f2', screen:'Announcements' },
+    { id:'Gallery', label:'معرض الصور', icon: Camera, color:'#10b981', bg:'#ecfdf5', screen:'Gallery' },
   ];
 
   return (

@@ -21,7 +21,11 @@ import { CamerasScreen } from '../screens/parent/CamerasScreen';
 import { UsersScreen } from '../screens/admin/UsersScreen';
 import { ClassesScreen } from '../screens/admin/ClassesScreen';
 import { TasksScreen } from '../screens/admin/TasksScreen';
-import { MessagesScreen } from '../screens/parent/MessagesScreen'; // Ensure MessagesScreen is imported
+import { MessagesScreen } from '../screens/parent/MessagesScreen';
+import { EventsScreen } from '../screens/admin/EventsScreen';
+import { PostsScreen } from '../screens/admin/PostsScreen';
+import { AnnouncementsScreen } from '../screens/admin/AnnouncementsScreen';
+import { GalleryScreen } from '../screens/admin/GalleryScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -41,6 +45,10 @@ function DashboardStack() {
       <Stack.Screen name="Complaints" component={ComplaintsScreen} />
       <Stack.Screen name="Requests" component={RequestsScreen} />
       <Stack.Screen name="Cameras" component={CamerasScreen} />
+      <Stack.Screen name="Events" component={EventsScreen} />
+      <Stack.Screen name="Posts" component={PostsScreen} />
+      <Stack.Screen name="Announcements" component={AnnouncementsScreen} />
+      <Stack.Screen name="Gallery" component={GalleryScreen} />
     </Stack.Navigator>
   );
 }

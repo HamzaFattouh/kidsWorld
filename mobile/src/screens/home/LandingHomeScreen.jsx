@@ -113,8 +113,8 @@ export function LandingHomeScreen() {
   const displayJournal = galleryImages.length > 0 ? galleryImages : getFallbackJournal();
   const displayActivities = events.length > 0 ? events.map(e => ({
     ...e,
-    album: [
-      e.imageUrl ||'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=500','https://images.unsplash.com/photo-1544717305-2782549b5136?w=500','https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500'
+    album: e.album && e.album.length > 0 ? e.album : [
+      e.imageUrl ||'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=500'
     ]
   })) : getFallbackActivities();
 
