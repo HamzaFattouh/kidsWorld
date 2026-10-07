@@ -5,7 +5,6 @@ import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Edit2, Trash2, Calendar, User, FileText } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
-import { compressImage } from '../../lib/imageUtils';
 import { useContentStore } from '../../store/contentStore';
 
 export function PostsPage() {
@@ -32,9 +31,11 @@ export function PostsPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      compressImage(file, (compressedBase64) => {
-        setFormData({ ...formData, image: compressedBase64 });
-      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
     }
   };
 

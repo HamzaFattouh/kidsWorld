@@ -7,7 +7,6 @@ import { Edit2, Trash2, Calendar as CalendarIcon, Clock, MapPin, CheckCircle, XC
 import { Input } from '../../components/ui/Input';
 import { cn } from '../../lib/utils';
 import { useContentStore } from '../../store/contentStore';
-import { compressImage } from '../../lib/imageUtils';
 
 export function EventsPage() {
   const { t } = useTranslation();
@@ -33,9 +32,11 @@ export function EventsPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      compressImage(file, (compressedBase64) => {
-        setFormData({ ...formData, image: compressedBase64 });
-      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
     }
   };
 

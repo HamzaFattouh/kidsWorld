@@ -6,7 +6,6 @@ import { Button } from '../../components/ui/Button';
 import { Trash2, Image as ImageIcon, UploadCloud } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { useContentStore } from '../../store/contentStore';
-import { compressImage } from '../../lib/imageUtils';
 
 export function GalleryPage() {
   const { t } = useTranslation();
@@ -24,9 +23,11 @@ export function GalleryPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      compressImage(file, (compressedBase64) => {
-        setFormData({ ...formData, imageUrl: compressedBase64 });
-      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, imageUrl: reader.result });
+      };
+      reader.readAsDataURL(file);
     }
   };
 

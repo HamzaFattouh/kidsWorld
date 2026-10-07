@@ -1,5 +1,18 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { get, set as idbSet, del } from 'idb-keyval';
+
+const idbStorage = {
+  getItem: async (name) => {
+    return (await get(name)) || null;
+  },
+  setItem: async (name, value) => {
+    await idbSet(name, value);
+  },
+  removeItem: async (name) => {
+    await del(name);
+  },
+};
 
 const initialEvents = [
   { 
@@ -80,6 +93,7 @@ export const useContentStore = create(
     }),
     {
       name: 'kids-world-content-storage',
+      storage: createJSONStorage(() => idbStorage),
     }
   )
 );
