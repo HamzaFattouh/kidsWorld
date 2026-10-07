@@ -26,6 +26,10 @@ export function AttendancePage() {
   // Teacher workflow steps:'date_grid' ->'teachers_checklist'
   const [teacherStep, setTeacherStep] = useState('date_grid');
 
+  // Attendance data stores
+  const [studentAttendanceByDay, setStudentAttendanceByDay] = useState({});
+  const [teacherAttendanceByDay, setTeacherAttendanceByDay] = useState({});
+
   const calendarDays = Array.from({ length: 30 }, (_, i) => i + 1);
 
   // All classes
