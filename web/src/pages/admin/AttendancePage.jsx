@@ -28,7 +28,23 @@ export function AttendancePage() {
   const [teacherStep, setTeacherStep] = useState('date_grid');
 
   // Attendance data stores
-  const [studentAttendanceByDay, setStudentAttendanceByDay] = useState({});
+  const initialStudentData = {
+    15: {
+      'class-birds-3-4': [
+        { id: 's1', name: 'يوسف أحمد', parent: 'أحمد محمود', present: true },
+        { id: 's2', name: 'ليلى العلي', parent: 'محمد العلي', present: false },
+        { id: 's3', name: 'عمر الخالد', parent: 'سالم الخالد', present: true },
+      ],
+      'class-flowers-4-5': [
+        { id: 's4', name: 'نورة السالم', parent: 'فهد السالم', present: true },
+      ],
+      'class-hope-2-3': [
+        { id: 's5', name: 'ماجد العبدالله', parent: 'عبدالله السعد', present: false },
+      ]
+    }
+  };
+
+  const [studentAttendanceByDay, setStudentAttendanceByDay] = useState(initialStudentData);
   const [teacherAttendanceByDay, setTeacherAttendanceByDay] = useState({});
 
   const [searchParams] = useSearchParams();
