@@ -15,7 +15,7 @@ export function NotificationDropdown() {
       message: 'قامت المعلمة سارة بتسجيل حضور الصف الأول: 15 حاضر، 2 غائب',
       time: 'منذ 5 دقائق',
       isRead: false,
-      link: '/admin/attendance'
+      link: '/admin/attendance?date=15&classId=class-birds-3-4'
     },
     {
       id: 2,

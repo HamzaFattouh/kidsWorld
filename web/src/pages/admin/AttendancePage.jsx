@@ -1,5 +1,6 @@
 import { useState, useEffect } from'react';
 import { useTranslation } from'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { Calendar, Users, ShieldCheck, CheckCircle2, Clock, ArrowRight } from'lucide-react';
 import { PageHeader } from'../../components/ui/PageHeader';
 import { useAuthStore } from'../../store/authStore';
@@ -30,6 +31,8 @@ export function AttendancePage() {
   const [studentAttendanceByDay, setStudentAttendanceByDay] = useState({});
   const [teacherAttendanceByDay, setTeacherAttendanceByDay] = useState({});
 
+  const [searchParams] = useSearchParams();
+
   const calendarDays = Array.from({ length: 30 }, (_, i) => i + 1);
 
   // All classes
@@ -38,6 +41,20 @@ export function AttendancePage() {
     { id:'class-flowers-4-5', name:'روضة الزهور', teacherName:'أ. سارة الخالد' },
     { id:'class-hope-2-3', name:'روضة الأمل', teacherName:'أ. منى التميمي' },
   ];
+
+  useEffect(() => {
+    const dateParam = searchParams.get('date');
+    const classIdParam = searchParams.get('classId');
+    if (dateParam && classIdParam) {
+      setSelectedDay(parseInt(dateParam));
+      const cls = allClasses.find(c => c.id === classIdParam);
+      if (cls) {
+        setSelectedClass(cls);
+        setStudentStep('students_checklist');
+        setCalendarMode('students');
+      }
+    }
+  }, [searchParams]);
 
   // If user is a teacher, restrict visible classes ONLY to their assigned class!
   const teacherClass = allClasses[0]; // Assigned class for teacher
