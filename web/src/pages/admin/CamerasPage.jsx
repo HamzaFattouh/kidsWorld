@@ -359,21 +359,30 @@ export function CamerasPage() {
         <div className="space-y-4">
           {(() => {
             const currentFocusCam = cameras.find((c) => c.id === (focusedCamId || cameras[0]?.id)) || cameras[0];
+            const isDirectHttp = Boolean(currentFocusCam?.streamUrl && /^https?:\/\//i.test(currentFocusCam.streamUrl.trim()));
+            const isHls = Boolean(isDirectHttp && (currentFocusCam.streamUrl.includes('.m3u8') || currentFocusCam.streamUrl.includes('m3u8')));
+            const isMp4 = Boolean(isDirectHttp && /\.(?:mp4|webm|mkv|ogg)(?:[?#].*)?$/i.test(currentFocusCam.streamUrl));
+
             const accessData = {
-              cameraId: currentFocusCam.id,
-              cameraName: currentFocusCam.name,
-              className: currentFocusCam.className,
-              streamKey: currentFocusCam.streamUrl?.toLowerCase() || 'cam1',
+              cameraId: currentFocusCam?.id,
+              cameraName: currentFocusCam?.name,
+              className: currentFocusCam?.className,
+              streamUrl: currentFocusCam?.streamUrl,
+              directStreamUrl: isDirectHttp ? currentFocusCam.streamUrl.trim() : null,
+              isDirectHttp,
+              isHls,
+              isMp4,
+              streamKey: isDirectHttp ? null : (currentFocusCam?.streamUrl?.toLowerCase() || 'cam1'),
               token: 'admin-preview-token',
-              webrtcOfferUrl: `https://stream.yourdomain.com/api/webrtc?src=${currentFocusCam.streamUrl?.toLowerCase() || 'cam1'}`
+              webrtcOfferUrl: isDirectHttp ? null : `https://stream.yourdomain.com/api/webrtc?src=${currentFocusCam?.streamUrl?.toLowerCase() || 'cam1'}`
             };
 
             return (
               <div className="space-y-4">
                 <WebRTCPlayer
                   accessData={accessData}
-                  cameraName={currentFocusCam.name}
-                  className={currentFocusCam.className}
+                  cameraName={currentFocusCam?.name}
+                  className={currentFocusCam?.className}
                   isLoadingAccess={false}
                   error={null}
                 />
@@ -385,7 +394,7 @@ export function CamerasPage() {
                       key={c.id}
                       onClick={() => setFocusedCamId(c.id)}
                       className={`shrink-0 px-4 py-2.5 rounded-xl border text-right transition ${
-                        c.id === currentFocusCam.id
+                        c.id === currentFocusCam?.id
                           ? 'border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-bold'
                           : 'border-gray-200 dark:border-gray-800 bg-surface dark:bg-surface-dark text-gray-700 dark:text-gray-300'
                       }`}
@@ -416,13 +425,22 @@ export function CamerasPage() {
             const endTime = cam.schedule?.endTime || '14:30';
             const is24h = cam.schedule?.is24h || false;
 
+            const isDirectHttp = Boolean(cam.streamUrl && /^https?:\/\//i.test(cam.streamUrl.trim()));
+            const isHls = Boolean(isDirectHttp && (cam.streamUrl.includes('.m3u8') || cam.streamUrl.includes('m3u8')));
+            const isMp4 = Boolean(isDirectHttp && /\.(?:mp4|webm|mkv|ogg)(?:[?#].*)?$/i.test(cam.streamUrl));
+
             const accessData = {
               cameraId: cam.id,
               cameraName: cam.name,
               className: cam.className,
-              streamKey: cam.streamUrl?.toLowerCase() || 'cam1',
+              streamUrl: cam.streamUrl,
+              directStreamUrl: isDirectHttp ? cam.streamUrl.trim() : null,
+              isDirectHttp,
+              isHls,
+              isMp4,
+              streamKey: isDirectHttp ? null : (cam.streamUrl?.toLowerCase() || 'cam1'),
               token: 'admin-preview-token',
-              webrtcOfferUrl: `https://stream.yourdomain.com/api/webrtc?src=${cam.streamUrl?.toLowerCase() || 'cam1'}`
+              webrtcOfferUrl: isDirectHttp ? null : `https://stream.yourdomain.com/api/webrtc?src=${cam.streamUrl?.toLowerCase() || 'cam1'}`
             };
 
             return (

@@ -136,14 +136,19 @@ export function ParentCamerasPage() {
     }
   }, [selectedCam?.id, requestAccess]);
 
+  const isDirectHttp = Boolean(selectedCam?.streamUrl && /^https?:\/\//i.test(selectedCam.streamUrl.trim()));
   const accessData = accessResponse?.data || {
-    cameraId: selectedCam.id,
-    cameraName: selectedCam.name,
-    className: selectedCam.className,
-    streamKey: selectedCam.streamKey || 'cam1',
+    cameraId: selectedCam?.id,
+    cameraName: selectedCam?.name,
+    className: selectedCam?.className,
+    streamUrl: selectedCam?.streamUrl,
+    directStreamUrl: isDirectHttp ? selectedCam.streamUrl.trim() : null,
+    isDirectHttp,
+    isHls: Boolean(isDirectHttp && (selectedCam.streamUrl.includes('.m3u8') || selectedCam.streamUrl.includes('m3u8'))),
+    streamKey: isDirectHttp ? null : (selectedCam?.streamKey || 'cam1'),
     token: 'demo-token',
-    webrtcOfferUrl: `https://stream.yourdomain.com/api/webrtc?src=${selectedCam.streamKey || 'cam1'}`,
-    webrtcWsUrl: `wss://stream.yourdomain.com/api/ws?src=${selectedCam.streamKey || 'cam1'}`
+    webrtcOfferUrl: isDirectHttp ? null : `https://stream.yourdomain.com/api/webrtc?src=${selectedCam?.streamKey || 'cam1'}`,
+    webrtcWsUrl: isDirectHttp ? null : `wss://stream.yourdomain.com/api/ws?src=${selectedCam?.streamKey || 'cam1'}`
   };
 
   const errorMessage = accessError?.response?.data?.error || accessError?.message || null;

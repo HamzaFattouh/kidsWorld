@@ -437,20 +437,29 @@ class CameraService {
       streamKey = 'cam' + camera.id.match(/cam-(?:sleep|play)-?([1-7])/)[1];
     }
 
+    const isDirectHttp = camera.streamUrl && /^https?:\/\//i.test(camera.streamUrl.trim());
+    const directStreamUrl = isDirectHttp ? camera.streamUrl.trim() : null;
+    const isHls = Boolean(directStreamUrl && (directStreamUrl.includes('.m3u8') || directStreamUrl.includes('m3u8')));
+    const isMp4 = Boolean(directStreamUrl && /\.(?:mp4|webm|mkv|ogg)(?:[?#].*)?$/i.test(directStreamUrl));
+
     const wsUrl = mediaServerUrl.replace(/^http:/, 'ws:').replace(/^https:/, 'wss:');
 
     return {
       cameraId: camera.id,
       cameraName: camera.name,
       className: camera.class?.name || 'قاعة الأطفال',
-      streamKey,
+      streamKey: isDirectHttp ? null : streamKey,
+      directStreamUrl,
+      isDirectHttp,
+      isHls,
+      isMp4,
       token: streamToken,
       mediaServerUrl,
-      webrtcOfferUrl: `${mediaServerUrl}/api/webrtc?src=${streamKey}&token=${streamToken}`,
-      webrtcWsUrl: `${wsUrl}/api/ws?src=${streamKey}&token=${streamToken}`,
-      hlsUrl: `${mediaServerUrl}/api/stream.m3u8?src=${streamKey}&token=${streamToken}`,
-      webrtcUrl: `${mediaServerUrl}/${camera.name}/webrtc?token=${streamToken}`,
-      streamUrl: `${mediaServerUrl}/${camera.name}/stream.m3u8?token=${streamToken}`,
+      webrtcOfferUrl: isDirectHttp ? null : `${mediaServerUrl}/api/webrtc?src=${streamKey}&token=${streamToken}`,
+      webrtcWsUrl: isDirectHttp ? null : `${wsUrl}/api/ws?src=${streamKey}&token=${streamToken}`,
+      hlsUrl: isDirectHttp ? directStreamUrl : `${mediaServerUrl}/api/stream.m3u8?src=${streamKey}&token=${streamToken}`,
+      webrtcUrl: isDirectHttp ? directStreamUrl : `${mediaServerUrl}/${camera.name}/webrtc?token=${streamToken}`,
+      streamUrl: isDirectHttp ? directStreamUrl : `${mediaServerUrl}/${camera.name}/stream.m3u8?token=${streamToken}`,
       expiresIn: 300
     };
   }

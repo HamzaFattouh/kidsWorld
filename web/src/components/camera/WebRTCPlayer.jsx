@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import Hls from 'hls.js';
 import {
   Camera,
   Play,
@@ -17,7 +18,8 @@ import {
 
 /**
  * WebRTCPlayer
- * Connects directly to go2rtc WebRTC endpoint for ultra-low latency (<1s).
+ * Connects directly to go2rtc WebRTC endpoint for ultra-low latency (<1s),
+ * and automatically falls back to HLS (.m3u8 via hls.js) or direct video feeds.
  * Adheres strictly to KidsWorld Design Guidelines:
  * - Icons, not Emojis (Lucide React only)
  * - Flat styling, NO shadows (no box-shadow / drop-shadow)
@@ -34,8 +36,10 @@ export function WebRTCPlayer({
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const pcRef = useRef(null);
+  const hlsRef = useRef(null);
 
   const [connectionStatus, setConnectionStatus] = useState('idle'); // 'idle' | 'connecting' | 'connected' | 'failed' | 'fallback'
+  const [streamMode, setStreamMode] = useState('webrtc'); // 'webrtc' | 'hls' | 'direct'
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -59,11 +63,16 @@ export function WebRTCPlayer({
     return () => clearInterval(interval);
   }, []);
 
-  // WebRTC Connection Logic to go2rtc
-  const connectWebRTC = useCallback(async () => {
-    if (!accessData) return;
-
-    // Reset previous connection
+  // Cleanup helper
+  const cleanupStreams = useCallback(() => {
+    if (hlsRef.current) {
+      try {
+        hlsRef.current.destroy();
+      } catch (e) {
+        // ignore
+      }
+      hlsRef.current = null;
+    }
     if (pcRef.current) {
       try {
         pcRef.current.close();
@@ -72,14 +81,115 @@ export function WebRTCPlayer({
       }
       pcRef.current = null;
     }
-
     if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.src = '';
       videoRef.current.srcObject = null;
     }
+  }, []);
 
+  // Unified Connection Logic: HLS (.m3u8), Direct MP4/Video, or WebRTC
+  const connectStream = useCallback(async () => {
+    if (!accessData) return;
+
+    cleanupStreams();
     setConnectionStatus('connecting');
     setErrorMessage('');
 
+    const directUrl =
+      accessData.directStreamUrl ||
+      (typeof accessData.streamUrl === 'string' && accessData.streamUrl.startsWith('http')
+        ? accessData.streamUrl
+        : null);
+
+    const isHls = Boolean(
+      accessData.isHls ||
+      (directUrl && (directUrl.includes('.m3u8') || directUrl.includes('m3u8')))
+    );
+
+    const isDirectVideo = Boolean(
+      accessData.isMp4 ||
+      (directUrl && /\.(?:mp4|webm|mkv|ogg)(?:[?#].*)?$/i.test(directUrl))
+    );
+
+    // Case 1: HLS Stream (.m3u8 via hls.js)
+    if (directUrl && isHls) {
+      setStreamMode('hls');
+      if (Hls.isSupported()) {
+        const hls = new Hls({
+          enableWorker: true,
+          lowLatencyMode: false,
+          backBufferLength: 90
+        });
+        hlsRef.current = hls;
+        hls.loadSource(directUrl);
+        hls.attachMedia(videoRef.current);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          setConnectionStatus('connected');
+          if (videoRef.current) {
+            videoRef.current.play().catch(() => {
+              // Browser auto-play policy may require user interaction
+            });
+          }
+        });
+
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.warn('HLS Event Error:', data);
+          if (data.fatal) {
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                hls.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                hls.recoverMediaError();
+                break;
+              default:
+                hls.destroy();
+                setConnectionStatus('failed');
+                setErrorMessage('تعذر تشغيل بث HLS');
+                break;
+            }
+          }
+        });
+      } else if (videoRef.current && videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+        // Native Safari HLS
+        videoRef.current.src = directUrl;
+        videoRef.current.addEventListener('loadedmetadata', () => {
+          setConnectionStatus('connected');
+          videoRef.current?.play().catch(() => {});
+        });
+        videoRef.current.addEventListener('error', () => {
+          setConnectionStatus('failed');
+          setErrorMessage('تعذر تشغيل البث على متصفحك');
+        });
+      } else {
+        setConnectionStatus('failed');
+        setErrorMessage('المتصفح الحالي لا يدعم تشغيل HLS');
+      }
+      return;
+    }
+
+    // Case 2: Direct MP4 / WebM / HTML5 Video
+    if (directUrl && isDirectVideo) {
+      setStreamMode('direct');
+      if (videoRef.current) {
+        videoRef.current.src = directUrl;
+        videoRef.current.load();
+        videoRef.current.onloadeddata = () => {
+          setConnectionStatus('connected');
+          videoRef.current?.play().catch(() => {});
+        };
+        videoRef.current.onerror = () => {
+          setConnectionStatus('failed');
+          setErrorMessage('تعذر تشغيل ملف الفيديو المباشر');
+        };
+      }
+      return;
+    }
+
+    // Case 3: Native WebRTC via go2rtc SDP Exchange
+    setStreamMode('webrtc');
     try {
       const pc = new RTCPeerConnection({
         iceServers: [
@@ -152,29 +262,20 @@ export function WebRTCPlayer({
         })
       );
     } catch (err) {
-      console.warn('WebRTC direct connection notice:', err.message);
-      // If direct VPS WebRTC is unreachable (e.g. during local offline dev or DNS setup),
-      // we gracefully flag as fallback to allow testing
+      console.warn('Stream connection notice:', err.message);
       setConnectionStatus('fallback');
       setErrorMessage(err.message || 'تعذر الاتصال بسيرفر البث المباشر');
     }
-  }, [accessData]);
+  }, [accessData, cleanupStreams]);
 
   useEffect(() => {
     if (accessData && !isLoadingAccess && !error) {
-      connectWebRTC();
+      connectStream();
     }
     return () => {
-      if (pcRef.current) {
-        try {
-          pcRef.current.close();
-        } catch (e) {
-          // ignore
-        }
-        pcRef.current = null;
-      }
+      cleanupStreams();
     };
-  }, [accessData, isLoadingAccess, error, connectWebRTC]);
+  }, [accessData, isLoadingAccess, error, connectStream, cleanupStreams]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -204,7 +305,13 @@ export function WebRTCPlayer({
         <div className="flex items-center space-x-2 space-x-reverse">
           <div className="flex items-center px-2.5 py-1 rounded-md bg-red-600/90 text-white text-xs font-bold tracking-wide">
             <Radio className="w-3.5 h-3.5 ml-1.5 animate-pulse" />
-            <span>بث حي WebRTC</span>
+            <span>
+              {streamMode === 'hls'
+                ? 'بث مباشر HLS'
+                : streamMode === 'direct'
+                ? 'فيديو تجريبي مباشر'
+                : 'بث حي WebRTC'}
+            </span>
           </div>
           <div className="hidden sm:flex items-center px-2.5 py-1 rounded-md bg-gray-800/80 text-gray-200 text-xs font-medium border border-gray-700/60">
             <ShieldCheck className="w-3.5 h-3.5 ml-1.5 text-emerald-400" />
@@ -233,8 +340,12 @@ export function WebRTCPlayer({
       {(isLoadingAccess || connectionStatus === 'connecting') && (
         <div className="flex flex-col items-center justify-center p-8 text-center z-10">
           <div className="w-12 h-12 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin mb-4" />
-          <p className="text-sm font-semibold text-white mb-1">جاري بدء البث فائق السرعة...</p>
-          <p className="text-xs text-gray-400">التحقق من التوكين وتأسيس اتصال WebRTC آمن</p>
+          <p className="text-sm font-semibold text-white mb-1">
+            {streamMode === 'hls' ? 'جاري تحميل بث HLS...' : 'جاري بدء البث المباشر...'}
+          </p>
+          <p className="text-xs text-gray-400">
+            {streamMode === 'hls' ? 'تجهيز مشغل الوسائط وفحص الحزم' : 'التحقق من التوكين وتأسيس اتصال مشفر'}
+          </p>
         </div>
       )}
 
