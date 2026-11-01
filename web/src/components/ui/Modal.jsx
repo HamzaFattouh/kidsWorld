@@ -26,7 +26,10 @@ export function Modal({ isOpen, onClose, title, children, className, showFooter 
       
       
       {/* Modal Content */}
-      <div className={cn("relative z-50 w-full max-w-lg rounded-xl bg-surface dark:bg-surface-dark","border border-gray-200 dark:border-gray-800","flex flex-col mx-4 sm:mx-0 max-h-[90vh]",
+      <div
+        role="dialog"
+        aria-modal="true"
+        className={cn("relative z-50 w-full max-w-lg rounded-xl bg-surface dark:bg-surface-dark","border border-gray-200 dark:border-gray-800","flex flex-col mx-4 sm:mx-0 max-h-[90vh]",
         className
       )}>
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">

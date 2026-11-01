@@ -24,8 +24,21 @@ class CameraService {
     if (role === 'PARENT') {
       const children = await _prisma.prisma.child.findMany({ where: { parentId: userId } });
       const classIds = children.map((c) => c.classId);
+
+      // Also include shared / common facilities (e.g. playroom, activities, playground)
+      const sharedClasses = await _prisma.prisma.class.findMany({
+        where: {
+          OR: [
+            { id: { in: ['class-playroom-1', 'class-playroom-2', 'class-playroom-3', 'class-activity', 'class-dining', 'class-playground', 'class-reception'] } },
+            { ageGroup: { in: ['مشترك', 'عام', 'غرفة الألعاب'] } }
+          ]
+        }
+      });
+      const sharedClassIds = sharedClasses.map((c) => c.id);
+      const allClassIds = Array.from(new Set([...classIds, ...sharedClassIds]));
+
       return _prisma.prisma.camera.findMany({
-        where: { classId: { in: classIds }, isActive: true },
+        where: { classId: { in: allClassIds }, isActive: true },
         include: { schedules: true, class: true }
       });
     }
@@ -109,11 +122,33 @@ class CameraService {
       ipAddress
     });
 
-    // We return the physical Media Server URL combined with the token
-    const mediaServerUrl = process.env.MEDIA_SERVER_URL || 'http://localhost:8888';
+    // 7. Resolve go2rtc stream key (cam1..cam7)
+    const mediaServerUrl = process.env.MEDIA_SERVER_URL || 'https://stream.yourdomain.com';
+    let streamKey = 'cam1';
+    if (camera.streamUrl && /^cam[1-7]$/i.test(camera.streamUrl.trim())) {
+      streamKey = camera.streamUrl.trim().toLowerCase();
+    } else if (camera.name && camera.name.toLowerCase().match(/cam[1-7]/)) {
+      streamKey = camera.name.toLowerCase().match(/cam[1-7]/)[0];
+    } else if (camera.id && camera.id.match(/cam-([1-7])/)) {
+      streamKey = 'cam' + camera.id.match(/cam-([1-7])/)[1];
+    }
+
+    const wsUrl = mediaServerUrl.replace(/^http:/, 'ws:').replace(/^https:/, 'wss:');
+
     return {
-      streamUrl: `${mediaServerUrl}/${camera.name}/stream.m3u8?token=${streamToken}`,
+      cameraId: camera.id,
+      cameraName: camera.name,
+      className: camera.class?.name || 'قاعة عامة',
+      streamKey,
+      token: streamToken,
+      mediaServerUrl,
+      // go2rtc WebRTC endpoints
+      webrtcOfferUrl: `${mediaServerUrl}/api/webrtc?src=${streamKey}&token=${streamToken}`,
+      webrtcWsUrl: `${wsUrl}/api/ws?src=${streamKey}&token=${streamToken}`,
+      hlsUrl: `${mediaServerUrl}/api/stream.m3u8?src=${streamKey}&token=${streamToken}`,
+      // Backward compatibility for existing tests
       webrtcUrl: `${mediaServerUrl}/${camera.name}/webrtc?token=${streamToken}`,
+      streamUrl: `${mediaServerUrl}/${camera.name}/stream.m3u8?token=${streamToken}`,
       expiresIn: 300
     };
   }

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  go2rtc:
+    image: alexxit/go2rtc:latest
+    container_name: kidsworld_go2rtc
+    restart: always
+    network_mode: host
+    volumes:
+      - ./go2rtc.yaml:/config/go2rtc.yaml:ro
+    environment:
+      - TZ=Asia/Jerusalem
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

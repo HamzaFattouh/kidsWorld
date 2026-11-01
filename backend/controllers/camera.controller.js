@@ -10,13 +10,44 @@ class CameraController {
 
       const cameras = await _camera.cameraService.getAccessibleCameras(user.id, user.role);
 
-      // Filter out internal stream urls and exact schedules to prevent scraping
-      const safeCameras = cameras.map((c) => ({
-        id: c.id,
-        name: c.name,
-        className: c.class.name,
-        isActive: c.isActive
-      }));
+      const now = new Date();
+      const currentDay = now.getDay();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      // Return safe camera metadata with active schedule status
+      const safeCameras = cameras.map((c) => {
+        const activeSchedule = (c.schedules || []).find((s) => {
+          if (!s.isActive || s.dayOfWeek !== currentDay) return false;
+          const startParts = (s.startTime || '00:00').split(':').map(Number);
+          const endParts = (s.endTime || '23:59').split(':').map(Number);
+          const startMin = startParts[0] * 60 + (startParts[1] || 0);
+          const endMin = endParts[0] * 60 + (endParts[1] || 0);
+          return currentMinutes >= startMin && currentMinutes <= endMin;
+        });
+
+        let streamKey = 'cam1';
+        if (c.streamUrl && /^cam[1-7]$/i.test(c.streamUrl.trim())) {
+          streamKey = c.streamUrl.trim().toLowerCase();
+        } else if (c.id && c.id.match(/cam-([1-7])/)) {
+          streamKey = 'cam' + c.id.match(/cam-([1-7])/)[1];
+        }
+
+        return {
+          id: c.id,
+          name: c.name,
+          className: c.class ? c.class.name : 'قاعة عامة',
+          classId: c.classId,
+          isActive: c.isActive,
+          streamKey,
+          isWithinSchedule: user.role === 'ADMIN' ? true : Boolean(activeSchedule),
+          schedules: (c.schedules || []).map((s) => ({
+            dayOfWeek: s.dayOfWeek,
+            startTime: s.startTime,
+            endTime: s.endTime,
+            isActive: s.isActive
+          }))
+        };
+      });
 
       return res.json({ data: safeCameras });
     } catch (error) {

@@ -22,7 +22,7 @@ export function AnnouncementsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
-  const [formData, setFormData] = useState({ titleEn: '', titleAr: '', contentEn: '', contentAr: '', priority: 'NORMAL' });
+  const [formData, setFormData] = useState({ titleEn: '', titleAr: '', contentEn: '', contentAr: '', priority: 'NORMAL', date: '' });
 
   const createMutation = useMutation({
     mutationFn: announcementApi.createOne,
@@ -47,11 +47,12 @@ export function AnnouncementsPage() {
         titleAr: announcement.titleAr || '',
         contentEn: announcement.contentEn || '',
         contentAr: announcement.contentAr || '',
-        priority: announcement.priority || 'NORMAL'
+        priority: announcement.priority || 'NORMAL',
+        date: announcement.date || ''
       });
     } else {
       setEditingId(null);
-      setFormData({ titleEn: '', titleAr: '', contentEn: '', contentAr: '', priority: 'NORMAL' });
+      setFormData({ titleEn: '', titleAr: '', contentEn: '', contentAr: '', priority: 'NORMAL', date: '' });
     }
     setIsModalOpen(true);
   };
@@ -153,8 +154,8 @@ export function AnnouncementsPage() {
                 value={formData.priority}
                 onChange={(e) => setFormData({...formData, priority: e.target.value})}
               >
-                <option value="Normal">عادي</option>
-                <option value="High">هام جداً</option>
+                <option value="NORMAL">عادي</option>
+                <option value="HIGH">هام جداً</option>
               </select>
             </div>
             

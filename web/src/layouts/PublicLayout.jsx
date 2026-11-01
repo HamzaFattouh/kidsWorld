@@ -184,7 +184,7 @@ export function PublicLayout() {
               )}
             </ul>
           </div>
-          <div>
+          <div id="contact">
             <h4 className="font-display font-bold text-xl mb-6">معلومات الاتصال</h4>
             <ul className="space-y-3 text-gray-400">
               <li className="text-start font-medium"> نابلس- نابلس الجديدة</li>

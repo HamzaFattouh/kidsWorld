@@ -1,0 +1,60 @@
+# go2rtc Configuration for KidsWorld Nursery
+# Live WebRTC & RTSP Streaming Server (7 Cameras)
+# Distribution:
+# - 4 Nap / Sleeping Rooms (Age 1, Age 2, Age 3, Age 4)
+# - 3 Cameras in the Playroom (Different angles: Motor skills, Creative zone, Central area)
+
+log:
+  level: info
+  api: info
+  rtsp: info
+  webrtc: info
+
+api:
+  # Internal API port for WebRTC signaling and stream statistics
+  # Listening on 127.0.0.1 so it's proxied securely via Nginx with HTTPS/WSS
+  listen: "127.0.0.1:1984"
+  base_path: ""
+  origin: "*"
+
+rtsp:
+  # RTSP server port if re-streaming RTSP locally
+  listen: ":8554"
+
+webrtc:
+  # Port for WebRTC media (UDP/TCP)
+  listen: ":8555"
+  candidates:
+    - stream.yourdomain.com:8555
+    - stun:stun.l.google.com:19302
+    - stun:stun1.l.google.com:19302
+
+# 7 Nursery Cameras (Substream H.264 / PCMU audio for minimal latency & bandwidth)
+streams:
+  # 1. غرفة نوم الأطفال (عمر سنة)
+  cam1:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/102#backchannel=0"
+    
+  # 2. غرفة نوم الأطفال (عمر سنتين)
+  cam2:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/202#backchannel=0"
+
+  # 3. غرفة نوم الأطفال (عمر 3 سنوات)
+  cam3:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/302#backchannel=0"
+
+  # 4. غرفة نوم الأطفال (عمر 4 سنوات)
+  cam4:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/402#backchannel=0"
+
+  # 5. غرفة الألعاب (الزاوية 1 - الأنشطة الحركية)
+  cam5:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/502#backchannel=0"
+
+  # 6. غرفة الألعاب (الزاوية 2 - الألعاب الإدراكية والهادئة)
+  cam6:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/602#backchannel=0"
+
+  # 7. غرفة الألعاب (الزاوية 3 - الساحة المركزية)
+  cam7:
+    - "rtsp://admin:NurseryPass2026@YOUR_DDNS_HOST:554/Streaming/Channels/702#backchannel=0"

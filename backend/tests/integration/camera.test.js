@@ -1,4 +1,4 @@
-"use strict";var _camera = require("../../backend/services/camera.service");
+"use strict";var _camera = require("../../services/camera.service");
 var _client = require("@prisma/client");
 
 
