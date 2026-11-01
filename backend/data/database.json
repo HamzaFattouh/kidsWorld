@@ -260,5 +260,127 @@
       "childId": "child-omar-shakaa",
       "createdAt": "2026-09-15T11:06:06.593Z"
     }
-  ]
+  ],
+  "cameras": [
+    {
+      "id": "cam-sleep-1",
+      "name": "غرفة نوم الأطفال (عمر سنة)",
+      "streamUrl": "cam1",
+      "classId": "class-sleep-1",
+      "isActive": true,
+      "class": {
+        "id": "class-sleep-1",
+        "name": "قسم الرضّع (سنة واحدة)"
+      },
+      "schedule": {
+        "startTime": "11:30",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    },
+    {
+      "id": "cam-sleep-2",
+      "name": "غرفة نوم الأطفال (عمر سنتين)",
+      "streamUrl": "cam2",
+      "classId": "class-sleep-2",
+      "isActive": true,
+      "class": {
+        "id": "class-sleep-2",
+        "name": "قسم الصغار (سنتين)"
+      },
+      "schedule": {
+        "startTime": "12:00",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    },
+    {
+      "id": "cam-sleep-3",
+      "name": "غرفة نوم الأطفال (عمر 3 سنوات)",
+      "streamUrl": "cam3",
+      "classId": "class-sleep-3",
+      "isActive": true,
+      "class": {
+        "id": "class-sleep-3",
+        "name": "قسم البراعم (3 سنوات)"
+      },
+      "schedule": {
+        "startTime": "12:30",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    },
+    {
+      "id": "cam-sleep-4",
+      "name": "غرفة نوم الأطفال (عمر 4 سنوات)",
+      "streamUrl": "cam4",
+      "classId": "class-sleep-4",
+      "isActive": true,
+      "class": {
+        "id": "class-sleep-4",
+        "name": "قسم الروضة (4 سنوات)"
+      },
+      "schedule": {
+        "startTime": "13:00",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    },
+    {
+      "id": "cam-play-1",
+      "name": "غرفة الألعاب (الأنشطة الحركية والتسلق)",
+      "streamUrl": "cam5",
+      "classId": "class-playroom-1",
+      "isActive": true,
+      "class": {
+        "id": "class-playroom-1",
+        "name": "غرفة الألعاب (الأنشطة الحركية)"
+      },
+      "schedule": {
+        "startTime": "07:30",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    },
+    {
+      "id": "cam-play-2",
+      "name": "غرفة الألعاب (الألعاب الهادئة والرسم)",
+      "streamUrl": "cam6",
+      "classId": "class-playroom-2",
+      "isActive": true,
+      "class": {
+        "id": "class-playroom-2",
+        "name": "غرفة الألعاب (الرسم والمكعبات)"
+      },
+      "schedule": {
+        "startTime": "07:30",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    },
+    {
+      "id": "cam-play-3",
+      "name": "غرفة الألعاب (الساحة المركزية)",
+      "streamUrl": "cam7",
+      "classId": "class-playroom-3",
+      "isActive": true,
+      "class": {
+        "id": "class-playroom-3",
+        "name": "غرفة الألعاب (الساحة المركزية)"
+      },
+      "schedule": {
+        "startTime": "07:30",
+        "endTime": "14:30",
+        "is24h": false,
+        "forceLocked": false
+      }
+    }
+  ],
+  "cameraPermissions": []
 }
