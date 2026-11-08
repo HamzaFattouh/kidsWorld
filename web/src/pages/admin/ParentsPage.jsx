@@ -199,10 +199,10 @@ export function ParentsPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs text-gray-600 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-700">
-                  <div> البريد: {selectedParent.email}</div>
-                  <div> الهاتف: {selectedParent.phone ||'—'}</div>
-                  <div>🆔 الهوية: {selectedParent.nationalId ||'—'}</div>
-                  <div> العنوان: {selectedParent.address ||'نابلس - نابلس الجديدة'}</div>
+                  <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-gray-400 shrink-0" /> البريد: {selectedParent.email}</div>
+                  <div className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" /> الهاتف: {selectedParent.phone || '—'}</div>
+                  <div className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-gray-400 shrink-0" /> الهوية: {selectedParent.nationalId || '—'}</div>
+                  <div className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" /> العنوان: {selectedParent.address || 'نابلس - نابلس الجديدة'}</div>
                 </div>
               </div>
 

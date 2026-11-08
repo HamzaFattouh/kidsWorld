@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "env": {
+        "CONTEXT7_API_KEY": ""
+      }
+    },
+    "magic-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@21st-dev/magic@latest"
+      ],
+      "env": {
+        "API_KEY": ""
+      }
+    },
+    "magic-remote": {
+      "url": "https://21st.dev/api/mcp"
+    },
+    "graphify": {
+      "command": "uvx",
+      "args": [
+        "graphifyy",
+        "serve",
+        "graphify-out/graph.json"
+      ]
+    }
+  }
+}
+

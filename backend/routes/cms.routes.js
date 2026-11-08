@@ -1,9 +1,18 @@
-"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.cmsRoutes = void 0;var _express = require("express");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cmsRoutes = void 0;
+
+var _express = require("express");
 var _cms = require("../controllers/cms.controller");
+var _sessionValidator = require("../api/middlewares/sessionValidator");
+var _authorize = require("../api/middlewares/authorize");
 
 const router = exports.cmsRoutes = (0, _express.Router)();
 
-// Endpoint for uploading CMS images
-// We should ideally protect this with an auth middleware that checks for ADMIN role.
-// For now, it will be publicly accessible in development, or we can add basic protection if available.
-router.post('/upload-image', _cms.uploadImage);
+// Protected endpoint for uploading CMS images (Admin role required)
+router.post(
+  '/upload-image',
+  _sessionValidator.requireAuth,
+  (0, _authorize.requirePermission)('MANAGE_USERS'),
+  _cms.uploadImage
+);

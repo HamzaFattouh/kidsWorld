@@ -86,12 +86,12 @@ export function WeeklyNotesScreen() {
     <ScreenWrapper>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>الملاحظات الأسبوعية </Text>
+          <Text style={styles.title}>الملاحظات الأسبوعية</Text>
           <Text style={styles.subTitle}>كتابة ومراجعة التقارير الأسبوعية للطلاب</Text>
         </View>
 
         {/* Class Selector Bar */}
-        <Text style={styles.sectionHeader}>اختر الصف لمتابعة الطلاب </Text>
+        <Text style={styles.sectionHeader}>اختر الصف لمتابعة الطلاب</Text>
         <View style={styles.classChipsRow}>
           {classesList.map((cls) => {
             const isSelected = cls.id === selectedClass;
@@ -110,7 +110,7 @@ export function WeeklyNotesScreen() {
         </View>
 
         {/* Students Completion List */}
-        <Text style={styles.sectionHeader}>كشف اكتمال التقارير </Text>
+        <Text style={styles.sectionHeader}>كشف اكتمال التقارير</Text>
         {currentList.map((std) => (
           <TouchableOpacity
             key={std.id}
