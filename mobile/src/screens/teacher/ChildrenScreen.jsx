@@ -143,6 +143,7 @@ export function ChildrenScreen({ navigation }) {
         {filteredChildren.map((child) => (
           <TouchableOpacity
             key={child.id}
+            testID={`child-card-${child.id}`}
             style={styles.childCard}
             activeOpacity={0.8}
             onPress={() => setSelectedChild(child)}
@@ -286,6 +287,7 @@ export function ChildrenScreen({ navigation }) {
                 </View>
 
                 <TouchableOpacity
+                  testID="close-child-modal-btn"
                   style={styles.modalCloseBtn}
                   onPress={() => setSelectedChild(null)}
                 >

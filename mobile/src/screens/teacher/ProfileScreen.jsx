@@ -118,7 +118,7 @@ export function ProfileScreen() {
         </View>
 
         {/* Logout Button */}
-        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+        <TouchableOpacity testID="teacher-logout-btn" style={styles.logoutBtn} onPress={handleLogout}>
           <LogOut size={18} color="#dc2626" />
           <Text style={styles.logoutText}>تسجيل الخروج من الحساب</Text>
         </TouchableOpacity>

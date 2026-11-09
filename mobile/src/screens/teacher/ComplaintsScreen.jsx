@@ -63,15 +63,16 @@ export function ComplaintsScreen() {
     return t.status === activeFilter;
   });
 
-  const handleSendReply = () => {
-    if (!replyText.trim()) {
+  const handleSendReply = (customReplyText) => {
+    const finalReply = (typeof customReplyText === 'string' ? customReplyText : replyText).trim();
+    if (!finalReply) {
       Alert.alert('تنبيه', 'يرجى كتابة نص الرد أولاً.');
       return;
     }
     setTickets((prev) =>
       prev.map((t) =>
         t.id === selectedTicket.id
-          ? { ...t, status: 'RESOLVED', reply: replyText.trim() }
+          ? { ...t, status: 'RESOLVED', reply: finalReply }
           : t
       )
     );
@@ -160,6 +161,7 @@ export function ComplaintsScreen() {
                 </View>
               ) : (
                 <TouchableOpacity
+                  testID={`reply-btn-${item.id}`}
                   style={styles.replyBtn}
                   onPress={() => {
                     setSelectedTicket(item);
@@ -212,7 +214,7 @@ export function ComplaintsScreen() {
                   onChangeText={setReplyText}
                 />
 
-                <TouchableOpacity style={styles.sendBtn} onPress={handleSendReply}>
+                <TouchableOpacity testID="send-reply-btn" style={styles.sendBtn} onPress={handleSendReply}>
                   <Send size={16} color="#ffffff" />
                   <Text style={styles.sendBtnText}>إرسال الرد وتحديث الحالة</Text>
                 </TouchableOpacity>

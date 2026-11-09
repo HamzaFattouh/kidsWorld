@@ -89,7 +89,7 @@ export function NotificationsScreen() {
             </Text>
           </View>
           {unreadCount > 0 && (
-            <TouchableOpacity style={styles.markReadBtn} onPress={markAllRead}>
+            <TouchableOpacity testID="mark-all-read-btn" style={styles.markReadBtn} onPress={markAllRead}>
               <CheckCheck size={16} color="#059669" />
               <Text style={styles.markReadText}>قراءة الكل</Text>
             </TouchableOpacity>

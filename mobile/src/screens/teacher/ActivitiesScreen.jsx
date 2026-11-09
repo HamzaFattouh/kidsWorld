@@ -87,14 +87,15 @@ export function ActivitiesScreen() {
     );
   };
 
-  const handleAddActivity = () => {
-    if (!newTitle.trim()) {
+  const handleAddActivity = (titleParam) => {
+    const finalTitle = (typeof titleParam === 'string' ? titleParam : newTitle).trim();
+    if (!finalTitle) {
       Alert.alert('تنبيه', 'يرجى كتابة عنوان النشاط أولاً.');
       return;
     }
     const newAct = {
       id: String(Date.now()),
-      title: newTitle.trim(),
+      title: finalTitle,
       time: newTime.trim() || '13:00 - 13:30',
       category: newCategory,
       completed: false,
@@ -120,7 +121,7 @@ export function ActivitiesScreen() {
               تم إنجاز {completedCount} من {activities.length} أنشطة اليوم
             </Text>
           </View>
-          <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
+          <TouchableOpacity testID="add-activity-btn" style={styles.addBtn} onPress={() => setModalVisible(true)}>
             <Plus size={18} color="#ffffff" />
             <Text style={styles.addBtnText}>إضافة نشاط</Text>
           </TouchableOpacity>
@@ -166,6 +167,7 @@ export function ActivitiesScreen() {
                 {act.notes ? <Text style={styles.actNotes}>{act.notes}</Text> : null}
 
                 <TouchableOpacity
+                  testID={`toggle-activity-status-${act.id}`}
                   style={[
                     styles.statusToggleBtn,
                     act.completed ? styles.statusBtnDone : styles.statusBtnPending,
@@ -255,7 +257,7 @@ export function ActivitiesScreen() {
                 onChangeText={setNewNotes}
               />
 
-              <TouchableOpacity style={styles.submitBtn} onPress={handleAddActivity}>
+              <TouchableOpacity testID="submit-activity-btn" style={styles.submitBtn} onPress={handleAddActivity}>
                 <Text style={styles.submitBtnText}>حفظ وإدراج النشاط</Text>
               </TouchableOpacity>
             </ScrollView>

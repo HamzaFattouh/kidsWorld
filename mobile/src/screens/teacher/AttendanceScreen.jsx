@@ -111,7 +111,7 @@ export function AttendanceScreen() {
             {/* Checklist for Selected Day */}
             <View style={styles.checklistCard}>
               <View style={styles.checklistHeader}>
-                <TouchableOpacity style={styles.saveBtn} onPress={handleSaveAttendance}>
+                <TouchableOpacity testID="save-attendance-btn" style={styles.saveBtn} onPress={handleSaveAttendance}>
                   <Text style={styles.saveBtnText}>حفظ الكشف</Text>
                 </TouchableOpacity>
 

@@ -119,6 +119,7 @@ export function DocumentsScreen() {
               </View>
 
               <TouchableOpacity
+                testID={`download-doc-btn-${doc.id}`}
                 style={styles.downloadBtn}
                 onPress={() => handleDownload(doc)}
               >

@@ -73,6 +73,7 @@ export function SettingsScreen() {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                testID="lang-chip-en"
                 style={[styles.langChip, currentLang === 'en' && styles.langChipActive]}
                 onPress={() => handleLangSelect('en')}
               >

@@ -113,6 +113,7 @@ export function EventsScreen() {
             {/* RSVP Button */}
             <View style={styles.cardFooter}>
               <TouchableOpacity
+                testID={`event-rsvp-btn-${ev.id}`}
                 style={[
                   styles.rsvpBtn,
                   ev.attending ? styles.rsvpAttending : styles.rsvpNotAttending,

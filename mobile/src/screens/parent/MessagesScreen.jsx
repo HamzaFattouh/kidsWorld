@@ -139,6 +139,7 @@ export function MessagesScreen() {
             {quickReplies.map((qr, index) => (
               <TouchableOpacity
                 key={index}
+                testID={`quick-reply-chip-${index}`}
                 style={styles.quickChip}
                 onPress={() => handleSend(qr)}
               >
@@ -158,6 +159,7 @@ export function MessagesScreen() {
             onChangeText={setInputText}
           />
           <TouchableOpacity
+            testID="parent-send-msg-btn"
             style={[styles.sendBtn, !inputText.trim() && styles.sendBtnDisabled]}
             onPress={() => handleSend(inputText)}
             disabled={!inputText.trim()}

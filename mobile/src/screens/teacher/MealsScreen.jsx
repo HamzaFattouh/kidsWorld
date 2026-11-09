@@ -74,6 +74,7 @@ export function MealsScreen() {
         {/* Tab Switcher */}
         <View style={styles.tabRow}>
           <TouchableOpacity
+            testID="daily-checklist-tab"
             style={[styles.tabBtn, activeTab ==='checklist' && styles.activeTabBtn]}
             onPress={() => setActiveTab('checklist')}
           >
@@ -82,6 +83,7 @@ export function MealsScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            testID="weekly-menu-tab"
             style={[styles.tabBtn, activeTab ==='weekly_menu' && styles.activeTabBtn]}
             onPress={() => setActiveTab('weekly_menu')}
           >
@@ -117,6 +119,7 @@ export function MealsScreen() {
             {currentList.map((c) => (
               <TouchableOpacity
                 key={c.id}
+                testID={`meal-card-${c.id}`}
                 style={styles.card}
                 onPress={() => toggleMealCheck(c.id, c.name, c.parent)}
                 activeOpacity={0.7}

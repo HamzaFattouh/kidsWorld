@@ -64,12 +64,13 @@ export function MessagesScreen() {
     },
   ]);
 
-  const handleSendMessage = () => {
-    if (!inputText.trim() || !activeThread) return;
+  const handleSendMessage = (textToSend) => {
+    const finalMsg = (typeof textToSend === 'string' ? textToSend : inputText).trim();
+    if (!finalMsg || !activeThread) return;
     const newMsg = {
       id: `m_${Date.now()}`,
       sender: 'teacher',
-      text: inputText.trim(),
+      text: finalMsg,
       time: 'الآن',
     };
 
@@ -174,6 +175,20 @@ export function MessagesScreen() {
             })}
           </ScrollView>
 
+          {/* Quick Replies */}
+          <View style={styles.quickRepliesContainer}>
+            {['أهلاً بك، تم الاطمئنان على الطفل.', 'عمر بخير ونشيط اليوم.'].map((reply, idx) => (
+              <TouchableOpacity
+                key={idx}
+                testID={`teacher-quick-reply-${idx}`}
+                style={styles.quickReplyChip}
+                onPress={() => handleSendMessage(reply)}
+              >
+                <Text style={styles.quickReplyText}>{reply}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
           {/* Composer */}
           <View style={styles.composerBox}>
             <TextInput
@@ -184,8 +199,9 @@ export function MessagesScreen() {
               onChangeText={setInputText}
             />
             <TouchableOpacity
+              testID="teacher-send-msg-btn"
               style={[styles.sendBtn, !inputText.trim() && styles.sendBtnDisabled]}
-              onPress={handleSendMessage}
+              onPress={() => handleSendMessage()}
               disabled={!inputText.trim()}
             >
               <Send size={18} color="#ffffff" />
@@ -216,6 +232,7 @@ export function MessagesScreen() {
           {filteredThreads.map((thread) => (
             <TouchableOpacity
               key={thread.id}
+              testID={`thread-item-${thread.id}`}
               style={styles.threadCard}
               onPress={() => {
                 setActiveThread(thread);
@@ -471,5 +488,24 @@ const styles = StyleSheet.create({
   },
   sendBtnDisabled: {
     backgroundColor: '#9ca3af',
+  },
+  quickRepliesContainer: {
+    flexDirection: 'row-reverse',
+    gap: 8,
+    paddingVertical: 6,
+    flexWrap: 'wrap',
+  },
+  quickReplyChip: {
+    backgroundColor: '#ecfdf5',
+    borderWidth: 1,
+    borderColor: '#a7f3d0',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  quickReplyText: {
+    color: '#059669',
+    fontSize: 11,
+    fontWeight: 'bold',
   },
 });

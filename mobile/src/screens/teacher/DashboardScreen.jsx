@@ -175,6 +175,7 @@ export function DashboardScreen({ navigation }) {
               </View>
 
               <TouchableOpacity
+                testID={`quick-attendance-toggle-${std.id}`}
                 style={[
                   styles.toggleBadge,
                   std.present ? styles.presentBadge : styles.absentBadge,

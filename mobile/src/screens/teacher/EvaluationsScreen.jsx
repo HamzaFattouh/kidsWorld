@@ -185,7 +185,7 @@ export function EvaluationsScreen() {
         </View>
 
         {/* Save button */}
-        <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+        <TouchableOpacity testID="save-evaluation-btn" style={styles.saveBtn} onPress={handleSave}>
           <Save size={18} color="#ffffff" />
           <Text style={styles.saveBtnText}>حفظ وتحديث التقييم</Text>
         </TouchableOpacity>

@@ -114,6 +114,7 @@ export function WeeklyNotesScreen() {
         {currentList.map((std) => (
           <TouchableOpacity
             key={std.id}
+            testID={`student-note-card-${std.id}`}
             style={styles.stdCard}
             onPress={() => openReportModal(std)}
             activeOpacity={0.7}
@@ -161,7 +162,7 @@ export function WeeklyNotesScreen() {
                     <Text style={styles.cancelBtnText}>إلغاء</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.saveBtn} onPress={handleSaveReport}>
+                  <TouchableOpacity testID="save-report-btn" style={styles.saveBtn} onPress={handleSaveReport}>
                     <Text style={styles.saveBtnText}>حفظ وتأكيد التقرير</Text>
                   </TouchableOpacity>
                 </View>
