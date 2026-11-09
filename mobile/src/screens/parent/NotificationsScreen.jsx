@@ -1,24 +1,206 @@
-import React from'react';
-import { View, Text, StyleSheet } from'react-native';
-import { ScreenWrapper } from'../../components/ui/ScreenWrapper';
-import { useParentStore } from'../../store/parentStore';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import {
+  Bell,
+  CheckCircle2,
+  Utensils,
+  FileText,
+  Trash2,
+  CheckCheck,
+  ShieldAlert,
+} from 'lucide-react-native';
+import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
 
 export function NotificationsScreen() {
-  const selectedChildId = useParentStore((s) => s.selectedChildId);
+  const [notifications, setNotifications] = useState([
+    {
+      id: '1',
+      type: 'attendance',
+      title: 'تسجيل دخول الطفل إلى الروضة',
+      body: 'تم تسجيل وصول عمر إلى قاعة روضة العصافير الساعة 07:55 صباحاً بإشراف أ. نور.',
+      time: 'اليوم، 07:55 ص',
+      read: false,
+    },
+    {
+      id: '2',
+      type: 'meals',
+      title: 'تقرير وجبة الإفطار',
+      body: 'تناول عمر وجبة الإفطار المكونة من الشطيرة والعصير الطبيعي بشكل ممتاز.',
+      time: 'اليوم، 10:15 ص',
+      read: false,
+    },
+    {
+      id: '3',
+      type: 'report',
+      title: 'صدور التقرير الأسبوعي للطفل',
+      body: 'قامت المعلمة بنشر التقرير الأسبوعي لعمر. يمكنك الاطلاع على ملخص التطور والملاحظات.',
+      time: 'أمس، 02:30 م',
+      read: true,
+    },
+    {
+      id: '4',
+      type: 'admin',
+      title: 'تعميم إداري: فعالية التغذية السليمة',
+      body: 'تذكير بمشاركة أولياء الأمور في يوم التغذية الصحية والنشاط الصفي القادم.',
+      time: 'منذ يومين',
+      read: true,
+    },
+  ]);
+
+  const markAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    Alert.alert('تم التحديث', 'تم تحديد جميع الإشعارات كمقروءة.');
+  };
+
+  const deleteNotification = (id) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  const getIcon = (type) => {
+    switch (type) {
+      case 'attendance':
+        return <CheckCircle2 size={20} color="#059669" />;
+      case 'meals':
+        return <Utensils size={20} color="#d97706" />;
+      case 'report':
+        return <FileText size={20} color="#7c3aed" />;
+      default:
+        return <Bell size={20} color="#2563eb" />;
+    }
+  };
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
   return (
     <ScreenWrapper>
-      <View style={styles.center}>
-        <Text style={styles.title}>NotificationsScreen</Text>
-        <Text style={styles.subtitle}>Selected Child: {selectedChildId ||'None'}</Text>
-        <Text style={styles.note}>UI pending backend integration.</Text>
-      </View>
-    </ScreenWrapper>);
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.title}>إشعارات متابعة الطفل</Text>
+            <Text style={styles.subtitle}>لديك {unreadCount} إشعار جديد لمتابعة عمر</Text>
+          </View>
+          {unreadCount > 0 && (
+            <TouchableOpacity style={styles.markReadBtn} onPress={markAllRead}>
+              <CheckCheck size={16} color="#059669" />
+              <Text style={styles.markReadText}>قراءة الكل</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
+        {notifications.map((item) => (
+          <View
+            key={item.id}
+            style={[
+              styles.card,
+              !item.read && styles.cardUnread,
+            ]}
+          >
+            <View style={styles.iconBox}>{getIcon(item.type)}</View>
+
+            <View style={styles.contentCol}>
+              <View style={styles.topRow}>
+                <Text style={styles.itemTitle}>{item.title}</Text>
+                <Text style={styles.itemTime}>{item.time}</Text>
+              </View>
+              <Text style={styles.itemBody}>{item.body}</Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.delBtn}
+              onPress={() => deleteNotification(item.id)}
+            >
+              <Trash2 size={16} color="#9ca3af" />
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+    </ScreenWrapper>
+  );
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent:'center', alignItems:'center' },
-  title: { fontSize: 24, fontWeight:'bold', marginBottom: 8, color:'#10b981' },
-  subtitle: { fontSize: 16, marginBottom: 16, color:'#6b7280' },
-  note: { fontSize: 14, color:'#9ca3af' }
+  container: { paddingBottom: 30 },
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  title: { fontSize: 20, fontWeight: 'bold', color: '#111827', textAlign: 'right' },
+  subtitle: { fontSize: 13, color: '#6b7280', textAlign: 'right', marginTop: 2 },
+  markReadBtn: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#ecfdf5',
+    borderWidth: 1,
+    borderColor: '#a7f3d0',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  markReadText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#059669',
+  },
+
+  card: {
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-start',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 10,
+    gap: 12,
+  },
+  cardUnread: {
+    backgroundColor: '#f0fdf4',
+    borderColor: '#bbf7d0',
+  },
+  iconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: '#f3f4f6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contentCol: {
+    flex: 1,
+  },
+  topRow: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  itemTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#111827',
+    textAlign: 'right',
+  },
+  itemTime: {
+    fontSize: 11,
+    color: '#9ca3af',
+  },
+  itemBody: {
+    fontSize: 12,
+    color: '#4b5563',
+    textAlign: 'right',
+    lineHeight: 18,
+  },
+  delBtn: {
+    padding: 4,
+  },
 });

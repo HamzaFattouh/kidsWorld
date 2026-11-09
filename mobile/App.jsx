@@ -10,6 +10,8 @@ import { linkingConfig } from './src/navigation/LinkingConfig';
 
 import { LoginScreen } from './src/screens/auth/LoginScreen';
 import { MainTabs } from './src/navigation/MainTabs';
+import { TeacherTabs } from './src/navigation/TeacherTabs';
+import { ParentTabs } from './src/navigation/ParentTabs';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +25,7 @@ function AuthStack() {
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  const { isAuthenticated, hydrate: hydrateAuth } = useAuthStore();
+  const { isAuthenticated, role, hydrate: hydrateAuth } = useAuthStore();
   const { theme, hydrate: hydrateTheme } = useThemeStore();
   const systemColorScheme = useColorScheme();
 
@@ -65,8 +67,12 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isAuthenticated ? (
           <Stack.Screen name="Auth" component={AuthStack} />
+        ) : role === 'TEACHER' ? (
+          <Stack.Screen name="TeacherApp" component={TeacherTabs} />
+        ) : role === 'PARENT' ? (
+          <Stack.Screen name="ParentApp" component={ParentTabs} />
         ) : (
-          <Stack.Screen name="MainApp" component={MainTabs} />
+          <Stack.Screen name="AdminApp" component={MainTabs} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

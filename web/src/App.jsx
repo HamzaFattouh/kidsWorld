@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from'react';
 import { BrowserRouter, Routes, Route, Navigate } from'react-router-dom';
 import { useThemeStore, applyTheme } from'./store/themeStore';
+import { useAuthStore } from'./store/authStore';
 import { AuthLayout } from'./layouts/AuthLayout';
 const LoginPage = lazy(() => import('./pages/auth/LoginPage').then(m => ({ default: m.LoginPage })));
 const SetupProfilePage = lazy(() => import('./pages/auth/SetupProfilePage').then(m => ({ default: m.SetupProfilePage })));
@@ -72,6 +73,13 @@ const ParentDocumentsPage = lazy(() => import('./pages/parent/DocumentsPage').th
 const ParentCamerasPage = lazy(() => import('./pages/parent/CamerasPage').then(m => ({ default: m.ParentCamerasPage })));
 
 const LandingPage = lazy(() => import('./pages/public/LandingPage').then(m => ({ default: m.LandingPage })));
+
+function DashboardRedirect() {
+  const { user } = useAuthStore();
+  if (user?.role === 'TEACHER') return <Navigate to="/teacher" replace />;
+  if (user?.role === 'PARENT') return <Navigate to="/parent" replace />;
+  return <Navigate to="/admin" replace />;
+}
 
 export default function App() {
   const { theme } = useThemeStore();
@@ -184,7 +192,7 @@ export default function App() {
           </Route>
         </Route>
 
-        <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
+        <Route path="/dashboard" element={<DashboardRedirect />} />
       </Routes>
       </Suspense>
     </BrowserRouter>);

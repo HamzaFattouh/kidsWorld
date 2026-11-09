@@ -41,7 +41,12 @@ export function LoginPage() {
       if (userData.requiresPasswordChange) {
         navigate('/auth/setup-profile');
       } else {
-        navigate('/dashboard');
+        const roleRoutes = {
+          ADMIN: '/admin',
+          TEACHER: '/teacher',
+          PARENT: '/parent',
+        };
+        navigate(roleRoutes[userData.role] || '/admin');
       }
     } catch (err) {
       setApiError(err.response?.data?.error?.message || t('error_occurred'));

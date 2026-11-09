@@ -41,7 +41,7 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'npm run dev',
+    command: 'npm.cmd run dev',
     url: BASE_URL,
     reuseExistingServer: true,
     timeout: 120000
