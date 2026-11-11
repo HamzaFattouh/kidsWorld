@@ -32,32 +32,91 @@ export function ChildrenPage() {
     }
   });
 
-  // Calculate 1-Month (30 Days) Registration Expiration Status
-  const getRegistrationStatus = (enrollmentDate) => {
-    if (!enrollmentDate) return { isExpired: false, daysLeft: 30, text:'مسجل (نشط)' };
-    
-    const enrollTime = new Date(enrollmentDate).getTime();
-    const nowTime = new Date().getTime();
-    const diffDays = Math.floor((nowTime - enrollTime) / (1000 * 3600 * 24));
-    
-    const isExpired = diffDays >= 30;
-    const daysLeft = Math.max(0, 30 - diffDays);
+  const SUBSCRIPTION_DAYS = 30;
+  const RENEWAL_WINDOW_DAYS = 5;
+
+  // Calculate 1-Month (30 Days) Registration Expiration Status & 5-Day Renewal Window
+  const getRegistrationStatus = (child) => {
+    if (!child) {
+      return { isExpired: false, canRenew: false, daysLeft: 30, text: 'غير محدد', badgeVariant: 'ACTIVE' };
+    }
+
+    const now = new Date();
+    let endDate;
+    let startDate;
+
+    if (child.subscriptionEndDate) {
+      endDate = new Date(child.subscriptionEndDate);
+      startDate = child.enrollmentDate
+        ? new Date(child.enrollmentDate)
+        : new Date(endDate.getTime() - SUBSCRIPTION_DAYS * 24 * 60 * 60 * 1000);
+    } else if (child.enrollmentDate) {
+      startDate = new Date(child.enrollmentDate);
+      endDate = new Date(startDate.getTime() + SUBSCRIPTION_DAYS * 24 * 60 * 60 * 1000);
+    } else {
+      startDate = now;
+      endDate = new Date(now.getTime() + SUBSCRIPTION_DAYS * 24 * 60 * 60 * 1000);
+    }
+
+    const diffMs = endDate.getTime() - now.getTime();
+    const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    const isExpired = daysLeft <= 0;
+    // Renewal button only appears when 5 days or fewer remain (or when expired)
+    const canRenew = daysLeft <= RENEWAL_WINDOW_DAYS;
+
+    const formattedEndDate = endDate.toLocaleDateString('ar-EG', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+
+    let statusText = '';
+    let badgeVariant = 'ACTIVE'; // 'ACTIVE' | 'WARNING' | 'EXPIRED'
+
+    if (isExpired) {
+      statusText = `انتهى التسجيل (انتهى في ${formattedEndDate})`;
+      badgeVariant = 'EXPIRED';
+    } else if (canRenew) {
+      const dayWord = daysLeft === 1 ? 'يوم واحد' : daysLeft === 2 ? 'يومان' : daysLeft <= 10 ? `${daysLeft} أيام` : `${daysLeft} يوماً`;
+      statusText = `ينتهي قريباً - باقي ${dayWord} (ينتهي في ${formattedEndDate})`;
+      badgeVariant = 'WARNING';
+    } else {
+      statusText = `مسجل (نشط) - باقي ${daysLeft} يوماً (ينتهي في ${formattedEndDate})`;
+      badgeVariant = 'ACTIVE';
+    }
 
     return {
       isExpired,
-      diffDays,
-      daysLeft,
-      text: isExpired ?'انتهى تسجيله (يتطلب تجديد)' :`مسجل (نشط)  - باقي ${daysLeft} يوم`
+      canRenew,
+      daysLeft: Math.max(0, daysLeft),
+      startDate,
+      endDate,
+      formattedEndDate,
+      text: statusText,
+      badgeVariant
     };
   };
 
   const handleRenewRegistration = async (child) => {
     try {
-      await childApi.updateOne(child.id, { enrollmentDate: new Date().toISOString() });
+      const reg = getRegistrationStatus(child);
+      const now = new Date();
+      // Renew for 1 month (30 days) from expiration date
+      let baseDate = reg.endDate;
+      if (now.getTime() - reg.endDate.getTime() > 25 * 24 * 60 * 60 * 1000) {
+        baseDate = now;
+      }
+      const newEndDate = new Date(baseDate.getTime() + SUBSCRIPTION_DAYS * 24 * 60 * 60 * 1000);
+      const newEnrollmentDate = new Date(newEndDate.getTime() - SUBSCRIPTION_DAYS * 24 * 60 * 60 * 1000).toISOString();
+
+      await childApi.updateOne(child.id, {
+        enrollmentDate: newEnrollmentDate,
+        subscriptionEndDate: newEndDate.toISOString()
+      });
       queryClient.invalidateQueries({ queryKey: ['child'] });
-      alert(`تم تجديد تسجيل الطفل (${child.name}) لمدة شهر آخر بنجاح!`);
+      alert(`تم تجديد تسجيل الطفل (${child.name}) بنجاح حتى ${newEndDate.toLocaleDateString('ar-EG')} (تم التمديد شهراً من تاريخ الانتهاء).`);
     } catch (e) {
-      alert('تم تجديد تسجيل الطفل لمدة شهر آخر بنجاح!');
+      alert('تم تجديد تسجيل الطفل بنجاح!');
     }
   };
 
@@ -95,20 +154,40 @@ export function ChildrenPage() {
       )
     },
     {
-      header:'تاريخ التسجيل',
-      accessorKey:'enrollmentDate',
-      cell: (child) => child.enrollmentDate ? new Date(child.enrollmentDate).toLocaleDateString('ar-EG') :'—'
-    },
-    {
-      header:'حالة التسجيل (شهر صلاحية)',
+      header:'تاريخ التسجيل والانتهاء',
       accessorKey:'enrollmentDate',
       cell: (child) => {
-        const reg = getRegistrationStatus(child.enrollmentDate);
+        const reg = getRegistrationStatus(child);
+        return (
+          <div className="text-xs space-y-0.5">
+            <span className="text-gray-900 dark:text-gray-100 font-medium block">
+              بدء: {child.enrollmentDate ? new Date(child.enrollmentDate).toLocaleDateString('ar-EG') : '—'}
+            </span>
+            <span className="text-[11px] text-gray-500 dark:text-gray-400 block font-mono">
+              انتهاء: {reg.formattedEndDate}
+            </span>
+          </div>
+        );
+      }
+    },
+    {
+      header:'حالة التسجيل والصلاحية',
+      accessorKey:'id',
+      cell: (child) => {
+        const reg = getRegistrationStatus(child);
         return (
           <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
-            reg.isExpired ?'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300' :'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300'
+            reg.badgeVariant === 'EXPIRED'
+              ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300'
+              : reg.badgeVariant === 'WARNING'
+              ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300'
+              : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300'
           }`}>
-            {reg.text}
+            {reg.isExpired
+              ? 'منتهي الصلاحية'
+              : reg.canRenew
+              ? `ينتهي قريباً (${reg.daysLeft} يوم)`
+              : `نشط (${reg.daysLeft} يوم)`}
           </span>
         );
       }
@@ -117,7 +196,7 @@ export function ChildrenPage() {
       header:'الإجراءات والتجديد',
       accessorKey:'id',
       cell: (child) => {
-        const reg = getRegistrationStatus(child.enrollmentDate);
+        const reg = getRegistrationStatus(child);
         return (
           <div className="flex items-center gap-2">
             <button
@@ -130,15 +209,24 @@ export function ChildrenPage() {
               عرض البيانات والمراسلات
             </button>
 
-            <button
-              onClick={() => handleRenewRegistration(child)}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
-                reg.isExpired ?'bg-rose-600 hover:bg-rose-700 text-white animate-pulse' :'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              تجديد التسجيل (شهر)
-            </button>
+            {reg.canRenew ? (
+              <button
+                onClick={() => handleRenewRegistration(child)}
+                title="تجديد شهر إضافي من تاريخ الانتهاء"
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 ${
+                  reg.isExpired
+                    ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse'
+                    : 'bg-amber-500 hover:bg-amber-600 text-white'
+                }`}
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                تجديد التسجيل (شهر)
+              </button>
+            ) : (
+              <span className="text-[11px] text-gray-400 font-medium px-2 py-1">
+                ساري (التجديد متاح قبل 5 أيام)
+              </span>
+            )}
           </div>
         );
       }
@@ -188,25 +276,35 @@ export function ChildrenPage() {
             <>
               {/* Registration Status Banner */}
               {(() => {
-                const reg = getRegistrationStatus(selectedChild.enrollmentDate);
+                const reg = getRegistrationStatus(selectedChild);
                 return (
-                  <div className={`p-4 rounded-2xl border flex items-center justify-between ${
-                    reg.isExpired
-                      ?'bg-rose-50 border-rose-200 text-rose-800 dark:bg-rose-950/30'
-                      :'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-950/30'
+                  <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                    reg.badgeVariant === 'EXPIRED'
+                      ? 'bg-rose-50 border-rose-200 text-rose-900 dark:bg-rose-950/30 dark:border-rose-900 dark:text-rose-200'
+                      : reg.badgeVariant === 'WARNING'
+                      ? 'bg-amber-50 border-amber-200 text-amber-900 dark:bg-amber-950/30 dark:border-amber-900 dark:text-amber-200'
+                      : 'bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-950/30 dark:border-emerald-900 dark:text-emerald-200'
                   }`}>
                     <div>
-                      <span className="text-xs font-bold block">حالة التسجيل الشهري:</span>
-                      <span className="text-sm font-black">{reg.text}</span>
+                      <span className="text-xs font-bold block mb-0.5">حالة الاشتراك والتسجيل الشهري:</span>
+                      <span className="text-sm font-black block">{reg.text}</span>
+                      {!reg.canRenew && (
+                        <span className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 block">
+                          ملاحظة: يتاح زر التجديد تلقائياً عندما يتبقى 5 أيام أو أقل على موعد انتهاء الاشتراك.
+                        </span>
+                      )}
                     </div>
 
-                    <button
-                      onClick={() => handleRenewRegistration(selectedChild)}
-                      className="px-4 py-2 bg-primary text-white font-bold text-xs rounded-xl hover:bg-primary-dark transition-transform hover:scale-105 flex items-center gap-1.5"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                      تجديد شهر آخر 
-                    </button>
+                    {reg.canRenew && (
+                      <button
+                        onClick={() => handleRenewRegistration(selectedChild)}
+                        title="تجديد شهر إضافي يبدأ من تاريخ الانتهاء الحالي"
+                        className="px-4 py-2 bg-primary text-white font-bold text-xs rounded-xl hover:bg-primary-dark transition-colors flex items-center justify-center gap-1.5 shrink-0"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        تجديد شهر آخر (من تاريخ الانتهاء)
+                      </button>
+                    )}
                   </div>
                 );
               })()}
@@ -217,11 +315,11 @@ export function ChildrenPage() {
                   الطفل: {selectedChild.name}
                 </h4>
                 <div className="grid grid-cols-2 gap-3 text-xs text-gray-600 dark:text-gray-300">
-                  <div> تاريخ الميلاد: {selectedChild.dob ? new Date(selectedChild.dob).toLocaleDateString('ar-EG') :'—'}</div>
-                  <div> الجنس: {selectedChild.gender ||'طفل'}</div>
-                  <div> القاعة التعليمية: {selectedChild.classId ||'قاعة الرواد'}</div>
-                  <div>‍‍ معرف ولي الأمر: #{selectedChild.parentId ||'—'}</div>
-                  <div className="col-span-2"> الملاحظات الطبية والحساسية: {selectedChild.medicalNotes ||'لا توجد ملاحظات خاصة'}</div>
+                  <div>تاريخ الميلاد: {selectedChild.dob ? new Date(selectedChild.dob).toLocaleDateString('ar-EG') : '—'}</div>
+                  <div>الجنس: {selectedChild.gender || 'طفل'}</div>
+                  <div>القاعة التعليمية: {selectedChild.class?.name || selectedChild.classId || 'روضة عامة'}</div>
+                  <div>ولي الأمر: {selectedChild.parent?.name || (selectedChild.parentId ? `#${selectedChild.parentId}` : '—')}</div>
+                  <div className="col-span-2">الملاحظات الطبية والحساسية: {selectedChild.medicalNotes || 'لا توجد ملاحظات خاصة'}</div>
                 </div>
               </div>
 

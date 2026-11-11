@@ -53,55 +53,103 @@ export function ChildrenScreen() {
   const currentChildId = selectedChildId || childrenList[0].id;
   const activeChild = childrenList.find((c) => c.id === currentChildId) || childrenList[0];
 
-  // Expiration logic calculation (30 days threshold)
-  const getEnrollmentStatus = (enrollDateStr) => {
-    if (!enrollDateStr) return { expired: false, days: 0, text:'غير محدد' };
-    const days = Math.floor((new Date() - new Date(enrollDateStr)) / (1000 * 60 * 60 * 24));
-    if (days >= 30) {
+  // Expiration logic calculation (30 days cycle, 5 days renewal window)
+  const getEnrollmentStatus = (childOrDate) => {
+    const enrollDateStr = typeof childOrDate === 'object' ? (childOrDate?.enrollmentDate) : childOrDate;
+    const subEndDateStr = typeof childOrDate === 'object' ? (childOrDate?.subscriptionEndDate) : null;
+
+    if (!enrollDateStr && !subEndDateStr) return { expired: false, canRenew: false, days: 0, text: 'غير محدد', color: '#10b981', bg: '#ecfdf5' };
+
+    const now = new Date();
+    let endDate;
+    if (subEndDateStr) {
+      endDate = new Date(subEndDateStr);
+    } else {
+      endDate = new Date(new Date(enrollDateStr).getTime() + 30 * 24 * 60 * 60 * 1000);
+    }
+
+    const diffMs = endDate.getTime() - now.getTime();
+    const remainingDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    const expired = remainingDays <= 0;
+    // Renewal button only appears when 5 days or fewer remain (or when expired)
+    const canRenew = remainingDays <= 5;
+
+    if (expired) {
       return {
         expired: true,
-        days,
-        text:'انتهى تسجيله (يتطلب تجديد)',
-        color:'#ef4444',
-        bg:'#fef2f2',
+        canRenew: true,
+        days: remainingDays,
+        endDate,
+        text: 'انتهى تسجيله (يتطلب تجديد)',
+        color: '#ef4444',
+        bg: '#fef2f2',
       };
     }
-    const remaining = 30 - days;
+
+    if (canRenew) {
+      return {
+        expired: false,
+        canRenew: true,
+        days: remainingDays,
+        endDate,
+        text: `ينتهي قريباً (باقي ${remainingDays} أيام على التجديد)`,
+        color: '#f59e0b',
+        bg: '#fffbeb',
+      };
+    }
+
     return {
       expired: false,
-      days,
-      text:`نشط (باقي ${remaining} يوماً على التجديد)`,
-      color:'#10b981',
-      bg:'#ecfdf5',
+      canRenew: false,
+      days: remainingDays,
+      endDate,
+      text: `نشط (باقي ${remainingDays} يوماً على التجديد)`,
+      color: '#10b981',
+      bg: '#ecfdf5',
     };
   };
 
   const handleRenewRegistration = (childId) => {
+    const target = childrenList.find((c) => c.id === childId);
+    const st = getEnrollmentStatus(target);
+    const now = new Date();
+    let baseDate = st.endDate && st.endDate.getTime() > now.getTime() - 25 * 24 * 60 * 60 * 1000
+      ? st.endDate
+      : now;
+    const newEndDate = new Date(baseDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+    const newEnrollDate = new Date(newEndDate.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
     setChildrenList((prev) =>
       prev.map((c) =>
-        c.id === childId ? { ...c, enrollmentDate: new Date().toISOString() } : c
+        c.id === childId
+          ? {
+              ...c,
+              enrollmentDate: newEnrollDate,
+              subscriptionEndDate: newEndDate.toISOString()
+            }
+          : c
       )
     );
-    Alert.alert('تم تجديد الاشتراك','تم تمديد تسجيل الطفل لمدة 30 يوماً بنجاح!');
+    Alert.alert('تم تجديد الاشتراك', 'تم تمديد تسجيل الطفل لمدة 30 يوماً إضافية تبدأ من تاريخ الانتهاء!');
   };
 
-  const currentStatus = getEnrollmentStatus(activeChild.enrollmentDate);
+  const currentStatus = getEnrollmentStatus(activeChild);
 
   return (
     <ScreenWrapper>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>الأطفال وتجديد التسجيل </Text>
+          <Text style={styles.title}>الأطفال وتجديد التسجيل</Text>
           <Text style={styles.subTitle}>متابعة حالة التسجيل والملف الطبي والمستندات الرسمية</Text>
         </View>
 
         {/* Child Selector Tabs */}
-        <Text style={styles.sectionHeader}>اختر الطفل المتابع ‍‍</Text>
+        <Text style={styles.sectionHeader}>اختر الطفل المتابع</Text>
 
         <View style={styles.childrenSelectorRow}>
           {childrenList.map((ch) => {
             const isSelected = ch.id === currentChildId;
-            const st = getEnrollmentStatus(ch.enrollmentDate);
+            const st = getEnrollmentStatus(ch);
             return (
               <TouchableOpacity
                 key={ch.id}
@@ -109,9 +157,9 @@ export function ChildrenScreen() {
                 onPress={() => setSelectedChildId(ch.id)}
                 activeOpacity={0.7}
               >
-                <Users size={16} color={isSelected ?'#ffffff' :'#10b981'} style={{ marginLeft: 6 }} />
+                <Users size={16} color={isSelected ? '#ffffff' : '#10b981'} style={{ marginLeft: 6 }} />
                 <Text style={[styles.childChipText, isSelected && styles.activeChildChipText]}>
-                  {ch.name} {st.expired ?'' :''}
+                  {ch.name}
                 </Text>
               </TouchableOpacity>
             );
@@ -132,14 +180,14 @@ export function ChildrenScreen() {
             </View>
           </View>
 
-          {currentStatus.expired && (
+          {currentStatus.canRenew && (
             <TouchableOpacity
               style={styles.renewBtn}
               activeOpacity={0.8}
               onPress={() => handleRenewRegistration(activeChild.id)}
             >
               <RefreshCw size={16} color="#ffffff" style={{ marginLeft: 6 }} />
-              <Text style={styles.renewBtnText}>تجديد الاشتراك الان</Text>
+              <Text style={styles.renewBtnText}>تجديد شهر آخر</Text>
             </TouchableOpacity>
           )}
         </View>
