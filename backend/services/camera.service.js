@@ -12,120 +12,134 @@ function _interopRequireDefault(e) {
   return e && e.__esModule ? e : { default: e };
 }
 
-// 7 Standard Nursery Cameras: 4 Sleep Rooms + 3 Playroom Angles
+// 7 Standard Nursery Cameras: 4 Sleep Rooms + 3 Playroom Angles with Verified Demo Streams
 const SEED_CAMERAS = [
   {
     id: 'cam-sleep-1',
     name: 'غرفة نوم الأطفال (عمر سنة)',
-    streamUrl: 'cam1',
+    streamUrl: 'https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8',
     classId: 'class-sleep-1',
     isActive: true,
     class: { id: 'class-sleep-1', name: 'قسم الرضّع (سنة واحدة)', ageGroup: 'سنة واحدة' },
     schedules: [
-      { dayOfWeek: 0, startTime: '11:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '11:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '11:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '11:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '11:30', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   },
   {
     id: 'cam-sleep-2',
     name: 'غرفة نوم الأطفال (عمر سنتين)',
-    streamUrl: 'cam2',
+    streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
     classId: 'class-sleep-2',
     isActive: true,
     class: { id: 'class-sleep-2', name: 'قسم الصغار (سنتين)', ageGroup: 'سنتين' },
     schedules: [
-      { dayOfWeek: 0, startTime: '12:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '12:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '12:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '12:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '12:00', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   },
   {
     id: 'cam-sleep-3',
     name: 'غرفة نوم الأطفال (عمر 3 سنوات)',
-    streamUrl: 'cam3',
+    streamUrl: 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8',
     classId: 'class-sleep-3',
     isActive: true,
     class: { id: 'class-sleep-3', name: 'قسم البراعم (3 سنوات)', ageGroup: '3 سنوات' },
     schedules: [
-      { dayOfWeek: 0, startTime: '12:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '12:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '12:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '12:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '12:30', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   },
   {
     id: 'cam-sleep-4',
     name: 'غرفة نوم الأطفال (عمر 4 سنوات)',
-    streamUrl: 'cam4',
+    streamUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8',
     classId: 'class-sleep-4',
     isActive: true,
     class: { id: 'class-sleep-4', name: 'قسم الروضة (4 سنوات)', ageGroup: '4 سنوات' },
     schedules: [
-      { dayOfWeek: 0, startTime: '13:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '13:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '13:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '13:00', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '13:00', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   },
   {
     id: 'cam-play-1',
     name: 'غرفة الألعاب (الأنشطة الحركية والتسلق)',
-    streamUrl: 'cam5',
+    streamUrl: 'https://test-streams.mux.dev/test_001/stream.m3u8',
     classId: 'class-playroom-1',
     isActive: true,
     class: { id: 'class-playroom-1', name: 'غرفة الألعاب (الأنشطة الحركية)', ageGroup: 'مشترك' },
     schedules: [
-      { dayOfWeek: 0, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '07:30', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   },
   {
     id: 'cam-play-2',
     name: 'غرفة الألعاب (الألعاب الهادئة والرسم)',
-    streamUrl: 'cam6',
+    streamUrl: 'https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8',
     classId: 'class-playroom-2',
     isActive: true,
     class: { id: 'class-playroom-2', name: 'غرفة الألعاب (الرسم والمكعبات)', ageGroup: 'مشترك' },
     schedules: [
-      { dayOfWeek: 0, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '07:30', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   },
   {
     id: 'cam-play-3',
     name: 'غرفة الألعاب (الساحة المركزية)',
-    streamUrl: 'cam7',
+    streamUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     classId: 'class-playroom-3',
     isActive: true,
     class: { id: 'class-playroom-3', name: 'غرفة الألعاب (الساحة المركزية)', ageGroup: 'مشترك' },
     schedules: [
-      { dayOfWeek: 0, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 1, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 2, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 3, startTime: '07:30', endTime: '14:30', isActive: true },
-      { dayOfWeek: 4, startTime: '07:30', endTime: '14:30', isActive: true }
+      { dayOfWeek: 0, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 1, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 2, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 3, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 4, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 5, startTime: '00:00', endTime: '23:59', isActive: true },
+      { dayOfWeek: 6, startTime: '00:00', endTime: '23:59', isActive: true }
     ]
   }
 ];
 
 class CameraService {
   constructor() {
-    // Ensure cameras collection exists in persistent store
+    // Ensure cameras collection exists in persistent store or upgrade stale 'cam1' seeds
     const existing = dbStore.get('cameras');
-    if (!existing || existing.length === 0) {
+    if (!existing || existing.length === 0 || existing[0]?.streamUrl === 'cam1') {
       dbStore.set('cameras', SEED_CAMERAS);
     }
   }

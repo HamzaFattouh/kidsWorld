@@ -18,86 +18,101 @@ import { Card, CardContent } from '../../components/ui/Card';
 import { WebRTCPlayer } from '../../components/camera/WebRTCPlayer';
 import { cameraApi } from '../../api/camera';
 
-// 7 Standard Nursery Cameras: 4 Sleep Rooms + 3 Playroom Cameras
+// 7 Standard Nursery Cameras: 4 Sleep Rooms + 3 Playroom Cameras with Verified Demo Streams
 const DEFAULT_CAMERAS = [
   {
     id: 'cam-sleep-1',
     name: 'غرفة نوم الأطفال (عمر سنة)',
     className: 'قسم الرضّع - سنة واحدة',
     classId: 'class-sleep-1',
+    streamUrl: 'https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8',
     streamKey: 'cam1',
     category: 'SLEEP',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '11:30 ص - 02:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   },
   {
     id: 'cam-sleep-2',
     name: 'غرفة نوم الأطفال (عمر سنتين)',
     className: 'قسم الصغار - سنتين',
     classId: 'class-sleep-2',
+    streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
     streamKey: 'cam2',
     category: 'SLEEP',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '12:00 م - 02:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   },
   {
     id: 'cam-sleep-3',
     name: 'غرفة نوم الأطفال (عمر 3 سنوات)',
     className: 'قسم البراعم - 3 سنوات',
     classId: 'class-sleep-3',
+    streamUrl: 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8',
     streamKey: 'cam3',
     category: 'SLEEP',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '12:30 م - 02:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   },
   {
     id: 'cam-sleep-4',
     name: 'غرفة نوم الأطفال (عمر 4 سنوات)',
     className: 'قسم الروضة - 4 سنوات',
     classId: 'class-sleep-4',
+    streamUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8',
     streamKey: 'cam4',
     category: 'SLEEP',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '01:00 م - 02:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   },
   {
     id: 'cam-play-1',
     name: 'غرفة الألعاب (الأنشطة الحركية)',
     className: 'الزاوية الحركية وألعاب التسلق',
     classId: 'class-playroom-1',
+    streamUrl: 'https://test-streams.mux.dev/test_001/stream.m3u8',
     streamKey: 'cam5',
     category: 'PLAYROOM',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '07:30 ص - 01:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   },
   {
     id: 'cam-play-2',
     name: 'غرفة الألعاب (الألعاب الهادئة والرسم)',
     className: 'زاوية الرسم وبناء المكعبات',
     classId: 'class-playroom-2',
+    streamUrl: 'https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8',
     streamKey: 'cam6',
     category: 'PLAYROOM',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '07:30 ص - 01:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   },
   {
     id: 'cam-play-3',
     name: 'غرفة الألعاب (الساحة المركزية)',
     className: 'منطقة اللعب المشترك والأنشطة الجماعية',
     classId: 'class-playroom-3',
+    streamUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     streamKey: 'cam7',
     category: 'PLAYROOM',
     isActive: true,
     isWithinSchedule: true,
-    operatingHours: '07:30 ص - 02:30 م'
+    operatingHours: 'طوال اليوم (بث تجريبي 24/7)'
   }
 ];
+
+const resolveCamStreamUrl = (cam, idx) => {
+  if (cam?.streamUrl && /^https?:\/\//i.test(cam.streamUrl.trim())) {
+    return cam.streamUrl.trim();
+  }
+  const fallbackSlot = typeof idx === 'number' && idx >= 0 ? idx : 0;
+  return DEFAULT_CAMERAS[fallbackSlot % DEFAULT_CAMERAS.length]?.streamUrl || 'https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8';
+};
 
 export function ParentCamerasPage() {
   const [selectedCamId, setSelectedCamId] = useState(DEFAULT_CAMERAS[0].id);
@@ -136,15 +151,21 @@ export function ParentCamerasPage() {
     }
   }, [selectedCam?.id, requestAccess]);
 
-  const isDirectHttp = Boolean(selectedCam?.streamUrl && /^https?:\/\//i.test(selectedCam.streamUrl.trim()));
-  const accessData = accessResponse?.data || {
+  const selectedIdx = cameras.findIndex((c) => c.id === selectedCam?.id);
+  const activeStreamUrl = resolveCamStreamUrl(selectedCam, selectedIdx);
+  const isDirectHttp = Boolean(activeStreamUrl && /^https?:\/\//i.test(activeStreamUrl));
+  const isHls = Boolean(isDirectHttp && (activeStreamUrl.includes('.m3u8') || activeStreamUrl.includes('m3u8')));
+  const isMp4 = Boolean(isDirectHttp && /\.(?:mp4|webm|mkv|ogg)(?:[?#].*)?$/i.test(activeStreamUrl));
+
+  const accessData = accessResponse?.data?.directStreamUrl ? accessResponse.data : {
     cameraId: selectedCam?.id,
     cameraName: selectedCam?.name,
     className: selectedCam?.className,
-    streamUrl: selectedCam?.streamUrl,
-    directStreamUrl: isDirectHttp ? selectedCam.streamUrl.trim() : null,
+    streamUrl: activeStreamUrl,
+    directStreamUrl: isDirectHttp ? activeStreamUrl : null,
     isDirectHttp,
-    isHls: Boolean(isDirectHttp && (selectedCam.streamUrl.includes('.m3u8') || selectedCam.streamUrl.includes('m3u8'))),
+    isHls,
+    isMp4,
     streamKey: isDirectHttp ? null : (selectedCam?.streamKey || 'cam1'),
     token: 'demo-token',
     webrtcOfferUrl: isDirectHttp ? null : `https://stream.yourdomain.com/api/webrtc?src=${selectedCam?.streamKey || 'cam1'}`,

@@ -128,6 +128,7 @@ export function WebRTCPlayer({
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setConnectionStatus('connected');
           if (videoRef.current) {
+            videoRef.current.muted = true;
             videoRef.current.play().catch(() => {
               // Browser auto-play policy may require user interaction
             });
@@ -175,6 +176,8 @@ export function WebRTCPlayer({
       setStreamMode('direct');
       if (videoRef.current) {
         videoRef.current.src = directUrl;
+        videoRef.current.loop = true;
+        videoRef.current.muted = true;
         videoRef.current.load();
         videoRef.current.onloadeddata = () => {
           setConnectionStatus('connected');
@@ -386,7 +389,7 @@ export function WebRTCPlayer({
           </p>
           <div className="flex items-center space-x-2 space-x-reverse">
             <button
-              onClick={connectWebRTC}
+              onClick={connectStream}
               className="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition"
             >
               <RefreshCw className="w-3.5 h-3.5 ml-1.5" />
