@@ -66,6 +66,12 @@ export function ParentsPage() {
     enabled: !!selectedParentId && isDetailsModalOpen
   });
 
+  const parentChildren = useMemo(() => {
+    if (!childrenData?.data || !Array.isArray(childrenData.data)) return [];
+    if (!selectedParentId) return childrenData.data;
+    return childrenData.data.filter((c) => c.parentId === selectedParentId);
+  }, [childrenData?.data, selectedParentId]);
+
   // Fetch complaints/messages for selected parent
   const { data: complaintsData } = useQuery({
     queryKey: ['parent-complaints', selectedParentId],
@@ -145,7 +151,7 @@ export function ParentsPage() {
   return (
     <div className="space-y-6 text-start">
       <PageHeader
-        title="إدارة أولياء الأمور ‍‍"
+        title="إدارة أولياء الأمور"
         description="استعراض بيانات أولياء الأمور، الأبناء المربوطين، الرسائل والشكاوى، وإضافة طفل جديد"
         actionLabel="إضافة ولي أمر جديد"
         onAction={() => setIsCreateModalOpen(true)}
@@ -215,16 +221,16 @@ export function ParentsPage() {
 
                 {isLoadingChildren ? (
                   <p className="text-xs text-gray-400">جاري التحميل...</p>
-                ) : childrenData?.data && childrenData.data.length > 0 ? (
+                ) : parentChildren && parentChildren.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {childrenData.data.map((child) => (
+                    {parentChildren.map((child) => (
                       <div key={child.id} className="p-3 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center justify-between">
                         <div>
                           <p className="font-bold text-xs text-emerald-900 dark:text-emerald-300">{child.name}</p>
-                          <p className="text-[10px] text-gray-500">القاعة: {child.classId ||'عامة'}</p>
+                          <p className="text-[10px] text-gray-500">القاعة: {child.class?.name || child.classId || 'عامة'}</p>
                         </div>
-                        <span className="text-[11px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-md">
-                          مربوط 
+                        <span className="text-[11px] font-bold text-emerald-600 bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 rounded-md">
+                          مربوط
                         </span>
                       </div>
                     ))}
@@ -279,6 +285,7 @@ export function ParentsPage() {
         <div className="py-4">
           <ChildForm
             initialData={{ parentId: selectedParentId }}
+            parentName={selectedParent?.name}
             onSubmit={(childData) => addChildMutation.mutate(childData)}
             isLoading={addChildMutation.isPending}
           />

@@ -44,7 +44,7 @@ export function TeacherLayout() {
     items: [
     { href:'/teacher/notes', label: t('nav.notes','Weekly Notes'), icon: FileText },
     { href:'/teacher/evaluations', label: t('nav.evaluations','Evaluations'), icon: Star },
-    { href:'/teacher/tasks', label: t('nav.tasks','Tasks'), icon: ClipboardCheck }]
+    { href:'/teacher/tasks', label: t('nav.tasks','المهام'), icon: ClipboardCheck }]
 
   },
   {

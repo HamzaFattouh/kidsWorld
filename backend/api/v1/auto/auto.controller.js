@@ -45,7 +45,16 @@ const listResource = async (req, res, next) => {
     };
 
     const collectionName = pluralMap[resource] || `${resource}s`;
-    const storedData = dbStore.get(collectionName);
+    let storedData = dbStore.get(collectionName) || [];
+
+    if (Object.keys(where).length > 0) {
+      storedData = storedData.filter((item) => {
+        return Object.entries(where).every(([key, val]) => {
+          return String(item[key]) === String(val);
+        });
+      });
+    }
+
     return res.json({ data: storedData });
   } catch (error) {
     next(error);

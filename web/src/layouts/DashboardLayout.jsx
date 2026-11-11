@@ -50,7 +50,7 @@ export function DashboardLayout() {
     { href:'/admin/meals', label: t('nav.meals','Meals'), icon: Utensils },
     { href:'/admin/notes', label: t('nav.notes','Weekly Notes'), icon: FileText },
     { href:'/admin/evaluations', label: t('nav.evaluations','Evaluations'), icon: Star },
-    { href:'/admin/tasks', label: t('nav.tasks','Tasks'), icon: ClipboardList }]
+    { href:'/admin/tasks', label: t('nav.tasks','المهام'), icon: ClipboardList }]
 
   },
   {

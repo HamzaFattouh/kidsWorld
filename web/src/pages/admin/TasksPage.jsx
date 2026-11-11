@@ -227,17 +227,17 @@ export function TasksPage() {
         </div>
 
         <div className="bg-amber-50 dark:bg-amber-950/30 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
-          <span className="text-xs font-bold text-amber-700 dark:text-amber-300 block">قيد التنفيذ </span>
+          <span className="text-xs font-bold text-amber-700 dark:text-amber-300 block">قيد التنفيذ</span>
           <span className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 block">{pendingCount} مهمة</span>
         </div>
 
         <div className="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800">
-          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 block">تم إنجازها </span>
+          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 block">تم إنجازها</span>
           <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 block">{completedCount} مهمة</span>
         </div>
 
         <div className="bg-rose-50 dark:bg-rose-950/30 p-4 rounded-2xl border border-rose-200 dark:border-rose-800">
-          <span className="text-xs font-bold text-rose-700 dark:text-rose-300 block">مهام عاجلة / عالية </span>
+          <span className="text-xs font-bold text-rose-700 dark:text-rose-300 block">مهام عاجلة / عالية الأولوية</span>
           <span className="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1 block">{urgentCount} مهمة</span>
         </div>
       </div>

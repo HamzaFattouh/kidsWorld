@@ -76,6 +76,32 @@
       "phone": "0599555666",
       "address": "نابلس- نابلس الجديدة",
       "createdAt": "2026-09-15T10:00:00.000Z"
+    },
+    {
+      "id": "user-parent-003",
+      "email": "khaled.parent@gmail.com",
+      "name": "خالد جودت",
+      "passwordHash": "$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu",
+      "role": "PARENT",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599222111",
+      "address": "نابلس - الجبل الشمالي",
+      "createdAt": "2026-09-15T10:00:00.000Z"
+    },
+    {
+      "id": "user-parent-004",
+      "email": "ibrahim.parent@gmail.com",
+      "name": "إبراهيم القاسم",
+      "passwordHash": "$2b$10$jMr7bNJ6DV6g5PfbE3bajO7.n6yIRO3SssgCcJ2mF.Usg/VrVX/pu",
+      "role": "PARENT",
+      "isActive": true,
+      "isVerified": true,
+      "requiresPasswordChange": false,
+      "phone": "0599444555",
+      "address": "نابلس - رفيديا",
+      "createdAt": "2026-09-15T10:00:00.000Z"
     }
   ],
   "children": [
@@ -166,15 +192,29 @@
     {
       "id": "child-1789470377020",
       "name": "كرم إبراهيم القاسم",
+      "parentId": "user-parent-004",
       "classId": "class-birds-3-4",
+      "dob": "2022-06-12",
       "gender": "ذكر",
-      "enrollmentDate": "2026-09-15T11:06:17.020Z"
+      "medicalNotes": "لا توجد حساسية معروفة",
+      "enrollmentDate": "2026-09-15T11:06:17.020Z",
+      "parent": {
+        "id": "user-parent-004",
+        "name": "إبراهيم القاسم",
+        "email": "ibrahim.parent@gmail.com",
+        "phone": "0599444555"
+      },
+      "class": {
+        "id": "class-birds-3-4",
+        "name": "روضة العصافير",
+        "ageGroup": "3 - 4 سنوات"
+      }
     }
   ],
   "classes": [
     {
       "id": "class-birds-3-4",
-      "name": "روضة العصافير 🐥",
+      "name": "روضة العصافير",
       "ageGroup": "3 - 4 سنوات",
       "capacity": 20,
       "teacher": "أ. نورة النابلسي",
@@ -195,7 +235,7 @@
     },
     {
       "id": "class-flowers-4-5",
-      "name": "روضة الزهور 🌸",
+      "name": "روضة الزهور",
       "ageGroup": "4 - 5 سنوات",
       "capacity": 22,
       "teacher": "أ. سارة الخالد",
@@ -210,7 +250,7 @@
     },
     {
       "id": "class-hope-2-3",
-      "name": "روضة الأمل 🌟",
+      "name": "روضة الأمل",
       "ageGroup": "2 - 3 سنوات",
       "capacity": 15,
       "teacher": "أ. منى التميمي",
