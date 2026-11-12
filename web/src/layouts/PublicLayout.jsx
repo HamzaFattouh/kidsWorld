@@ -54,6 +54,9 @@ export function PublicLayout() {
                   <img 
                     src="/images/logo_icon.png?v=7" 
                     alt="عالم الأطفال" 
+                    width="80"
+                    height="80"
+                    decoding="async"
                     className="w-full h-full object-contain" 
                   />
                 </div>
@@ -86,13 +89,13 @@ export function PublicLayout() {
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-2">
               <div className="hidden xl:flex items-center gap-2 me-2">
-                <a href="#" className="w-8 h-8 bg-brand-yellow hover:bg-brand-orange text-white rounded flex items-center justify-center transition-colors">
+                <a href="#" aria-label="فيسبوك" className="w-8 h-8 bg-brand-yellow hover:bg-brand-orange text-slate-900 rounded flex items-center justify-center transition-colors">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg>
                 </a>
-                <a href="#" className="w-8 h-8 bg-brand-yellow hover:bg-brand-orange text-white rounded flex items-center justify-center transition-colors">
+                <a href="#" aria-label="إنستغرام" className="w-8 h-8 bg-brand-yellow hover:bg-brand-orange text-slate-900 rounded flex items-center justify-center transition-colors">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <a href="#" className="w-8 h-8 bg-brand-yellow hover:bg-brand-orange text-white rounded flex items-center justify-center transition-colors">
+                <a href="#" aria-label="يوتيوب" className="w-8 h-8 bg-brand-yellow hover:bg-brand-orange text-slate-900 rounded flex items-center justify-center transition-colors">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33 2.78 2.78 0 001.94 2C5.12 19.5 12 19.5 12 19.5s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
                 </a>
               </div>
@@ -111,6 +114,8 @@ export function PublicLayout() {
             <div className="flex items-center lg:hidden gap-2">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="القائمة الرئيسية"
+                aria-expanded={isMobileMenuOpen}
                 className={`p-2 ${scrolled ?'text-brand-dark dark:text-white' :'text-white'}`}>
                 
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -133,9 +138,9 @@ export function PublicLayout() {
                 </button>
             )}
               <div className="flex gap-4 px-3 pt-4 border-t border-gray-100 dark:border-gray-800">
-                <a href="#" className="w-10 h-10 bg-brand-yellow text-white rounded-xl flex items-center justify-center"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg></a>
-                <a href="#" className="w-10 h-10 bg-brand-yellow text-white rounded-xl flex items-center justify-center"><svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                <a href="#" className="w-10 h-10 bg-brand-yellow text-white rounded-xl flex items-center justify-center"><svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33 2.78 2.78 0 001.94 2C5.12 19.5 12 19.5 12 19.5s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+                <a href="#" aria-label="فيسبوك" className="w-10 h-10 bg-brand-yellow text-slate-900 rounded-xl flex items-center justify-center"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg></a>
+                <a href="#" aria-label="إنستغرام" className="w-10 h-10 bg-brand-yellow text-slate-900 rounded-xl flex items-center justify-center"><svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="#" aria-label="يوتيوب" className="w-10 h-10 bg-brand-yellow text-slate-900 rounded-xl flex items-center justify-center"><svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33 2.78 2.78 0 001.94 2C5.12 19.5 12 19.5 12 19.5s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
               </div>
               <div className="px-3 pt-4">
                 {isAuthenticated ?
@@ -164,17 +169,17 @@ export function PublicLayout() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full p-2.5 flex items-center justify-center overflow-hidden border-2 border-brand-green/20 shrink-0">
-                <img src="/images/logo_icon.png?v=6" alt="عالم الأطفال" className="w-full h-full object-contain" />
+                <img src="/images/logo_icon.png?v=6" alt="عالم الأطفال" width="80" height="80" loading="lazy" decoding="async" className="w-full h-full object-contain" />
               </div>
               <div className="text-3xl font-display font-bold">عالم الأطفال</div>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm leading-relaxed">
               في عالم الأطفال، نضع دائماً جودة التعليم ورعاية الأطفال في المقام الأول، لذا يرجى الاطمئنان عند اختيار روضتنا.
             </p>
           </div>
           <div>
             <h4 className="font-display font-bold text-xl mb-6">روابط سريعة</h4>
-            <ul className="space-y-3 text-gray-400">
+            <ul className="space-y-3 text-gray-300">
               {navLinks.map((link) =>
               <li key={link.href}>
                   <button onClick={() => scrollTo(link.href)} className="hover:text-brand-yellow transition-colors">
@@ -186,7 +191,7 @@ export function PublicLayout() {
           </div>
           <div id="contact">
             <h4 className="font-display font-bold text-xl mb-6">معلومات الاتصال</h4>
-            <ul className="space-y-3 text-gray-400">
+            <ul className="space-y-3 text-gray-300">
               <li className="text-start font-medium"> نابلس- نابلس الجديدة</li>
               <li className="text-start"> info@kidsworld.ps</li>
               <li className="text-start"> +970 9 234 5678</li>
@@ -194,10 +199,10 @@ export function PublicLayout() {
           </div>
           <div>
             <h4 className="font-display font-bold text-xl mb-6">النشرة البريدية</h4>
-            <p className="text-gray-400 text-sm mb-4">اشترك للحصول على آخر الأخبار والتحديثات.</p>
+            <p className="text-gray-300 text-sm mb-4">اشترك للحصول على آخر الأخبار والتحديثات.</p>
             <div className="flex">
-              <input type="email" placeholder="بريدك الإلكتروني" className="px-4 py-2 w-full rounded-s-md text-brand-dark outline-none focus:ring-2 focus:ring-brand-yellow" />
-              <button className="bg-brand-yellow px-4 py-2 rounded-e-md text-white font-bold hover:bg-brand-orange transition-colors">اشترك</button>
+              <input type="email" aria-label="البريد الإلكتروني للنشرة البريدية" placeholder="بريدك الإلكتروني" className="px-4 py-2 w-full rounded-s-md text-brand-dark outline-none focus:ring-2 focus:ring-brand-yellow" />
+              <button className="bg-brand-yellow px-4 py-2 rounded-e-md text-slate-900 font-bold hover:bg-brand-orange transition-colors">اشترك</button>
             </div>
           </div>
         </div>

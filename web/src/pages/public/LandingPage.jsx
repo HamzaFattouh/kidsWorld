@@ -161,7 +161,7 @@ export function LandingPage() {
             <div className="pt-4">
               <button
                 onClick={scrollToAbout}
-                className="bg-brand-yellow hover:bg-brand-orange text-white font-display font-bold text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105"
+                className="bg-brand-yellow hover:bg-brand-orange text-slate-900 font-display font-bold text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105"
               >
                 اكتشف المزيد ⬇
               </button>
@@ -172,7 +172,11 @@ export function LandingPage() {
             <div className="absolute -top-10 -end-10 w-32 h-32 bg-brand-blue rounded-full opacity-20 blur-2xl"></div>
             <img
               src="/images/dynamic/hero.jpg"
-              alt="Kid playing with cardboard airplane"
+              alt="طفل يلعب ويمرح في حضانة عالم الأطفال"
+              width="448"
+              height="448"
+              fetchpriority="high"
+              decoding="sync"
               className="w-full max-w-md mx-auto rounded-full border-8 border-white object-cover aspect-square"
             />
             
@@ -232,7 +236,7 @@ export function LandingPage() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="rounded-2xl overflow-hidden group flex flex-col">
             <div className="h-64 overflow-hidden shrink-0">
-              <img src="/images/dynamic/value_1.jpg" alt="Learn and Play" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <img src="/images/dynamic/value_1.jpg" alt="التعلم واللعب" width="384" height="256" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
             </div>
             <div className="bg-brand-blue p-8 text-center text-white space-y-3 flex-1 flex flex-col justify-center">
               <h3 className="text-2xl font-display font-bold">التعلم واللعب</h3>
@@ -242,7 +246,7 @@ export function LandingPage() {
           
           <div className="rounded-2xl overflow-hidden group mt-0 md:-mt-6 flex flex-col">
             <div className="h-64 overflow-hidden shrink-0">
-              <img src="/images/dynamic/value_2.jpg" alt="Nutritious Dishes" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <img src="/images/dynamic/value_2.jpg" alt="وجبات مغذية" width="384" height="256" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
             </div>
             <div className="bg-brand-orange p-8 text-center text-white space-y-3 flex-1 flex flex-col justify-center">
               <h3 className="text-2xl font-display font-bold">وجبات مغذية</h3>
@@ -252,11 +256,11 @@ export function LandingPage() {
 
           <div className="rounded-2xl overflow-hidden group flex flex-col">
             <div className="h-64 overflow-hidden shrink-0">
-              <img src="/images/dynamic/value_3.jpg" alt="Great Teachers" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <img src="/images/dynamic/value_3.jpg" alt="معلمون رائعون" width="384" height="256" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
             </div>
-            <div className="bg-brand-yellow p-8 text-center text-white space-y-3 flex-1 flex flex-col justify-center">
+            <div className="bg-brand-yellow p-8 text-center text-slate-900 space-y-3 flex-1 flex flex-col justify-center">
               <h3 className="text-2xl font-display font-bold">معلمون رائعون</h3>
-              <p className="text-sm text-white/90 leading-relaxed">سيهتم معلمون ذوو خبرة ومحبوبون بأطفالك في عالم الأطفال.</p>
+              <p className="text-sm text-slate-800 leading-relaxed font-medium">سيهتم معلمون ذوو خبرة ومحبوبون بأطفالك في عالم الأطفال.</p>
             </div>
           </div>
         </div>
@@ -268,7 +272,7 @@ export function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <div className="absolute -bottom-6 -start-6 w-32 h-32 bg-brand-yellow rounded-full -z-10"></div>
-              <img src="/images/dynamic/welcome.jpg" alt="Welcome to Kidtime" className="w-full h-full object-cover rounded-2xl aspect-square" />
+              <img src="/images/dynamic/welcome.jpg" alt="مرحباً بكم في حضانة عالم الأطفال" width="576" height="576" loading="lazy" decoding="async" className="w-full h-full object-cover rounded-2xl aspect-square" />
             </div>
             <div className="space-y-6 text-start">
               <h2 className="text-4xl md:text-5xl font-display font-bold leading-tight">
@@ -284,15 +288,15 @@ export function LandingPage() {
               </p>
               <ul className="space-y-3 pt-4">
                 <li className="flex items-center gap-3 text-sm font-medium text-brand-dark/80">
-                  <div className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center text-white"><Check className="w-3 h-3" /></div>
+                  <div className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center text-slate-900"><Check className="w-3 h-3" /></div>
                   دعم شخصية طفلك وتطوير مهاراته.
                 </li>
                 <li className="flex items-center gap-3 text-sm font-medium text-brand-dark/80">
-                  <div className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center text-white"><Check className="w-3 h-3" /></div>
+                  <div className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center text-slate-900"><Check className="w-3 h-3" /></div>
                   ألعاب إبداعية داخلية وخارجية في بيئة آمنة.
                 </li>
                 <li className="flex items-center gap-3 text-sm font-medium text-brand-dark/80">
-                  <div className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center text-white"><Check className="w-3 h-3" /></div>
+                  <div className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center text-slate-900"><Check className="w-3 h-3" /></div>
                   كادر تعليمي محترف ومتفرغ.
                 </li>
               </ul>
@@ -327,7 +331,11 @@ export function LandingPage() {
               <div className="h-64 overflow-hidden relative">
                 <img
                   src={img.url}
-                  alt={img.captionAr ||'صورة يومية'}
+                  alt={img.captionAr ||'صورة يومية من أنشطة الأطفال'}
+                  width="300"
+                  height="256"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 {img.date && (
@@ -342,6 +350,7 @@ export function LandingPage() {
                 </p>
                 <button
                   onClick={() => handleDownloadImage(img.url,`daily-photo-${idx + 1}.jpg`)}
+                  aria-label={`حفظ صورة ${img.captionAr || 'اليومية'}`}
                   className="p-2 text-brand-green hover:bg-brand-green/10 rounded-lg transition-colors"
                   title="حفظ الصورة"
                 >
@@ -379,7 +388,11 @@ export function LandingPage() {
               <div className="h-60 overflow-hidden relative">
                 <img
                   src={act.imageUrl ||'/images/dynamic/welcome.jpg'}
-                  alt={act.titleAr || act.titleEn}
+                  alt={act.titleAr || act.titleEn || 'فعالية في عالم الأطفال'}
+                  width="384"
+                  height="240"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
@@ -408,10 +421,11 @@ export function LandingPage() {
 
       {/* Activity Details & Photo Album Modal */}
       {selectedActivity && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div role="dialog" aria-modal="true" aria-labelledby="activity-modal-title" className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative text-start space-y-6">
             <button
               onClick={() => setSelectedActivity(null)}
+              aria-label="إغلاق النافذة"
               className="absolute top-6 end-6 text-gray-400 hover:text-gray-700 dark:hover:text-white p-2 rounded-full bg-gray-100 dark:bg-slate-800 transition-colors"
             >
               <X className="w-6 h-6" />
@@ -421,7 +435,7 @@ export function LandingPage() {
               <span className="text-xs font-bold text-brand-orange bg-brand-orange/10 px-3 py-1 rounded-full">
                 {new Date(selectedActivity.eventDate).toLocaleDateString('ar-EG')}
               </span>
-              <h3 className="text-3xl font-display font-bold text-brand-dark dark:text-white mt-3">
+              <h3 id="activity-modal-title" className="text-3xl font-display font-bold text-brand-dark dark:text-white mt-3">
                 {selectedActivity.titleAr || selectedActivity.titleEn}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-sm mt-3 leading-relaxed">
@@ -440,11 +454,12 @@ export function LandingPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {selectedActivity.album?.map((photoUrl, pIdx) => (
                   <div key={pIdx} className="relative group rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 bg-gray-50">
-                    <img src={photoUrl} alt="Activity" className="w-full h-48 object-cover" />
+                    <img src={photoUrl} alt="صورة من ألبوم الفعالية" width="300" height="192" loading="lazy" decoding="async" className="w-full h-48 object-cover" />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <button
                         onClick={() => handleDownloadImage(photoUrl,`activity-photo-${pIdx + 1}.jpg`)}
-                        className="bg-brand-yellow hover:bg-brand-orange text-white font-bold text-xs px-4 py-2 rounded-full flex items-center gap-2 transition-transform hover:scale-105"
+                        aria-label="حفظ الصورة"
+                        className="bg-brand-yellow hover:bg-brand-orange text-slate-900 font-bold text-xs px-4 py-2 rounded-full flex items-center gap-2 transition-transform hover:scale-105"
                       >
                         <Download className="w-4 h-4" />
                         حفظ الصورة
@@ -462,7 +477,7 @@ export function LandingPage() {
       <section id="programs" className="bg-brand-green relative overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div className="h-[400px] lg:h-auto">
-            <img src="/images/dynamic/programs.jpg" alt="Programs" className="w-full h-full object-cover" />
+            <img src="/images/dynamic/programs.jpg" alt="برامج عالم الأطفال التعليمية" width="720" height="480" loading="lazy" decoding="async" className="w-full h-full object-cover" />
           </div>
           <div className="p-12 lg:p-24 text-white text-start">
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">برامج عالم الأطفال</h2>
@@ -480,6 +495,7 @@ export function LandingPage() {
                 <div key={index} className="border-b border-white/20 pb-4">
                   <button
                     onClick={() => setOpenProgram(openProgram === index ? null : index)}
+                    aria-expanded={openProgram === index}
                     className="w-full flex items-center justify-between text-start font-display font-bold text-xl hover:text-brand-yellow transition-colors"
                   >
                     {prog.title}
@@ -515,7 +531,7 @@ export function LandingPage() {
             {posts.slice(0, 3).map((post) => (
               <div key={post.id} className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 flex flex-col text-start hover:-translate-y-2 transition-transform duration-300">
                 <div className="h-48 overflow-hidden relative">
-                  <img src={post.thumbnailUrl || post.image || '/images/dynamic/value_1.jpg'} alt={post.titleAr} className="w-full h-full object-cover" />
+                  <img src={post.thumbnailUrl || post.image || '/images/dynamic/value_1.jpg'} alt={post.titleAr || 'منشور تعليمي في حضانة عالم الأطفال'} width="384" height="192" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </div>
                 <div className="p-6 flex-1 flex flex-col">
                   <span className="text-xs font-bold text-gray-500 mb-2">{post.createdAt ? new Date(post.createdAt).toLocaleDateString('ar-EG') : ''}</span>
@@ -532,7 +548,7 @@ export function LandingPage() {
       )}
 
       {/* Footer Address Info Bar */}
-      <div className="bg-brand-dark border-t border-white/10 py-6 text-center text-gray-400 text-sm font-semibold">
+      <div className="bg-brand-dark border-t border-white/10 py-6 text-center text-gray-300 text-sm font-semibold">
          نابلس- نابلس الجديدة | جميع الحقوق محفوظة © {new Date().getFullYear()} عالم الأطفال
       </div>
     </div>
